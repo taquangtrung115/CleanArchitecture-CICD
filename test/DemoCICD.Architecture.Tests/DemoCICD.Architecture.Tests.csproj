@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\DemoCICD.Domain\DemoCICD.Domain.csproj" />
     <ProjectReference Include="..\..\src\DemoCICD.API\DemoCICD.API.csproj" />
+    <ProjectReference Include="..\..\src\DemoCICD.Domain\DemoCICD.Domain.csproj" />
     <ProjectReference Include="..\..\src\DemoCICD.Infrastructure\DemoCICD.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\DemoCICD.Persistence\DemoCICD.Persistence.csproj" />
     <ProjectReference Include="..\..\src\DemoCICD.Presentation\DemoCICD.Presentation.csproj" />

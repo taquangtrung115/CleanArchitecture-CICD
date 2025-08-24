@@ -1,5 +1,5 @@
 ﻿
-namespace DemoCICD.Contract.Shared;
+namespace DemoCICD.Contract.Abstractions.Shared;
 
 public class Error : IEquatable<Error>
 {

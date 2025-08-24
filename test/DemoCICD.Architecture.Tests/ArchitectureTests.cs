@@ -1,5 +1,5 @@
 using System.Windows.Input;
-using DemoCICD.Application.Abstractions.Message;
+using DemoCICD.Contract.Abstractions.Message;
 using FluentAssertions;
 using NetArchTest.Rules;
 using static System.Net.Mime.MediaTypeNames;
@@ -20,7 +20,7 @@ public class ArchitectureTests
     public void Domain_Should_Not_HaveDependencyOnOtherProject()
     {
         // Arrage
-        var assembly = Domain.AssemblyReference.Assembly;
+        var assembly = DemoCICD.Domain.AssemblyReference.Assembly;
 
         var otherProjects = new[]
         {
@@ -152,7 +152,7 @@ public class ArchitectureTests
         var testResult = Types
             .InAssembly(assembly)
             .That()
-            .ImplementInterface(typeof(DemoCICD.Application.Abstractions.Message.ICommand))
+            .ImplementInterface(typeof(DemoCICD.Contract.Abstractions.Message.ICommand))
             .Should().HaveNameEndingWith("Command")
             .GetResult();
 

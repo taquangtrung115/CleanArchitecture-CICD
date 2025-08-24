@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DemoCICD.Contract.Shared;
+namespace DemoCICD.Contract.Abstractions.Shared;
 
 public sealed class ValidationResult : Result, IValidationResult
 {

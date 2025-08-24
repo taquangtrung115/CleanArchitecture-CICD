@@ -1,5 +1,5 @@
 ﻿
-using DemoCICD.Application.Abstractions.Message;
+using DemoCICD.Contract.Abstractions.Message;
 
 namespace DemoCICD.Application.UserCases.V1.Commands.Product;
 

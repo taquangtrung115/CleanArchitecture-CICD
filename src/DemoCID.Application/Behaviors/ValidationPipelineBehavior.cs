@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DemoCICD.Contract.Shared;
+using DemoCICD.Contract.Abstractions.Shared;
 using FluentValidation;
 using MediatR;
 

@@ -1,5 +1,5 @@
 ﻿
-namespace DemoCICD.Contract.Shared;
+namespace DemoCICD.Contract.Abstractions.Shared;
 
 public sealed class ValidationResult<TValue> : Result<TValue>, IValidationResult
 {

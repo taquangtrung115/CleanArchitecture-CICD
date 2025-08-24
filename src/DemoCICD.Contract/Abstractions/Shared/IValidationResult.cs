@@ -1,4 +1,4 @@
-﻿namespace DemoCICD.Contract.Shared;
+﻿namespace DemoCICD.Contract.Abstractions.Shared;
 
 public interface IValidationResult
 {
