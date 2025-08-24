@@ -1,6 +1,6 @@
-﻿using DemoCID.Application.Abstractions.Message;
+﻿using DemoCICD.Application.Abstractions.Message;
 
-namespace DemoCID.Application.UserCases.V1.Queries.Product;
+namespace DemoCICD.Application.UserCases.V1.Queries.Product;
 
 public sealed class GetProductQuery : IQuery<GetProductResponse>
 {

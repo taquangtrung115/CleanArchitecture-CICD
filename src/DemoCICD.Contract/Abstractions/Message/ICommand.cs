@@ -1,7 +1,7 @@
-﻿using DemoCICD.Domain.Shared;
+﻿using DemoCICD.Contract.Shared;
 using MediatR;
 
-namespace DemoCID.Application.Abstractions.Message;
+namespace DemoCICD.Contract.Abstractions.Message;
 
 public interface ICommand : IRequest<Result>
 {

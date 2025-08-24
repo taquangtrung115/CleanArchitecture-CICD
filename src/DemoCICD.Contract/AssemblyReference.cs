@@ -1,8 +1,7 @@
 ﻿
 using System.Reflection;
 
-
-namespace DemoCICD.Application;
+namespace DemoCICD.Contract;
 
 public static class AssemblyReference
 {

@@ -1,5 +1,5 @@
 using System.Windows.Input;
-using DemoCID.Application.Abstractions.Message;
+using DemoCICD.Application.Abstractions.Message;
 using FluentAssertions;
 using NetArchTest.Rules;
 using static System.Net.Mime.MediaTypeNames;
@@ -46,7 +46,7 @@ public class ArchitectureTests
     public void Application_Should_Not_HaveDependencyOnOtherProjects()
     {
         // Arrange
-        var assembly = DemoCID.Application.AssemblyReference.Assembly;
+        var assembly = DemoCICD.Application.AssemblyReference.Assembly;
 
         var otherProjects = new[]
         {
@@ -146,13 +146,13 @@ public class ArchitectureTests
     public void Command_Should_Have_NamingConventionEndingCommand()
     {
         // Arrage
-        var assembly = DemoCID.Application.AssemblyReference.Assembly;
+        var assembly = DemoCICD.Application.AssemblyReference.Assembly;
 
         // Act
         var testResult = Types
             .InAssembly(assembly)
             .That()
-            .ImplementInterface(typeof(DemoCID.Application.Abstractions.Message.ICommand))
+            .ImplementInterface(typeof(DemoCICD.Application.Abstractions.Message.ICommand))
             .Should().HaveNameEndingWith("Command")
             .GetResult();
 
@@ -164,7 +164,7 @@ public class ArchitectureTests
     public void CommandT_Should_Have_NamingConventionEndingCommand()
     {
         // Arrage
-        var assembly = DemoCID.Application.AssemblyReference.Assembly;
+        var assembly = DemoCICD.Application.AssemblyReference.Assembly;
 
         // Act
         var testResult = Types
@@ -182,7 +182,7 @@ public class ArchitectureTests
     public void CommandHandlers_Should_Have_NamingConventionEndingCommandHandler()
     {
         // Arrange
-        var assembly = DemoCID.Application.AssemblyReference.Assembly;
+        var assembly = DemoCICD.Application.AssemblyReference.Assembly;
 
         // Act
         var testResult = Types.InAssembly(assembly)
@@ -200,7 +200,7 @@ public class ArchitectureTests
     public void CommandHandlers_Should_Have_BeSealed()
     {
         // Arrange
-        var assembly = DemoCID.Application.AssemblyReference.Assembly;
+        var assembly = DemoCICD.Application.AssemblyReference.Assembly;
 
         // Act
         var testResult = Types.InAssembly(assembly)
@@ -218,7 +218,7 @@ public class ArchitectureTests
     public void CommandHandlersT_Should_Have_NamingConventionEndingCommandHandler()
     {
         // Arrange
-        var assembly = DemoCID.Application.AssemblyReference.Assembly;
+        var assembly = DemoCICD.Application.AssemblyReference.Assembly;
 
         // Act
         var testResult = Types.InAssembly(assembly)
@@ -236,7 +236,7 @@ public class ArchitectureTests
     public void CommandHandlersT_Should_Have_BeSealed()
     {
         // Arrange
-        var assembly = DemoCID.Application.AssemblyReference.Assembly;
+        var assembly = DemoCICD.Application.AssemblyReference.Assembly;
 
         // Act
         var testResult = Types.InAssembly(assembly)
@@ -258,7 +258,7 @@ public class ArchitectureTests
     public void Query_Should_Have_NamingConventionEndingQuery()
     {
         // Arrage
-        var assembly = DemoCID.Application.AssemblyReference.Assembly;
+        var assembly = DemoCICD.Application.AssemblyReference.Assembly;
 
         // Act
         var testResult = Types
@@ -276,7 +276,7 @@ public class ArchitectureTests
     public void QueryHandlers_Should_Have_NamingConventionEndingQueryHandler()
     {
         // Arrange
-        var assembly = DemoCID.Application.AssemblyReference.Assembly;
+        var assembly = DemoCICD.Application.AssemblyReference.Assembly;
 
         // Act
         var testResult = Types.InAssembly(assembly)
@@ -294,7 +294,7 @@ public class ArchitectureTests
     public void QueryHandlers_Should_Have_BeSealed()
     {
         // Arrange
-        var assembly = DemoCID.Application.AssemblyReference.Assembly;
+        var assembly = DemoCICD.Application.AssemblyReference.Assembly;
 
         // Act
         var testResult = Types.InAssembly(assembly)

@@ -9,8 +9,11 @@
   <ItemGroup>
     <Folder Include="Abstractions\Entities\" />
     <Folder Include="Abstractions\Reponsitories\" />
-    <Folder Include="Entities\" />
     <Folder Include="Enumerations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.13" />
   </ItemGroup>
 
 </Project>

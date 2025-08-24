@@ -1,7 +1,6 @@
-﻿using DemoCICD.Domain.Shared;
-using DemoCID.Application.Abstractions.Message;
+﻿using DemoCICD.Contract.Abstractions.Message;
 
-namespace DemoCID.Application.UserCases.V1.Commands.Product;
+namespace DemoCICD.Application.UserCases.V1.Commands.Product;
 
 public sealed class CreateProductCommandHandler : ICommandHandler<CreateProductCommand>
 {

@@ -1,7 +1,7 @@
 ﻿
-using DemoCID.Application.Abstractions.Message;
+using DemoCICD.Application.Abstractions.Message;
 
-namespace DemoCID.Application.UserCases.V1.Commands.Product;
+namespace DemoCICD.Application.UserCases.V1.Commands.Product;
 
 public sealed class CreateProductCommand : ICommand
 {

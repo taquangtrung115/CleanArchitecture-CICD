@@ -8,7 +8,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DemoCICD.Infrastructure\DemoCICD.Infrastructure.csproj" />
-    <ProjectReference Include="..\DemoCID.Application\DemoCID.Application.csproj" />
+    <ProjectReference Include="..\DemoCID.Application\DemoCICD.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Configurations\" />
+    <Folder Include="Constants\" />
+    <Folder Include="DependencyInjection\Extensions\" />
+    <Folder Include="DependencyInjection\Options\" />
+    <Folder Include="Reponsitories\" />
   </ItemGroup>
 
 </Project>

@@ -8,11 +8,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\DemoCICD.Domain\DemoCICD.Domain.csproj" />
+    <ProjectReference Include="..\DemoCICD.Contract\DemoCICD.Contract.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DependencyInjection\Extensions\" />
+    <Folder Include="Abstractions\" />
     <Folder Include="DependencyInjection\Options\" />
+    <Folder Include="Exceptions\" />
     <Folder Include="UserCases\V1\Commands\Order\" />
     <Folder Include="UserCases\V1\Queries\Order\" />
     <Folder Include="UserCases\V2\Commands\" />
@@ -21,6 +23,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.8.0" />
     <PackageReference Include="MediatR" Version="12.1.1" />
   </ItemGroup>
 

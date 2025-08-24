@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DemoCICD.Domain.Shared;
+using DemoCICD.Contract.Shared;
 using FluentValidation;
 using MediatR;
 
-namespace DemoCID.Application.Behaviors;
+namespace DemoCICD.Application.Behaviors;
 
 public class ValidationPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
