@@ -1,4 +1,8 @@
-﻿# Applying Migrations in EF Core
+﻿# Course1 - Structure code - Setup CI/CD of Mr. Tran Dong
+# Study and Practice, customy to my liking by Ta Quang Trung
+# Reference: https://www.facebook.com/groups/342670156801353
+
+# Applying Migrations in EF Core
 ## Create Migrations
 	1. Windows command prompt: "Add-Migration MigrationName [options]"
 	2. dotnet CLI: "dotnet ef migrations add MigrationName [options]"
