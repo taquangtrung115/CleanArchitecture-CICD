@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using DemoCICD.API.DependencyInjection.Options;
+using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 

@@ -4,24 +4,25 @@ using DemoCICD.Contract.Services.V1.Product;
 
 namespace DemoCICD.Application.UserCases.V1.Queries.Event;
 
-internal class SendEmailWhenProductChangedEventHandler
+internal class SendSmsWhenProductChangedEventHandler
     : IDomainEventHandler<DomainEvent.ProductCreated>,
     IDomainEventHandler<DomainEvent.ProductDeleted>
 {
     public async Task Handle(DomainEvent.ProductCreated notification, CancellationToken cancellationToken)
     {
-        SendEmail();
+        SendSms();
         await Task.Delay(100000);
     }
 
     public async Task Handle(DomainEvent.ProductDeleted notification, CancellationToken cancellationToken)
     {
-        SendEmail();
+        SendSms();
         await Task.Delay(100000);
     }
 
-    private void SendEmail()
+    private void SendSms()
     {
 
     }
 }
+

@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 
 namespace DemoCICD.Persistence.DependencyInjection.Extensions;
 
+
 public static class ServiceCollectionExtensions
 {
     public static void AddSqlConfiguration(this IServiceCollection services)
@@ -77,12 +78,14 @@ public static class ServiceCollectionExtensions
             options.Lockout.AllowedForNewUsers = true;
         });
     }
+
     public static void AddRepositoryBaseConfiguration(this IServiceCollection services)
     {
         services.AddTransient(typeof(IUnitOfWork), typeof(EFUnitOfWork));
         services.AddTransient(typeof(IRepositoryBase<,>), typeof(RepositoryBase<,>));
 
     }
+
     public static OptionsBuilder<SqlServerRetryOptions> ConfigureSqlServerRetryOptions(this IServiceCollection services, IConfigurationSection section)
         => services
             .AddOptions<SqlServerRetryOptions>()
@@ -90,3 +93,4 @@ public static class ServiceCollectionExtensions
             .ValidateDataAnnotations()
             .ValidateOnStart();
 }
+

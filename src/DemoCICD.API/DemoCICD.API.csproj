@@ -22,7 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DemoCICD.Domain\DemoCICD.Domain.csproj" />
+    <ProjectReference Include="..\DemoCICD.Contract\DemoCICD.Contract.csproj" />
+    <ProjectReference Include="..\DemoCICD.Infrastructure.Dapper\DemoCICD.Infrastructure.Dapper.csproj" />
     <ProjectReference Include="..\DemoCICD.Infrastructure\DemoCICD.Infrastructure.csproj" />
     <ProjectReference Include="..\DemoCICD.Persistence\DemoCICD.Persistence.csproj" />
     <ProjectReference Include="..\DemoCICD.Presentation\DemoCICD.Presentation.csproj" />

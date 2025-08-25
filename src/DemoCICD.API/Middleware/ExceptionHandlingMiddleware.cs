@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System;
 using DemoCICD.Domain.Exceptions;
 
 namespace DemoCICD.API.Middleware;
@@ -33,7 +34,7 @@ internal sealed class ExceptionHandlingMiddleware : IMiddleware
             title = GetTitle(exception),
             status = statusCode,
             detail = exception.Message,
-            errors = GetErrors(exception),
+            //errors = GetErrors(exception),
         };
 
         httpContext.Response.ContentType = "application/json";
@@ -72,5 +73,4 @@ internal sealed class ExceptionHandlingMiddleware : IMiddleware
 
         return errors;
     }
-
 }
