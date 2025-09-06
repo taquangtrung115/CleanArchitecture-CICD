@@ -8,6 +8,7 @@ using DemoCICD.API.DependencyInjection.Extensions;
 using DemoCICD.Infrastructure.Dapper.DependencyInjection.Extensions;
 using DemoCICD.Presentation.APIs.Products;
 using Carter;
+using DemoCICD.Infrastructure.DependencyInjection.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,10 +26,13 @@ builder.Host.UseSerilog();
 
 builder.Services.AddConfigureMediatR();
 
-builder
-    .Services
-    .AddControllers()
-    .AddApplicationPart(DemoCICD.Presentation.AssemblyReference.Assembly);
+builder.Services.AddInfrastructure();
+builder.Services.AddJwtAuthentication(builder.Configuration);
+
+//builder
+//    .Services
+//    .AddControllers()
+//    .AddApplicationPart(DemoCICD.Presentation.AssemblyReference.Assembly);
 
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
@@ -62,16 +66,16 @@ var app = builder.Build();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Add API Endpoint
-app.NewVersionedApi("products-minimal-show-on-swagger").MapProductApiV1().MapProductApiV2();
+//app.NewVersionedApi("products-minimal-show-on-swagger").MapProductApiV1().MapProductApiV2();
 
 // Add API Endpoint with carter module
-app.MapCarter();
 
 //app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapCarter();
+//app.MapControllers();
 
 //if (builder.Environment.IsDevelopment() || builder.Environment.IsStaging())
     app.ConfigureSwagger();
