@@ -18,7 +18,7 @@ public static class ProductApi
 
     public static IVersionedEndpointRouteBuilder MapProductApiV1(this IVersionedEndpointRouteBuilder builder)
     {
-        var group = builder.MapGroup(BaseUrl).HasApiVersion(1);
+        var group = builder.MapGroup(BaseUrl).HasApiVersion(1).RequireAuthorization();
 
         group.MapPost(string.Empty, CreateProducts);
         group.MapGet(string.Empty, GetProducts);
