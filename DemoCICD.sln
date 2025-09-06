@@ -6,13 +6,13 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		..\..\Documents\Pipeline_CICD-JENKIN\IIS\DEV-Environment.ps1 = ..\..\Documents\Pipeline_CICD-JENKIN\IIS\DEV-Environment.ps1
+		DEV-Environment.ps1 = DEV-Environment.ps1
 		Directory.Build.props = Directory.Build.props
-		..\..\Documents\Pipeline_CICD-JENKIN\IIS\PROD_BACKUP\iis-rollback.ps1 = ..\..\Documents\Pipeline_CICD-JENKIN\IIS\PROD_BACKUP\iis-rollback.ps1
-		..\..\Documents\Preparation.txt = ..\..\Documents\Preparation.txt
-		..\..\Documents\Pipeline_CICD-JENKIN\IIS\PROD-Environment.ps1 = ..\..\Documents\Pipeline_CICD-JENKIN\IIS\PROD-Environment.ps1
+		iis-rollback.ps1 = iis-rollback.ps1
+		Preparation.txt = Preparation.txt
+		PROD-Environment.ps1 = PROD-Environment.ps1
 		README.md = README.md
-		..\..\Documents\StructureCode.txt = ..\..\Documents\StructureCode.txt
+		StructureCode.txt = StructureCode.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EE251F61-BE76-4A3B-8C76-D54707D79852}"
