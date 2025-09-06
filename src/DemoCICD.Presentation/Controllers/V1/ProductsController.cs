@@ -38,7 +38,7 @@ public class ProductsController : ApiController
         string? sortOrder = null,
         string? sortColumnAndOrder = null,
         int pageIndex = 1,
-        int pageSize = 10)
+        int pageSize = 5)
     {
         var result = await Sender.Send(new Query.GetProductsQuery(serchTerm, sortColumn,
             SortOrderExtension.ConvertStringToSortOrder(sortOrder),
