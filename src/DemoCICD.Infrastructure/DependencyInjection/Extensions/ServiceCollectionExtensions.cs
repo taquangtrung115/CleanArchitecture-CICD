@@ -20,6 +20,9 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IJwtTokenService, JwtTokenService>();
         services.AddTransient<ITokenCacheService, TokenCacheService>();
         services.AddTransient<IUserAuthenticationService, UserAuthenticationService>();
+        services.AddTransient<IUserManagementService, UserManagementService>();
+        services.AddTransient<IRoleManagementService, RoleManagementService>();
+        services.AddTransient<IPermissionManagementService, PermissionManagementService>();
     }
 
     public static void AddRedisCache(this IServiceCollection services, IConfiguration configuration)

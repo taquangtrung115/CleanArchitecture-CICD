@@ -76,4 +76,53 @@ public class UserAuthenticationService : IUserAuthenticationService
             return Enumerable.Empty<string>();
         }
     }
+
+    public async Task<UserAuthResult> RegisterUserAsync(string userName, string email, string password, string firstName, string lastName, DateTime? dayOfBirth)
+    {
+        try
+        {
+            var existingUser = await _userManager.FindByNameAsync(userName);
+            if (existingUser != null)
+            {
+                return UserAuthResult.Failure("Username already exists");
+            }
+
+            existingUser = await _userManager.FindByEmailAsync(email);
+            if (existingUser != null)
+            {
+                return UserAuthResult.Failure("Email already exists");
+            }
+
+            var user = new AppUser
+            {
+                UserName = userName,
+                Email = email,
+                FirstName = firstName,
+                LastName = lastName,
+                FullName = $"{firstName} {lastName}",
+                DayOfBirth = dayOfBirth,
+                EmailConfirmed = true // Auto-confirm for simplicity
+            };
+
+            var result = await _userManager.CreateAsync(user, password);
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                return UserAuthResult.Failure($"User creation failed: {errors}");
+            }
+
+            _logger.LogInformation("User {UserName} registered successfully with ID {UserId}", userName, user.Id);
+
+            return UserAuthResult.Success(
+                user.Id.ToString(),
+                user.UserName,
+                user.Email,
+                user.FullName);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error registering user: {UserName}", userName);
+            return UserAuthResult.Failure("An error occurred during registration");
+        }
+    }
 }
