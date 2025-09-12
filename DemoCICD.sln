@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoCICD.Domain", "src\Demo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoCICD.Infrastructure.Dapper", "src\DemoCICD.Infrastructure.Dapper\DemoCICD.Infrastructure.Dapper.csproj", "{A3B66AC2-0F55-4072-AC20-19DD7D05C6BD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoCICD.UnitTests", "test\DemoCICD.UnitTests\DemoCICD.UnitTests.csproj", "{4915F8C9-76FA-4AA0-B4B4-A24409E63C93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{A3B66AC2-0F55-4072-AC20-19DD7D05C6BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3B66AC2-0F55-4072-AC20-19DD7D05C6BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3B66AC2-0F55-4072-AC20-19DD7D05C6BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4915F8C9-76FA-4AA0-B4B4-A24409E63C93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4915F8C9-76FA-4AA0-B4B4-A24409E63C93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4915F8C9-76FA-4AA0-B4B4-A24409E63C93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4915F8C9-76FA-4AA0-B4B4-A24409E63C93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,6 +100,7 @@ Global
 		{90ED6786-E292-410A-9C83-9F23E487527C} = {EE251F61-BE76-4A3B-8C76-D54707D79852}
 		{BB0FE7BE-AFFD-0CAE-71DE-7D52AA3E7137} = {EE251F61-BE76-4A3B-8C76-D54707D79852}
 		{A3B66AC2-0F55-4072-AC20-19DD7D05C6BD} = {EE251F61-BE76-4A3B-8C76-D54707D79852}
+		{4915F8C9-76FA-4AA0-B4B4-A24409E63C93} = {715D87E5-A6B4-47E7-B325-D215C66263B0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F0CB6053-194A-472B-848E-8CB7F413E523}
