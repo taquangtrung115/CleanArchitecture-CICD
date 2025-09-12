@@ -1,4 +1,4 @@
-using DemoCICD.API.Middleware;
+﻿using DemoCICD.API.Middleware;
 using DemoCICD.Application.DependencyInjection.Extensions;
 using DemoCICD.Persistence.DependencyInjection.Options;
 using Serilog;
@@ -12,7 +12,7 @@ using DemoCICD.Infrastructure.DependencyInjection.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add configuration
+// Thêm cấu hình
 
 Log.Logger = new LoggerConfiguration().ReadFrom
     .Configuration(builder.Configuration)
@@ -36,17 +36,17 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 //    .AddApplicationPart(DemoCICD.Presentation.AssemblyReference.Assembly);
 
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
-builder.Services.AddTransient<TokenValidationMiddleware>();
 
-// Configure Options and SQL
+// Cấu hình Tùy chọn và SQL
 builder.Services.ConfigureSqlServerRetryOptions(builder.Configuration.GetSection(nameof(SqlServerRetryOptions)));
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSqlConfiguration();
 builder.Services.AddRepositoryBaseConfiguration();
 builder.Services.AddConfigureAutoMapper();
 
 builder.Services.AddCarter();
 
-// Configure Dapper
+// Cấu hình Dapper
 builder.Services.AddInfrastructureDapper();
 
 builder.Services
@@ -67,10 +67,10 @@ var app = builder.Build();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-// Add API Endpoint
+// Thêm Điểm cuối API
 //app.NewVersionedApi("products-minimal-show-on-swagger").MapProductApiV1().MapProductApiV2();
 
-// Add API Endpoint with carter module
+// Thêm Điểm cuối API với mô-đun carter
 
 //app.UseHttpsRedirection();
 app.UseAuthentication();
@@ -86,11 +86,11 @@ app.MapCarter();
 try
 {
     await app.RunAsync();
-    Log.Information("Stopped cleanly");
+    Log.Information("Dừng lại một cách gọn gàng");
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "An unhandled exception occured during bootstrapping");
+    Log.Fatal(ex, "Đã xảy ra ngoại lệ không được xử lý trong quá trình khởi động");
     await app.StopAsync();
 }
 finally

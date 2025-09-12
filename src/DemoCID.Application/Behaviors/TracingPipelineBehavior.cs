@@ -1,6 +1,5 @@
-﻿
-using MediatR;
-using Microsoft.Extensions.Logging;
+﻿using MediatR;
+using Serilog;
 using System.Diagnostics;
 
 namespace DemoCICD.Application.Behaviors;
@@ -10,12 +9,10 @@ public class TracingPipelineBehavior<TRequest, TResponse> :
     where TRequest : IRequest<TResponse>
 {
     private readonly Stopwatch _timer;
-    private readonly ILogger<TRequest> _logger;
 
-    public TracingPipelineBehavior(ILogger<TRequest> logger)
+    public TracingPipelineBehavior()
     {
         _timer = new Stopwatch();
-        _logger = logger;
     }
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
@@ -26,7 +23,7 @@ public class TracingPipelineBehavior<TRequest, TResponse> :
 
         var elapsedMilliseconds = _timer.ElapsedMilliseconds;
         var requestName = typeof(TRequest).Name;
-        _logger.LogInformation("Request Details: {Name} ({ElapsedMilliseconds} milliseconds) {@Request}", requestName, elapsedMilliseconds, request);
+        Log.Information("Request Details: {Name} ({ElapsedMilliseconds} milliseconds) {@Request}", requestName, elapsedMilliseconds, request);
 
         return response;
     }

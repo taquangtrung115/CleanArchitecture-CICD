@@ -20,11 +20,11 @@
   "prompts": {
     "clean-architecture-analysis": {
       "name": "Clean Architecture Analysis",
-      "description": "Analyze code structure for Clean Architecture compliance and suggest improvements",
+      "description": "Analyze code structure for Clean Architecture compliance and suggest improvements. Hãy trả lời bằng tiếng Việt.",
       "arguments": [
         {
           "name": "layer",
-          "description": "The architectural layer to analyze (Domain, Application, Infrastructure, Presentation, API)",
+          "description": "The architectural layer to analyze (Domain, Application, Infrastructure, Presentation, API). Hãy trả lời bằng tiếng Việt.",
           "required": false
         }
       ],
@@ -32,43 +32,43 @@
     },
     "cqrs-command-generator": {
       "name": "CQRS Command Generator",
-      "description": "Generate CQRS Command, Handler, and related components following the project's patterns",
+      "description": "Generate CQRS Command, Handler, and related components following the project's patterns. Hãy trả lời bằng tiếng Việt.",
       "arguments": [
         {
           "name": "entity",
-          "description": "The entity name (e.g., Product, User, Order)",
+          "description": "The entity name (e.g., Product, User, Order). Hãy trả lời bằng tiếng Việt.",
           "required": true
         },
         {
           "name": "operation",
-          "description": "The operation name (e.g., Create, Update, Delete, Activate)",
+          "description": "The operation name (e.g., Create, Update, Delete, Activate). Hãy trả lời bằng tiếng Việt.",
           "required": true
         },
         {
           "name": "properties",
-          "description": "Comma-separated list of properties needed for the command",
+          "description": "Comma-separated list of properties needed for the command. Hãy trả lời bằng tiếng Việt.",
           "required": false
         }
       ],
       "template": "Generate a complete CQRS Command implementation for {{operation}}{{entity}} with the following structure:\n\n1. **Command** (in Contract/Services/[Domain]/Command.cs):\n   - {{operation}}{{entity}}Command record with {{properties}}\n   - Implement ICommand interface\n   - Include proper validation attributes\n\n2. **Command Handler** (in Application/UseCases/V1/Commands/[Entity]/{{operation}}{{entity}}CommandHandler.cs):\n   - Implement ICommandHandler<{{operation}}{{entity}}Command>\n   - Include proper error handling\n   - Follow the existing transaction patterns\n   - Include domain event publishing if applicable\n\n3. **Response DTO** (in Contract/Services/[Domain]/Command.cs):\n   - {{operation}}{{entity}}Response record\n\n4. **Validation** (if needed):\n   - FluentValidation validator for the command\n\nEnsure the generated code follows the project's existing patterns, naming conventions, and architectural principles."
     },
     "cqrs-query-generator": {
-      "name": "CQRS Query Generator", 
-      "description": "Generate CQRS Query, Handler, and related components following the project's patterns",
+      "name": "CQRS Query Generator",
+      "description": "Generate CQRS Query, Handler, and related components following the project's patterns. Hãy trả lời bằng tiếng Việt.",
       "arguments": [
         {
           "name": "entity",
-          "description": "The entity name (e.g., Product, User, Order)",
+          "description": "The entity name (e.g., Product, User, Order). Hãy trả lời bằng tiếng Việt.",
           "required": true
         },
         {
           "name": "operation",
-          "description": "The query operation (e.g., Get, GetAll, GetBy, Search)",
+          "description": "The query operation (e.g., Get, GetAll, GetBy, Search). Hãy trả lời bằng tiếng Việt.",
           "required": true
         },
         {
           "name": "filters",
-          "description": "Comma-separated list of filter properties",
+          "description": "Comma-separated list of filter properties. Hãy trả lời bằng tiếng Việt.",
           "required": false
         }
       ],
@@ -76,11 +76,11 @@
     },
     "ef-migration-helper": {
       "name": "Entity Framework Migration Helper",
-      "description": "Assist with EF Core migrations and database schema changes",
+      "description": "Assist with EF Core migrations and database schema changes. Hãy trả lời bằng tiếng Việt.",
       "arguments": [
         {
           "name": "operation",
-          "description": "Migration operation: create, apply, remove, or rollback",
+          "description": "Migration operation: create, apply, remove, or rollback. Hãy trả lời bằng tiếng Việt.",
           "required": true
         },
         {
@@ -93,16 +93,16 @@
     },
     "api-documentation": {
       "name": "API Documentation Generator",
-      "description": "Generate comprehensive API documentation for endpoints",
+      "description": "Generate comprehensive API documentation for endpoints. Hãy trả lời bằng tiếng Việt.",
       "arguments": [
         {
           "name": "controller",
-          "description": "Controller name to document",
+          "description": "Controller name to document. Hãy trả lời bằng tiếng Việt.",
           "required": false
         },
         {
           "name": "endpoint",
-          "description": "Specific endpoint to document",
+          "description": "Specific endpoint to document. Hãy trả lời bằng tiếng Việt.",
           "required": false
         }
       ],
@@ -110,7 +110,7 @@
     },
     "testing-strategy": {
       "name": "Testing Strategy Advisor",
-      "description": "Provide testing guidance and generate test templates for different layers",
+      "description": "Provide testing guidance and generate test templates for different layers. Hãy trả lời bằng tiếng Việt.",
       "arguments": [
         {
           "name": "layer",
@@ -131,7 +131,7 @@
       "arguments": [
         {
           "name": "stage",
-          "description": "Pipeline stage to optimize: build, test, deploy, or monitoring",
+          "description": "Pipeline stage to optimize: build, test, deploy, or monitoring. Hãy trả lời bằng tiếng Việt.",
           "required": false
         }
       ],
@@ -139,7 +139,7 @@
     },
     "domain-modeling": {
       "name": "Domain Modeling Assistant",
-      "description": "Help design domain models following DDD principles",
+      "description": "Help design domain models following DDD principles. Hãy trả lời bằng tiếng Việt.",
       "arguments": [
         {
           "name": "domain",
@@ -156,11 +156,11 @@
     },
     "performance-optimization": {
       "name": "Performance Optimization Guide",
-      "description": "Analyze and suggest performance improvements for the application",
+      "description": "Analyze and suggest performance improvements for the applicatio. Hãy trả lời bằng tiếng Việt.",
       "arguments": [
         {
           "name": "area",
-          "description": "Performance area: database, api, memory, or caching",
+          "description": "Performance area: database, api, memory, or caching. Hãy trả lời bằng tiếng Việt.",
           "required": false
         }
       ],
@@ -173,5 +173,13 @@
     "logLevel": "info"
   },
   "version": "1.0.0",
-  "description": "MCP configuration for Clean Architecture .NET project with CI/CD pipeline. Provides comprehensive development assistance including code generation, architecture guidance, and performance optimization."
+  "description": "MCP configuration for Clean Architecture .NET project with CI/CD pipeline. Provides comprehensive development assistance including code generation, architecture guidance, and performance optimization.",
+  "pipelines": {
+    "PL_SLN": [
+      { "name": "Fetch latest changes", "run": "git fetch" },
+      { "name": "Pull latest changes from current branch", "run": "git pull origin $(git rev-parse --abbrev-ref HEAD)" },
+      { "name": "Clean solution", "run": "dotnet clean" },
+      { "name": "Build solution", "run": "dotnet build --no-restore" }
+    ]
+  }
 }
