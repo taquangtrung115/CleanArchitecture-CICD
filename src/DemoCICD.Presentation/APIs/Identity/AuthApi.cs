@@ -23,6 +23,7 @@ public class AuthApi : ApiEndpoint, ICarterModule
             .MapGroup(BaseUrl).HasApiVersion(1);
 
         group1.MapPost("login", LoginV1).AllowAnonymous();
+        group1.MapPost("register", RegisterV1).AllowAnonymous();
         group1.MapPost("logout", LogoutV1).RequireAuthorization();
         group1.MapPost("refresh-token", RefreshTokenV1).AllowAnonymous();
 
@@ -57,6 +58,15 @@ public class AuthApi : ApiEndpoint, ICarterModule
     public static async Task<IResult> RefreshTokenV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.RefreshTokenRequest refreshToken)
     {
         var result = await sender.Send(refreshToken);
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Results.Ok(result);
+    }
+
+    public static async Task<IResult> RegisterV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.Register register)
+    {
+        var result = await sender.Send(register);
         if (result.IsFailure)
             return HandlerFailure(result);
 
