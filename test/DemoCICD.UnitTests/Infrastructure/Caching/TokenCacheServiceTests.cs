@@ -3,7 +3,6 @@ using FluentAssertions;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
-using NSubstitute.ReturnsExtensions;
 using System.Text;
 
 namespace DemoCICD.UnitTests.Infrastructure.Caching;
@@ -28,15 +27,16 @@ public class TokenCacheServiceTests
         var userId = "test-user-id";
         var expectedToken = "refresh-token-value";
         var cacheKey = $"refresh_token:{userId}";
+        var tokenBytes = Encoding.UTF8.GetBytes(expectedToken);
 
-        _distributedCache.GetStringAsync(cacheKey).Returns(expectedToken);
+        _distributedCache.GetAsync(cacheKey, default).Returns(tokenBytes);
 
         // Act
         var result = await _tokenCacheService.GetRefreshTokenAsync(userId);
 
         // Assert
         result.Should().Be(expectedToken);
-        await _distributedCache.Received(1).GetStringAsync(cacheKey);
+        await _distributedCache.Received(1).GetAsync(cacheKey, default);
     }
 
     [Fact]
@@ -46,14 +46,14 @@ public class TokenCacheServiceTests
         var userId = "test-user-id";
         var cacheKey = $"refresh_token:{userId}";
 
-        _distributedCache.GetStringAsync(cacheKey).ReturnsNull();
+        _distributedCache.GetAsync(cacheKey, default).Returns((byte[]?)null);
 
         // Act
         var result = await _tokenCacheService.GetRefreshTokenAsync(userId);
 
         // Assert
         result.Should().BeNull();
-        await _distributedCache.Received(1).GetStringAsync(cacheKey);
+        await _distributedCache.Received(1).GetAsync(cacheKey, default);
     }
 
     [Fact]
@@ -63,7 +63,7 @@ public class TokenCacheServiceTests
         var userId = "test-user-id";
         var cacheKey = $"refresh_token:{userId}";
 
-        _distributedCache.When(x => x.GetStringAsync(cacheKey))
+        _distributedCache.When(x => x.GetAsync(cacheKey, default))
             .Do(x => throw new Exception("Cache error"));
 
         // Act
@@ -86,11 +86,12 @@ public class TokenCacheServiceTests
         await _tokenCacheService.SetRefreshTokenAsync(userId, refreshToken, expiration);
 
         // Assert
-        await _distributedCache.Received(1).SetStringAsync(
+        await _distributedCache.Received(1).SetAsync(
             cacheKey,
-            refreshToken,
+            Arg.Any<byte[]>(),
             Arg.Is<DistributedCacheEntryOptions>(options =>
-                options.AbsoluteExpirationRelativeToNow == expiration));
+                options.AbsoluteExpirationRelativeToNow == expiration),
+            default);
     }
 
     [Fact]
@@ -101,7 +102,7 @@ public class TokenCacheServiceTests
         var refreshToken = "refresh-token-value";
         var expiration = TimeSpan.FromHours(1);
 
-        _distributedCache.When(x => x.SetStringAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<DistributedCacheEntryOptions>()))
+        _distributedCache.When(x => x.SetAsync(Arg.Any<string>(), Arg.Any<byte[]>(), Arg.Any<DistributedCacheEntryOptions>(), default))
             .Do(x => throw new Exception("Cache error"));
 
         // Act & Assert
@@ -120,7 +121,7 @@ public class TokenCacheServiceTests
         await _tokenCacheService.RemoveRefreshTokenAsync(userId);
 
         // Assert
-        await _distributedCache.Received(1).RemoveAsync(cacheKey);
+        await _distributedCache.Received(1).RemoveAsync(cacheKey, default);
     }
 
     [Fact]
@@ -130,7 +131,7 @@ public class TokenCacheServiceTests
         var userId = "test-user-id";
         var cacheKey = $"refresh_token:{userId}";
 
-        _distributedCache.When(x => x.RemoveAsync(cacheKey))
+        _distributedCache.When(x => x.RemoveAsync(cacheKey, default))
             .Do(x => throw new Exception("Cache error"));
 
         // Act & Assert
@@ -150,11 +151,12 @@ public class TokenCacheServiceTests
         await _tokenCacheService.BlacklistTokenAsync(tokenId, expiration);
 
         // Assert
-        await _distributedCache.Received(1).SetStringAsync(
+        await _distributedCache.Received(1).SetAsync(
             cacheKey,
-            "blacklisted",
+            Arg.Any<byte[]>(),
             Arg.Is<DistributedCacheEntryOptions>(options =>
-                options.AbsoluteExpirationRelativeToNow == expiration));
+                options.AbsoluteExpirationRelativeToNow == expiration),
+            default);
     }
 
     [Fact]
@@ -164,7 +166,7 @@ public class TokenCacheServiceTests
         var tokenId = "token-id";
         var expiration = TimeSpan.FromHours(1);
 
-        _distributedCache.When(x => x.SetStringAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<DistributedCacheEntryOptions>()))
+        _distributedCache.When(x => x.SetAsync(Arg.Any<string>(), Arg.Any<byte[]>(), Arg.Any<DistributedCacheEntryOptions>(), default))
             .Do(x => throw new Exception("Cache error"));
 
         // Act & Assert
@@ -178,15 +180,16 @@ public class TokenCacheServiceTests
         // Arrange
         var tokenId = "token-id";
         var cacheKey = $"blacklist_token:{tokenId}";
+        var tokenBytes = Encoding.UTF8.GetBytes("blacklisted");
 
-        _distributedCache.GetStringAsync(cacheKey).Returns("blacklisted");
+        _distributedCache.GetAsync(cacheKey, default).Returns(tokenBytes);
 
         // Act
         var result = await _tokenCacheService.IsTokenBlacklistedAsync(tokenId);
 
         // Assert
         result.Should().BeTrue();
-        await _distributedCache.Received(1).GetStringAsync(cacheKey);
+        await _distributedCache.Received(1).GetAsync(cacheKey, default);
     }
 
     [Fact]
@@ -196,14 +199,14 @@ public class TokenCacheServiceTests
         var tokenId = "token-id";
         var cacheKey = $"blacklist_token:{tokenId}";
 
-        _distributedCache.GetStringAsync(cacheKey).ReturnsNull();
+        _distributedCache.GetAsync(cacheKey, default).Returns((byte[]?)null);
 
         // Act
         var result = await _tokenCacheService.IsTokenBlacklistedAsync(tokenId);
 
         // Assert
         result.Should().BeFalse();
-        await _distributedCache.Received(1).GetStringAsync(cacheKey);
+        await _distributedCache.Received(1).GetAsync(cacheKey, default);
     }
 
     [Fact]
@@ -213,7 +216,7 @@ public class TokenCacheServiceTests
         var tokenId = "token-id";
         var cacheKey = $"blacklist_token:{tokenId}";
 
-        _distributedCache.When(x => x.GetStringAsync(cacheKey))
+        _distributedCache.When(x => x.GetAsync(cacheKey, default))
             .Do(x => throw new Exception("Cache error"));
 
         // Act
@@ -234,7 +237,7 @@ public class TokenCacheServiceTests
         await _tokenCacheService.RemoveAllUserTokensAsync(userId);
 
         // Assert
-        await _distributedCache.Received(1).RemoveAsync(refreshTokenKey);
+        await _distributedCache.Received(1).RemoveAsync(refreshTokenKey, default);
     }
 
     [Fact]
@@ -243,7 +246,7 @@ public class TokenCacheServiceTests
         // Arrange
         var userId = "test-user-id";
 
-        _distributedCache.When(x => x.RemoveAsync(Arg.Any<string>()))
+        _distributedCache.When(x => x.RemoveAsync(Arg.Any<string>(), default))
             .Do(x => throw new Exception("Cache error"));
 
         // Act & Assert
