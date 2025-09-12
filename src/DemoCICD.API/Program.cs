@@ -27,6 +27,7 @@ builder.Host.UseSerilog();
 builder.Services.AddConfigureMediatR();
 
 builder.Services.AddInfrastructure();
+builder.Services.AddRedisCache(builder.Configuration);
 builder.Services.AddJwtAuthentication(builder.Configuration);
 
 //builder
@@ -35,6 +36,7 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 //    .AddApplicationPart(DemoCICD.Presentation.AssemblyReference.Assembly);
 
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+builder.Services.AddTransient<TokenValidationMiddleware>();
 
 // Configure Options and SQL
 builder.Services.ConfigureSqlServerRetryOptions(builder.Configuration.GetSection(nameof(SqlServerRetryOptions)));
@@ -72,6 +74,7 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 //app.UseHttpsRedirection();
 app.UseAuthentication();
+app.UseMiddleware<TokenValidationMiddleware>();
 app.UseAuthorization();
 
 app.MapCarter();

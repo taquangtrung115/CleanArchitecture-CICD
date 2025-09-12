@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		.mcp.json = .mcp.json
 		DEV-Environment.ps1 = DEV-Environment.ps1
 		Directory.Build.props = Directory.Build.props
 		iis-rollback.ps1 = iis-rollback.ps1

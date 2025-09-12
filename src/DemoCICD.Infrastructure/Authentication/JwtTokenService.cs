@@ -16,19 +16,28 @@ namespace DemoCICD.Infrastructure.Authentication;
 public class JwtTokenService : IJwtTokenService
 {
     private readonly JwtOption jwtOption = new JwtOption();
-    public JwtTokenService(IConfiguration configuration)
+    private readonly ITokenCacheService _tokenCacheService;
+
+    public JwtTokenService(IConfiguration configuration, ITokenCacheService tokenCacheService)
     {
         configuration.GetSection(nameof(JwtOption)).Bind(jwtOption);
+        _tokenCacheService = tokenCacheService;
     }
+
     public string GenerateAccessToken(IEnumerable<Claim> claims)
     {
+        var tokenId = Guid.NewGuid().ToString();
+        var claimsList = claims.ToList();
+        claimsList.Add(new Claim(JwtRegisteredClaimNames.Jti, tokenId));
+        claimsList.Add(new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64));
+
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOption.SecretKey));
         var signInCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
         var tokenOptions = new JwtSecurityToken(
             issuer: jwtOption.Issuer,
             audience: jwtOption.Audience,
-            claims: claims,
+            claims: claimsList,
             expires: DateTime.Now.AddMinutes(jwtOption.ExpireMin),
             signingCredentials: signInCredentials
             );
@@ -56,7 +65,7 @@ public class JwtTokenService : IJwtTokenService
         {
             ValidateIssuer = false,
             ValidateAudience = false,
-            ValidateLifetime = true,
+            ValidateLifetime = false, // We're checking an expired token
             ValidateIssuerSigningKey = true,
             ValidIssuer = jwtOption.Issuer,
             IssuerSigningKey = new SymmetricSecurityKey(key),
@@ -69,5 +78,55 @@ public class JwtTokenService : IJwtTokenService
             throw new SecurityTokenException("Invalid token");
 
         return principal;
+    }
+
+    public string? GetTokenIdFromToken(string token)
+    {
+        try
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jsonToken = tokenHandler.ReadJwtToken(token);
+            return jsonToken.Claims?.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)?.Value;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    public async Task<bool> ValidateTokenAsync(string token)
+    {
+        try
+        {
+            var tokenId = GetTokenIdFromToken(token);
+            if (string.IsNullOrEmpty(tokenId))
+                return false;
+
+            // Check if token is blacklisted
+            var isBlacklisted = await _tokenCacheService.IsTokenBlacklistedAsync(tokenId);
+            if (isBlacklisted)
+                return false;
+
+            // Validate token signature and expiration
+            var key = Encoding.UTF8.GetBytes(jwtOption.SecretKey);
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtOption.Issuer,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ClockSkew = TimeSpan.Zero
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }

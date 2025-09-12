@@ -12,4 +12,6 @@ public interface IJwtTokenService
     string GenerateAccessToken(IEnumerable<Claim> claims);
     string GenerateRefreshToken();
     ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
+    string? GetTokenIdFromToken(string token);
+    Task<bool> ValidateTokenAsync(string token);
 }
