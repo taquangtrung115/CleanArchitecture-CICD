@@ -111,7 +111,7 @@ public class UpdateUserCommandHandler : ICommandHandler<Command.UpdateUser, Resp
     }
 }
 
-public class DeleteUserCommandHandler : ICommandHandler<Command.DeleteUser>
+public sealed class DeleteUserCommandHandler : ICommandHandler<Command.DeleteUser>
 {
     private readonly IUserManagementService _userManagementService;
     private readonly ILogger<DeleteUserCommandHandler> _logger;
@@ -146,7 +146,7 @@ public class DeleteUserCommandHandler : ICommandHandler<Command.DeleteUser>
     }
 }
 
-public class ChangePasswordCommandHandler : ICommandHandler<Command.ChangePassword>
+public sealed class ChangePasswordCommandHandler : ICommandHandler<Command.ChangePassword>
 {
     private readonly IUserManagementService _userManagementService;
     private readonly ILogger<ChangePasswordCommandHandler> _logger;
@@ -184,7 +184,7 @@ public class ChangePasswordCommandHandler : ICommandHandler<Command.ChangePasswo
     }
 }
 
-public class ResetPasswordCommandHandler : ICommandHandler<Command.ResetPassword>
+public sealed class ResetPasswordCommandHandler : ICommandHandler<Command.ResetPassword>
 {
     private readonly IUserManagementService _userManagementService;
     private readonly ILogger<ResetPasswordCommandHandler> _logger;
@@ -221,7 +221,7 @@ public class ResetPasswordCommandHandler : ICommandHandler<Command.ResetPassword
     }
 }
 
-public class LockUserCommandHandler : ICommandHandler<Command.LockUser>
+public sealed class LockUserCommandHandler : ICommandHandler<Command.LockUser>
 {
     private readonly IUserManagementService _userManagementService;
     private readonly ILogger<LockUserCommandHandler> _logger;
@@ -256,7 +256,7 @@ public class LockUserCommandHandler : ICommandHandler<Command.LockUser>
     }
 }
 
-public class UnlockUserCommandHandler : ICommandHandler<Command.UnlockUser>
+public sealed class UnlockUserCommandHandler : ICommandHandler<Command.UnlockUser>
 {
     private readonly IUserManagementService _userManagementService;
     private readonly ILogger<UnlockUserCommandHandler> _logger;
@@ -291,7 +291,7 @@ public class UnlockUserCommandHandler : ICommandHandler<Command.UnlockUser>
     }
 }
 
-public class AssignUserToRoleCommandHandler : ICommandHandler<Command.AssignUserToRole>
+public sealed class AssignUserToRoleCommandHandler : ICommandHandler<Command.AssignUserToRole>
 {
     private readonly IUserManagementService _userManagementService;
     private readonly ILogger<AssignUserToRoleCommandHandler> _logger;
@@ -326,7 +326,7 @@ public class AssignUserToRoleCommandHandler : ICommandHandler<Command.AssignUser
     }
 }
 
-public class RemoveUserFromRoleCommandHandler : ICommandHandler<Command.RemoveUserFromRole>
+public sealed class RemoveUserFromRoleCommandHandler : ICommandHandler<Command.RemoveUserFromRole>
 {
     private readonly IUserManagementService _userManagementService;
     private readonly ILogger<RemoveUserFromRoleCommandHandler> _logger;

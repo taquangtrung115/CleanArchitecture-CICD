@@ -13,7 +13,6 @@ public class UserAuthenticationServiceTests
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
-    private readonly ILogger<UserAuthenticationService> _logger;
     private readonly UserAuthenticationService _userAuthenticationService;
 
     public UserAuthenticationServiceTests()
@@ -26,8 +25,7 @@ public class UserAuthenticationServiceTests
             Substitute.For<Microsoft.AspNetCore.Http.IHttpContextAccessor>(),
             Substitute.For<IUserClaimsPrincipalFactory<AppUser>>(),
             null, null, null, null);
-        _logger = Substitute.For<ILogger<UserAuthenticationService>>();
-        _userAuthenticationService = new UserAuthenticationService(_userManager, _signInManager, _logger);
+        _userAuthenticationService = new UserAuthenticationService(_userManager, _signInManager);
     }
 
     [Fact]

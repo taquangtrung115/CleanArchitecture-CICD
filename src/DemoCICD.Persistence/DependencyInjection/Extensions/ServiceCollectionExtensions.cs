@@ -4,6 +4,7 @@ using DemoCICD.Domain.Entities.Identity;
 using DemoCICD.Persistence.DependencyInjection.Options;
 using DemoCICD.Persistence.Reponsitories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -61,8 +62,8 @@ public static class ServiceCollectionExtensions
             opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2); // Default 5
             opt.Lockout.MaxFailedAccessAttempts = 3; // Default 5
         })
-            .AddRoles<AppRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+           .AddRoles<AppRole>()
+           .AddEntityFrameworkStores<ApplicationDbContext>();
 
         services.Configure<IdentityOptions>(options =>
         {

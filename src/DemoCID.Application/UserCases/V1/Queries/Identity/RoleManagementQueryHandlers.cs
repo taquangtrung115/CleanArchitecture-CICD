@@ -2,21 +2,18 @@ using DemoCICD.Application.Abstractions;
 using DemoCICD.Contract.Abstractions.Message;
 using DemoCICD.Contract.Abstractions.Shared;
 using DemoCICD.Contract.Services.V1.Identity;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace DemoCICD.Application.UserCases.V1.Queries.Identity;
 
 public class GetRoleByIdQueryHandler : IQueryHandler<Query.GetRoleById, Response.RoleDetails>
 {
     private readonly IRoleManagementService _roleManagementService;
-    private readonly ILogger<GetRoleByIdQueryHandler> _logger;
 
     public GetRoleByIdQueryHandler(
-        IRoleManagementService roleManagementService,
-        ILogger<GetRoleByIdQueryHandler> logger)
+        IRoleManagementService roleManagementService)
     {
         _roleManagementService = roleManagementService;
-        _logger = logger;
     }
 
     public async Task<Result<Response.RoleDetails>> Handle(Query.GetRoleById request, CancellationToken cancellationToken)
@@ -42,7 +39,7 @@ public class GetRoleByIdQueryHandler : IQueryHandler<Query.GetRoleById, Response
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting role by ID: {RoleId}", request.RoleId);
+            Log.Error(ex, "Error getting role by ID: {RoleId}", request.RoleId);
             return Result.Failure<Response.RoleDetails>(
                 new Error("Role.GetError", "An error occurred while retrieving role"));
         }
@@ -52,14 +49,11 @@ public class GetRoleByIdQueryHandler : IQueryHandler<Query.GetRoleById, Response
 public class GetRolesQueryHandler : IQueryHandler<Query.GetRoles, Response.RoleList>
 {
     private readonly IRoleManagementService _roleManagementService;
-    private readonly ILogger<GetRolesQueryHandler> _logger;
 
     public GetRolesQueryHandler(
-        IRoleManagementService roleManagementService,
-        ILogger<GetRolesQueryHandler> logger)
+        IRoleManagementService roleManagementService)
     {
         _roleManagementService = roleManagementService;
-        _logger = logger;
     }
 
     public async Task<Result<Response.RoleList>> Handle(Query.GetRoles request, CancellationToken cancellationToken)
@@ -87,10 +81,9 @@ public class GetRolesQueryHandler : IQueryHandler<Query.GetRoles, Response.RoleL
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting roles with page: {Page}, pageSize: {PageSize}, searchTerm: {SearchTerm}", 
-                request.Page, request.PageSize, request.SearchTerm);
+            Log.Error(ex, "Error getting roles");
             return Result.Failure<Response.RoleList>(
-                new Error("Roles.GetError", "An error occurred while retrieving roles"));
+                new Error("Role.GetError", "An error occurred while retrieving roles"));
         }
     }
 }
@@ -98,14 +91,11 @@ public class GetRolesQueryHandler : IQueryHandler<Query.GetRoles, Response.RoleL
 public class GetUsersInRoleQueryHandler : IQueryHandler<Query.GetUsersInRole, Response.UserList>
 {
     private readonly IRoleManagementService _roleManagementService;
-    private readonly ILogger<GetUsersInRoleQueryHandler> _logger;
 
     public GetUsersInRoleQueryHandler(
-        IRoleManagementService roleManagementService,
-        ILogger<GetUsersInRoleQueryHandler> logger)
+        IRoleManagementService roleManagementService)
     {
         _roleManagementService = roleManagementService;
-        _logger = logger;
     }
 
     public async Task<Result<Response.UserList>> Handle(Query.GetUsersInRole request, CancellationToken cancellationToken)
@@ -131,7 +121,7 @@ public class GetUsersInRoleQueryHandler : IQueryHandler<Query.GetUsersInRole, Re
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting users in role: {RoleId}", request.RoleId);
+            Log.Error(ex, "Error getting users in role: {RoleId}", request.RoleId);
             return Result.Failure<Response.UserList>(
                 new Error("RoleUsers.GetError", "An error occurred while retrieving users in role"));
         }
@@ -141,14 +131,11 @@ public class GetUsersInRoleQueryHandler : IQueryHandler<Query.GetUsersInRole, Re
 public class GetRolePermissionsQueryHandler : IQueryHandler<Query.GetRolePermissions, Response.PermissionList>
 {
     private readonly IRoleManagementService _roleManagementService;
-    private readonly ILogger<GetRolePermissionsQueryHandler> _logger;
 
     public GetRolePermissionsQueryHandler(
-        IRoleManagementService roleManagementService,
-        ILogger<GetRolePermissionsQueryHandler> logger)
+        IRoleManagementService roleManagementService)
     {
         _roleManagementService = roleManagementService;
-        _logger = logger;
     }
 
     public async Task<Result<Response.PermissionList>> Handle(Query.GetRolePermissions request, CancellationToken cancellationToken)
@@ -175,7 +162,7 @@ public class GetRolePermissionsQueryHandler : IQueryHandler<Query.GetRolePermiss
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting role permissions for role: {RoleId}", request.RoleId);
+            Log.Error(ex, "Error getting role permissions for role: {RoleId}", request.RoleId);
             return Result.Failure<Response.PermissionList>(
                 new Error("RolePermissions.GetError", "An error occurred while retrieving role permissions"));
         }

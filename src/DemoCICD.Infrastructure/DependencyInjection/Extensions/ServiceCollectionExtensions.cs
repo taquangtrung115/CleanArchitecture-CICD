@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DemoCICD.Application.Abstractions;
+using DemoCICD.Domain.Entities.Identity;
 using DemoCICD.Infrastructure.Authentication;
 using DemoCICD.Infrastructure.Caching;
 using DemoCICD.Infrastructure.DependencyInjection.Options;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +18,7 @@ public static class ServiceCollectionExtensions
 {
     public static void AddInfrastructure(this IServiceCollection services)
     {
+        services.AddScoped<SignInManager<AppUser>>();
         // Add infrastructure services here
         services.AddTransient<IJwtTokenService, JwtTokenService>();
         services.AddTransient<ITokenCacheService, TokenCacheService>();

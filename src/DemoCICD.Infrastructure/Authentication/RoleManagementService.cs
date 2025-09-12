@@ -2,7 +2,7 @@ using DemoCICD.Application.Abstractions;
 using DemoCICD.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace DemoCICD.Infrastructure.Authentication;
 
@@ -11,18 +11,15 @@ public class RoleManagementService : IRoleManagementService
     private readonly UserManager<AppUser> _userManager;
     private readonly RoleManager<AppRole> _roleManager;
     private readonly IPermissionManagementService _permissionManagementService;
-    private readonly ILogger<RoleManagementService> _logger;
 
     public RoleManagementService(
         UserManager<AppUser> userManager,
         RoleManager<AppRole> roleManager,
-        IPermissionManagementService permissionManagementService,
-        ILogger<RoleManagementService> logger)
+        IPermissionManagementService permissionManagementService)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _permissionManagementService = permissionManagementService;
-        _logger = logger;
     }
 
     public async Task<AppRole?> GetRoleByIdAsync(Guid roleId)
@@ -73,7 +70,7 @@ public class RoleManagementService : IRoleManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error creating role: {RoleName}", name);
+            Log.Error(ex, "Error creating role: {RoleName}", name);
             throw;
         }
     }
@@ -98,8 +95,8 @@ public class RoleManagementService : IRoleManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error updating role: {RoleId}", roleId);
-            return false;
+            Log.Error(ex, "Error updating role: {RoleId}", roleId);
+            throw;
         }
     }
 
@@ -118,7 +115,7 @@ public class RoleManagementService : IRoleManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error deleting role: {RoleId}", roleId);
+            Log.Error(ex, "Error deleting role: {RoleId}", roleId);
             return false;
         }
     }
@@ -137,7 +134,7 @@ public class RoleManagementService : IRoleManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting users in role: {RoleId}", roleId);
+            Log.Error(ex, "Error getting users in role: {RoleId}", roleId);
             return Enumerable.Empty<AppUser>();
         }
     }
@@ -154,7 +151,7 @@ public class RoleManagementService : IRoleManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting permissions for role: {RoleId}", roleId);
+            Log.Error(ex, "Error getting permissions for role: {RoleId}", roleId);
             return Enumerable.Empty<Permission>();
         }
     }
@@ -168,7 +165,7 @@ public class RoleManagementService : IRoleManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error granting permission to role: {RoleId}, function: {FunctionId}, action: {ActionId}", roleId, functionId, actionId);
+            Log.Error(ex, "Error granting permission to role: {RoleId}, function: {FunctionId}, action: {ActionId}", roleId, functionId, actionId);
             return false;
         }
     }
@@ -181,7 +178,7 @@ public class RoleManagementService : IRoleManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error revoking permission from role: {RoleId}, function: {FunctionId}, action: {ActionId}", roleId, functionId, actionId);
+            Log.Error(ex, "Error revoking permission from role: {RoleId}, function: {FunctionId}, action: {ActionId}", roleId, functionId, actionId);
             return false;
         }
     }
