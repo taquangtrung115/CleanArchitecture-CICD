@@ -63,16 +63,24 @@ builder.Services
         options.SubstituteApiVersionInUrl = true;
     });
 
+// CORS configuration
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy => policy
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+    );
+});
+
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-// Thêm Điểm cuối API
-//app.NewVersionedApi("products-minimal-show-on-swagger").MapProductApiV1().MapProductApiV2();
+// Enable CORS before authentication and authorization
+app.UseCors("AllowFrontend");
 
-// Thêm Điểm cuối API với mô-đun carter
-
-//app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseMiddleware<TokenValidationMiddleware>();
 app.UseAuthorization();
