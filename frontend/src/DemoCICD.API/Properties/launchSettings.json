@@ -1,0 +1,23 @@
+﻿{
+  "profiles": {
+    "http": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5258",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  },
+  "Docker": {
+    "commandName": "Docker",
+    "launchBrowser": true,
+    "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+    "environmentVariables": {
+      "ASPNETCORE_URLS": "http://+:80"
+    },
+    "publishAllPorts": true
+  }
+}

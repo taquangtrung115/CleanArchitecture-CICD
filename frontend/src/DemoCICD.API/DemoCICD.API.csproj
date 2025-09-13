@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.8.0" />
+    <PackageReference Include="MediatR" Version="12.1.1" />
+    <PackageReference Include="MicroElements.Swashbuckle.FluentValidation" Version="5.7.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.19" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.13">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.4" />
+    <PackageReference Include="Serilog" Version="4.3.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DemoCICD.Contract\DemoCICD.Contract.csproj" />
+    <ProjectReference Include="..\DemoCICD.Infrastructure.Dapper\DemoCICD.Infrastructure.Dapper.csproj" />
+    <ProjectReference Include="..\DemoCICD.Infrastructure\DemoCICD.Infrastructure.csproj" />
+    <ProjectReference Include="..\DemoCICD.Persistence\DemoCICD.Persistence.csproj" />
+    <ProjectReference Include="..\DemoCICD.Presentation\DemoCICD.Presentation.csproj" />
+    <ProjectReference Include="..\DemoCID.Application\DemoCICD.Application.csproj" />
+  </ItemGroup>
+
+</Project>

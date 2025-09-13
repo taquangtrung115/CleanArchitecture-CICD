@@ -1,0 +1,185 @@
+﻿{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "file:///home/runner/work/CleanArchitecture-CICD/CleanArchitecture-CICD"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"]
+    },
+    "sqlite": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sqlite"]
+    },
+    "browser": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-playwright"]
+    }
+  },
+  "prompts": {
+    "clean-architecture-analysis": {
+      "name": "Clean Architecture Analysis",
+      "description": "Analyze code structure for Clean Architecture compliance and suggest improvements. Hãy trả lời bằng tiếng Việt.",
+      "arguments": [
+        {
+          "name": "layer",
+          "description": "The architectural layer to analyze (Domain, Application, Infrastructure, Presentation, API). Hãy trả lời bằng tiếng Việt.",
+          "required": false
+        }
+      ],
+      "template": "Analyze the {{layer}} layer (or entire codebase if no layer specified) for Clean Architecture compliance. Check for:\n\n1. **Dependency Rule**: Ensure dependencies point inward (Domain → Application → Infrastructure/Presentation → API)\n2. **Layer Responsibilities**: Verify each layer contains appropriate code\n3. **Interface Segregation**: Check if interfaces are properly defined in the correct layers\n4. **Domain Logic**: Ensure business logic stays in Domain layer\n5. **Cross-cutting Concerns**: Verify proper handling of logging, validation, etc.\n\nProvide specific recommendations for violations found and suggest refactoring approaches that maintain clean architecture principles."
+    },
+    "cqrs-command-generator": {
+      "name": "CQRS Command Generator",
+      "description": "Generate CQRS Command, Handler, and related components following the project's patterns. Hãy trả lời bằng tiếng Việt.",
+      "arguments": [
+        {
+          "name": "entity",
+          "description": "The entity name (e.g., Product, User, Order). Hãy trả lời bằng tiếng Việt.",
+          "required": true
+        },
+        {
+          "name": "operation",
+          "description": "The operation name (e.g., Create, Update, Delete, Activate). Hãy trả lời bằng tiếng Việt.",
+          "required": true
+        },
+        {
+          "name": "properties",
+          "description": "Comma-separated list of properties needed for the command. Hãy trả lời bằng tiếng Việt.",
+          "required": false
+        }
+      ],
+      "template": "Generate a complete CQRS Command implementation for {{operation}}{{entity}} with the following structure:\n\n1. **Command** (in Contract/Services/[Domain]/Command.cs):\n   - {{operation}}{{entity}}Command record with {{properties}}\n   - Implement ICommand interface\n   - Include proper validation attributes\n\n2. **Command Handler** (in Application/UseCases/V1/Commands/[Entity]/{{operation}}{{entity}}CommandHandler.cs):\n   - Implement ICommandHandler<{{operation}}{{entity}}Command>\n   - Include proper error handling\n   - Follow the existing transaction patterns\n   - Include domain event publishing if applicable\n\n3. **Response DTO** (in Contract/Services/[Domain]/Command.cs):\n   - {{operation}}{{entity}}Response record\n\n4. **Validation** (if needed):\n   - FluentValidation validator for the command\n\nEnsure the generated code follows the project's existing patterns, naming conventions, and architectural principles."
+    },
+    "cqrs-query-generator": {
+      "name": "CQRS Query Generator",
+      "description": "Generate CQRS Query, Handler, and related components following the project's patterns. Hãy trả lời bằng tiếng Việt.",
+      "arguments": [
+        {
+          "name": "entity",
+          "description": "The entity name (e.g., Product, User, Order). Hãy trả lời bằng tiếng Việt.",
+          "required": true
+        },
+        {
+          "name": "operation",
+          "description": "The query operation (e.g., Get, GetAll, GetBy, Search). Hãy trả lời bằng tiếng Việt.",
+          "required": true
+        },
+        {
+          "name": "filters",
+          "description": "Comma-separated list of filter properties. Hãy trả lời bằng tiếng Việt.",
+          "required": false
+        }
+      ],
+      "template": "Generate a complete CQRS Query implementation for {{operation}}{{entity}} with the following structure:\n\n1. **Query** (in Contract/Services/[Domain]/Query.cs):\n   - {{operation}}{{entity}}Query record with {{filters}} parameters\n   - Implement IQuery<T> interface\n   - Include pagination if applicable\n\n2. **Query Handler** (in Application/UseCases/V1/Queries/[Entity]/{{operation}}{{entity}}QueryHandler.cs):\n   - Implement IQueryHandler<{{operation}}{{entity}}Query, T>\n   - Use appropriate repository pattern\n   - Include proper error handling\n   - Consider using Dapper for read-only operations\n\n3. **Response DTO** (in Contract/Services/[Domain]/Query.cs):\n   - {{operation}}{{entity}}Response record with projection properties\n\n4. **Repository Interface** (if new methods needed):\n   - Add methods to I{{entity}}Repository in Domain layer\n\nEnsure the generated code follows the project's existing patterns and uses appropriate data access technology (EF Core or Dapper)."
+    },
+    "ef-migration-helper": {
+      "name": "Entity Framework Migration Helper",
+      "description": "Assist with EF Core migrations and database schema changes. Hãy trả lời bằng tiếng Việt.",
+      "arguments": [
+        {
+          "name": "operation",
+          "description": "Migration operation: create, apply, remove, or rollback. Hãy trả lời bằng tiếng Việt.",
+          "required": true
+        },
+        {
+          "name": "migration_name",
+          "description": "Name for the migration (for create operation)",
+          "required": false
+        }
+      ],
+      "template": "Help with Entity Framework Core migration {{operation}}:\n\n{% if operation == 'create' %}\n**Creating Migration**: {{migration_name}}\n1. Review recent entity changes\n2. Run: `dotnet ef migrations add {{migration_name}} --project src/DemoCICD.Persistence`\n3. Review generated migration files\n4. Check for data loss warnings\n5. Test migration on development database\n\n{% elif operation == 'apply' %}\n**Applying Migrations**:\n1. Review pending migrations: `dotnet ef migrations list --project src/DemoCICD.Persistence`\n2. Backup production database if applicable\n3. Apply: `dotnet ef database update --project src/DemoCICD.Persistence`\n4. Verify schema changes\n\n{% elif operation == 'remove' %}\n**Removing Last Migration**:\n1. Ensure migration hasn't been applied to production\n2. Run: `dotnet ef migrations remove --project src/DemoCICD.Persistence`\n3. Review entity model changes\n\n{% elif operation == 'rollback' %}\n**Rolling Back Migration**:\n1. Identify target migration\n2. Run: `dotnet ef database update [PreviousMigrationName] --project src/DemoCICD.Persistence`\n3. Remove unwanted migration files\n{% endif %}\n\n**Best Practices**:\n- Always review generated SQL before applying\n- Use explicit transaction handling for complex changes\n- Consider data seeding for new required fields\n- Test migrations on copy of production data"
+    },
+    "api-documentation": {
+      "name": "API Documentation Generator",
+      "description": "Generate comprehensive API documentation for endpoints. Hãy trả lời bằng tiếng Việt.",
+      "arguments": [
+        {
+          "name": "controller",
+          "description": "Controller name to document. Hãy trả lời bằng tiếng Việt.",
+          "required": false
+        },
+        {
+          "name": "endpoint",
+          "description": "Specific endpoint to document. Hãy trả lời bằng tiếng Việt.",
+          "required": false
+        }
+      ],
+      "template": "Generate comprehensive API documentation for {{controller}}{{endpoint}}:\n\n**API Documentation Structure**:\n\n1. **Endpoint Overview**:\n   - HTTP Method and Route\n   - Purpose and functionality\n   - Authentication requirements\n   - Rate limiting considerations\n\n2. **Request Format**:\n   - Headers (Content-Type, Authorization, etc.)\n   - Path parameters with validation rules\n   - Query parameters with examples\n   - Request body schema (JSON)\n   - File upload specifications (if applicable)\n\n3. **Response Format**:\n   - Success responses (200, 201, 204) with examples\n   - Error responses (400, 401, 403, 404, 500) with error codes\n   - Response headers\n   - Pagination format (if applicable)\n\n4. **OpenAPI/Swagger Annotations**:\n   - [ProducesResponseType] attributes\n   - [SwaggerOperation] descriptions\n   - [SwaggerParameter] for parameters\n   - Schema examples and descriptions\n\n5. **Integration Examples**:\n   - cURL commands\n   - C# HttpClient usage\n   - JavaScript fetch examples\n\n6. **Business Rules**:\n   - Validation requirements\n   - Business logic constraints\n   - Related endpoint workflows\n\nEnsure documentation follows the project's API versioning strategy and includes proper error handling examples."
+    },
+    "testing-strategy": {
+      "name": "Testing Strategy Advisor",
+      "description": "Provide testing guidance and generate test templates for different layers. Hãy trả lời bằng tiếng Việt.",
+      "arguments": [
+        {
+          "name": "layer",
+          "description": "Layer to test: unit, integration, architecture, or e2e",
+          "required": true
+        },
+        {
+          "name": "component",
+          "description": "Specific component or feature to test",
+          "required": false
+        }
+      ],
+      "template": "Provide testing strategy and templates for {{layer}} testing{{component}}:\n\n{% if layer == 'unit' %}\n**Unit Testing Strategy**:\n1. **Domain Layer Tests**:\n   - Entity behavior and invariants\n   - Value object validation\n   - Domain service logic\n   - Domain event handling\n\n2. **Application Layer Tests**:\n   - Command/Query handler logic\n   - Business rule validation\n   - Repository interaction mocking\n   - Pipeline behavior testing\n\n3. **Test Structure** (AAA Pattern):\n   ```csharp\n   [Fact]\n   public async Task Handle_ValidCommand_ReturnsExpectedResult()\n   {\n       // Arrange\n       var command = new TestCommand();\n       var handler = new TestCommandHandler(_mockRepository.Object);\n       \n       // Act\n       var result = await handler.Handle(command, CancellationToken.None);\n       \n       // Assert\n       result.Should().BeOfType<SuccessResult>();\n   }\n   ```\n\n{% elif layer == 'integration' %}\n**Integration Testing Strategy**:\n1. **Database Integration**:\n   - Repository implementation tests\n   - Entity Framework configuration tests\n   - Migration verification\n\n2. **API Integration**:\n   - End-to-end request/response testing\n   - Authentication/authorization flows\n   - Error handling scenarios\n\n3. **Test Setup**:\n   - Use TestContainers for database\n   - WebApplicationFactory for API tests\n   - Seed test data appropriately\n\n{% elif layer == 'architecture' %}\n**Architecture Testing Strategy**:\n1. **Dependency Rules**:\n   - Layer dependency validation\n   - Circular dependency detection\n   - Interface implementation verification\n\n2. **Naming Conventions**:\n   - Command/Query naming patterns\n   - Handler class naming\n   - Repository interface patterns\n\n3. **NetArchTest Examples**:\n   ```csharp\n   [Fact]\n   public void Domain_Should_Not_HaveDependencyOnApplication()\n   {\n       Types.InAssembly(DomainAssembly)\n           .Should()\n           .NotHaveDependencyOn(ApplicationNamespace)\n           .GetResult().IsSuccessful.Should().BeTrue();\n   }\n   ```\n\n{% elif layer == 'e2e' %}\n**End-to-End Testing Strategy**:\n1. **User Journey Tests**:\n   - Complete business workflows\n   - Cross-system integration\n   - User interface interactions\n\n2. **Test Environment**:\n   - Isolated test environment\n   - Test data management\n   - External service mocking\n{% endif %}\n\n**Best Practices**:\n- Follow the test pyramid principle\n- Use meaningful test names\n- Implement proper test data cleanup\n- Mock external dependencies appropriately\n- Measure and maintain test coverage"
+    },
+    "cicd-optimization": {
+      "name": "CI/CD Pipeline Optimization",
+      "description": "Analyze and suggest improvements for CI/CD pipeline",
+      "arguments": [
+        {
+          "name": "stage",
+          "description": "Pipeline stage to optimize: build, test, deploy, or monitoring. Hãy trả lời bằng tiếng Việt.",
+          "required": false
+        }
+      ],
+      "template": "Analyze and optimize CI/CD pipeline{{stage}}:\n\n**Current Pipeline Analysis**:\n1. Review existing PowerShell scripts (DEV-Environment.ps1, PROD-Environment.ps1)\n2. Examine solution structure and build dependencies\n3. Identify bottlenecks and optimization opportunities\n\n{% if stage == 'build' or not stage %}\n**Build Optimization**:\n1. **Multi-stage Docker builds**:\n   - Separate restore, build, and publish stages\n   - Use build cache effectively\n   - Minimize final image size\n\n2. **Parallel builds**:\n   - Build independent projects concurrently\n   - Optimize project reference order\n   - Use MSBuild parallel execution\n\n3. **Build artifacts**:\n   - Cache NuGet packages\n   - Reuse build outputs between stages\n   - Implement incremental builds\n{% endif %}\n\n{% if stage == 'test' or not stage %}\n**Testing Pipeline**:\n1. **Test categorization**:\n   - Unit tests (fast feedback)\n   - Integration tests (database/API)\n   - Architecture tests (compliance)\n\n2. **Parallel test execution**:\n   - Run test assemblies in parallel\n   - Isolate test databases\n   - Use test containers for integration tests\n\n3. **Test reporting**:\n   - Code coverage collection\n   - Test result publishing\n   - Performance trend analysis\n{% endif %}\n\n{% if stage == 'deploy' or not stage %}\n**Deployment Strategy**:\n1. **Blue-Green deployment**:\n   - Zero-downtime deployments\n   - Automatic rollback capability\n   - Health check validation\n\n2. **Database migrations**:\n   - Safe migration strategies\n   - Rollback procedures\n   - Data backup verification\n\n3. **Configuration management**:\n   - Environment-specific settings\n   - Secret management\n   - Feature flag implementation\n{% endif %}\n\n{% if stage == 'monitoring' or not stage %}\n**Monitoring & Observability**:\n1. **Application monitoring**:\n   - Health checks implementation\n   - Performance metrics collection\n   - Error tracking and alerting\n\n2. **Infrastructure monitoring**:\n   - Resource utilization tracking\n   - Deployment success metrics\n   - Security scanning integration\n{% endif %}\n\n**Recommendations**:\n- Implement proper branching strategy (GitFlow/GitHub Flow)\n- Add quality gates (code coverage, security scans)\n- Automate environment provisioning\n- Include performance testing in pipeline\n- Set up proper monitoring and alerting"
+    },
+    "domain-modeling": {
+      "name": "Domain Modeling Assistant",
+      "description": "Help design domain models following DDD principles. Hãy trả lời bằng tiếng Việt.",
+      "arguments": [
+        {
+          "name": "domain",
+          "description": "The business domain or subdomain to model",
+          "required": true
+        },
+        {
+          "name": "scenario",
+          "description": "Specific business scenario or use case",
+          "required": false
+        }
+      ],
+      "template": "Design domain model for {{domain}}{{scenario}} following Domain-Driven Design principles:\n\n**Domain Analysis**:\n1. **Identify Core Domain Elements**:\n   - Entities with unique identity\n   - Value Objects for descriptive aspects\n   - Aggregates with consistency boundaries\n   - Domain Services for domain logic\n\n2. **Ubiquitous Language**:\n   - Define domain-specific terminology\n   - Ensure consistency between code and business language\n   - Document business rules and constraints\n\n**Domain Model Structure**:\n\n1. **Entities**:\n   ```csharp\n   public class {{domain}}Entity : Entity<Guid>\n   {\n       // Identity, business logic, and invariants\n       private readonly List<IDomainEvent> _domainEvents = new();\n       \n       // Business methods that maintain invariants\n       public void BusinessOperation()\n       {\n           // Validate business rules\n           // Apply changes\n           // Raise domain events\n       }\n   }\n   ```\n\n2. **Value Objects**:\n   ```csharp\n   public record ValueObject(string Property1, int Property2)\n   {\n       // Validation logic\n       // Immutable structure\n   }\n   ```\n\n3. **Aggregates**:\n   - Define aggregate root\n   - Establish consistency boundaries\n   - Implement aggregate-level business rules\n\n4. **Domain Events**:\n   ```csharp\n   public record {{domain}}DomainEvent(\n       Guid AggregateId,\n       DateTime OccurredOn\n   ) : IDomainEvent;\n   ```\n\n5. **Repository Interfaces**:\n   ```csharp\n   public interface I{{domain}}Repository\n   {\n       Task<{{domain}}> GetByIdAsync(Guid id);\n       Task AddAsync({{domain}} entity);\n       Task UpdateAsync({{domain}} entity);\n   }\n   ```\n\n**Business Rules & Invariants**:\n- List specific business constraints\n- Define validation rules\n- Specify domain event triggers\n- Document aggregate consistency requirements\n\n**Integration Considerations**:\n- Bounded context boundaries\n- Anti-corruption layers\n- Domain event publishing\n- External service integration patterns\n\n**Testing Strategy**:\n- Unit tests for entity behavior\n- Aggregate invariant testing\n- Domain service testing\n- Integration testing for repositories"
+    },
+    "performance-optimization": {
+      "name": "Performance Optimization Guide",
+      "description": "Analyze and suggest performance improvements for the applicatio. Hãy trả lời bằng tiếng Việt.",
+      "arguments": [
+        {
+          "name": "area",
+          "description": "Performance area: database, api, memory, or caching. Hãy trả lời bằng tiếng Việt.",
+          "required": false
+        }
+      ],
+      "template": "Performance optimization analysis and recommendations{{area}}:\n\n{% if area == 'database' or not area %}\n**Database Performance**:\n1. **Query Optimization**:\n   - Analyze slow queries using EF Core logging\n   - Add appropriate indexes\n   - Use projection for read operations\n   - Consider Dapper for complex read scenarios\n\n2. **Entity Framework Optimization**:\n   ```csharp\n   // Use AsNoTracking for read-only queries\n   await context.Entities.AsNoTracking().ToListAsync();\n   \n   // Include related data efficiently\n   await context.Entities\n       .Include(e => e.RelatedEntities)\n       .Where(e => e.Condition)\n       .ToListAsync();\n   \n   // Use Split queries for multiple includes\n   await context.Entities\n       .AsSplitQuery()\n       .Include(e => e.Collection1)\n       .Include(e => e.Collection2)\n       .ToListAsync();\n   ```\n\n3. **Connection Management**:\n   - Optimize connection pooling\n   - Use async operations consistently\n   - Implement connection retry policies\n{% endif %}\n\n{% if area == 'api' or not area %}\n**API Performance**:\n1. **Response Optimization**:\n   - Implement compression (Gzip)\n   - Use appropriate HTTP caching headers\n   - Optimize serialization settings\n   - Implement pagination for large datasets\n\n2. **Async Operations**:\n   ```csharp\n   [HttpGet]\n   public async Task<IActionResult> GetAsync()\n   {\n       var result = await _mediator.SendAsync(new GetQuery());\n       return Ok(result);\n   }\n   ```\n\n3. **Request Processing**:\n   - Minimize middleware pipeline\n   - Use efficient routing\n   - Implement request/response compression\n{% endif %}\n\n{% if area == 'memory' or not area %}\n**Memory Optimization**:\n1. **Object Lifecycle Management**:\n   - Proper disposal of disposable objects\n   - Avoid unnecessary object allocations\n   - Use object pooling for frequently created objects\n\n2. **Collections Optimization**:\n   ```csharp\n   // Pre-size collections when possible\n   var list = new List<T>(expectedCapacity);\n   \n   // Use ReadOnlySpan<T> for substring operations\n   ReadOnlySpan<char> span = text.AsSpan(start, length);\n   \n   // Use ArrayPool for temporary arrays\n   var pool = ArrayPool<T>.Shared;\n   var array = pool.Rent(minimumLength);\n   try { /* use array */ }\n   finally { pool.Return(array); }\n   ```\n{% endif %}\n\n{% if area == 'caching' or not area %}\n**Caching Strategy**:\n1. **Distributed Caching**:\n   ```csharp\n   public async Task<T> GetOrSetAsync<T>(\n       string key, \n       Func<Task<T>> getItem, \n       TimeSpan? expiry = null)\n   {\n       var cached = await _cache.GetStringAsync(key);\n       if (cached != null)\n           return JsonSerializer.Deserialize<T>(cached);\n           \n       var item = await getItem();\n       var serialized = JsonSerializer.Serialize(item);\n       await _cache.SetStringAsync(key, serialized, \n           new DistributedCacheEntryOptions \n           { \n               AbsoluteExpirationRelativeToNow = expiry ?? TimeSpan.FromMinutes(30) \n           });\n       return item;\n   }\n   ```\n\n2. **Cache Invalidation**:\n   - Implement cache-aside pattern\n   - Use cache tags for related data\n   - Implement cache warming strategies\n{% endif %}\n\n**Performance Monitoring**:\n1. **Metrics Collection**:\n   - Response time tracking\n   - Memory usage monitoring\n   - Database query performance\n   - Error rate tracking\n\n2. **Profiling Tools**:\n   - Use Application Insights\n   - Implement custom performance counters\n   - Add structured logging for performance analysis\n\n**Load Testing**:\n- Implement automated performance tests\n- Use tools like NBomber or k6\n- Test under realistic load conditions\n- Monitor resource utilization during tests"
+    }
+  },
+  "globalSettings": {
+    "timeout": 30000,
+    "retries": 3,
+    "logLevel": "info"
+  },
+  "version": "1.0.0",
+  "description": "MCP configuration for Clean Architecture .NET project with CI/CD pipeline. Provides comprehensive development assistance including code generation, architecture guidance, and performance optimization.",
+  "pipelines": {
+    "PL_SLN": [
+      { "name": "Fetch latest changes", "run": "git fetch" },
+      { "name": "Pull latest changes from current branch", "run": "git pull origin $(git rev-parse --abbrev-ref HEAD)" },
+      { "name": "Clean solution", "run": "dotnet clean" },
+      { "name": "Build solution", "run": "dotnet build --no-restore" }
+    ]
+  }
+}
