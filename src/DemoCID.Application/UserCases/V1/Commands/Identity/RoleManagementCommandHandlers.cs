@@ -6,7 +6,7 @@ using Serilog;
 
 namespace DemoCICD.Application.UserCases.V1.Commands.Identity;
 
-public class CreateRoleCommandHandler : ICommandHandler<Command.CreateRole, Response.RoleCreated>
+public sealed class CreateRoleCommandHandler : ICommandHandler<Command.CreateRole, Response.RoleCreated>
 {
     private readonly IRoleManagementService _roleManagementService;
 
@@ -43,7 +43,7 @@ public class CreateRoleCommandHandler : ICommandHandler<Command.CreateRole, Resp
     }
 }
 
-public class UpdateRoleCommandHandler : ICommandHandler<Command.UpdateRole, Response.RoleUpdated>
+public sealed class UpdateRoleCommandHandler : ICommandHandler<Command.UpdateRole, Response.RoleUpdated>
 {
     private readonly IRoleManagementService _roleManagementService;
 

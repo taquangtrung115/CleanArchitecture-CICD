@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DemoCICD.Application.UserCases.V1.Queries.Identity;
 
-public class GetUserByIdQueryHandler : IQueryHandler<Query.GetUserById, Response.UserDetails>
+public sealed class GetUserByIdQueryHandler : IQueryHandler<Query.GetUserById, Response.UserDetails>
 {
     private readonly IUserManagementService _userManagementService;
     private readonly ILogger<GetUserByIdQueryHandler> _logger;
@@ -57,7 +57,7 @@ public class GetUserByIdQueryHandler : IQueryHandler<Query.GetUserById, Response
     }
 }
 
-public class GetUsersQueryHandler : IQueryHandler<Query.GetUsers, Response.UserList>
+public sealed class GetUsersQueryHandler : IQueryHandler<Query.GetUsers, Response.UserList>
 {
     private readonly IUserManagementService _userManagementService;
     private readonly ILogger<GetUsersQueryHandler> _logger;
@@ -104,7 +104,7 @@ public class GetUsersQueryHandler : IQueryHandler<Query.GetUsers, Response.UserL
     }
 }
 
-public class GetUserRolesQueryHandler : IQueryHandler<Query.GetUserRoles, Response.UserRoleList>
+public sealed class GetUserRolesQueryHandler : IQueryHandler<Query.GetUserRoles, Response.UserRoleList>
 {
     private readonly IUserManagementService _userManagementService;
     private readonly ILogger<GetUserRolesQueryHandler> _logger;

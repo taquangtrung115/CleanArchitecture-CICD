@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DemoCICD.Application.UserCases.V1.Commands.Identity;
 
-public class RefreshTokenCommandHandler : ICommandHandler<Command.RefreshTokenRequest, Response.Authenticated>
+public sealed class RefreshTokenCommandHandler : ICommandHandler<Command.RefreshTokenRequest, Response.Authenticated>
 {
     private readonly IJwtTokenService _jwtTokenService;
     private readonly ITokenCacheService _tokenCacheService;

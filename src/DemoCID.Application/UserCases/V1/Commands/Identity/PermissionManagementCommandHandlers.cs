@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DemoCICD.Application.UserCases.V1.Commands.Identity;
 
-public class CreatePermissionCommandHandler : ICommandHandler<Command.CreatePermission, Response.PermissionCreated>
+public sealed class CreatePermissionCommandHandler : ICommandHandler<Command.CreatePermission, Response.PermissionCreated>
 {
     private readonly IPermissionManagementService _permissionManagementService;
     private readonly ILogger<CreatePermissionCommandHandler> _logger;
@@ -48,7 +48,7 @@ public class CreatePermissionCommandHandler : ICommandHandler<Command.CreatePerm
     }
 }
 
-public class DeletePermissionCommandHandler : ICommandHandler<Command.DeletePermission>
+public sealed class DeletePermissionCommandHandler : ICommandHandler<Command.DeletePermission>
 {
     private readonly IPermissionManagementService _permissionManagementService;
     private readonly ILogger<DeletePermissionCommandHandler> _logger;

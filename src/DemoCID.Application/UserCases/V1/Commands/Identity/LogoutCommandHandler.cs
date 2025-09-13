@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DemoCICD.Application.UserCases.V1.Commands.Identity;
 
-public class LogoutCommandHandler : ICommandHandler<Command.Logout>
+public sealed class LogoutCommandHandler : ICommandHandler<Command.Logout>
 {
     private readonly IJwtTokenService _jwtTokenService;
     private readonly ITokenCacheService _tokenCacheService;

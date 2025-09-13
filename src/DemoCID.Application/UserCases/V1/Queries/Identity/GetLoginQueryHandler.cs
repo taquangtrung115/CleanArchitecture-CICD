@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DemoCICD.Application.UserCases.V1.Queries.Identity;
 
-public class GetLoginQueryHandler : IQueryHandler<Query.Login, Response.Authenticated>
+public sealed class GetLoginQueryHandler : IQueryHandler<Query.Login, Response.Authenticated>
 {
     private readonly IJwtTokenService _jwtTokenService;
     private readonly ITokenCacheService _tokenCacheService;

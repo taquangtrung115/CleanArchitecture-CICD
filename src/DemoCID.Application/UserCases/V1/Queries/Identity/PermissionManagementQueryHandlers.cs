@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DemoCICD.Application.UserCases.V1.Queries.Identity;
 
-public class GetPermissionsQueryHandler : IQueryHandler<Query.GetPermissions, Response.PermissionList>
+public sealed class GetPermissionsQueryHandler : IQueryHandler<Query.GetPermissions, Response.PermissionList>
 {
     private readonly IPermissionManagementService _permissionManagementService;
     private readonly ILogger<GetPermissionsQueryHandler> _logger;
@@ -53,7 +53,7 @@ public class GetPermissionsQueryHandler : IQueryHandler<Query.GetPermissions, Re
     }
 }
 
-public class GetPermissionByIdQueryHandler : IQueryHandler<Query.GetPermissionById, Response.PermissionDetails>
+public sealed class GetPermissionByIdQueryHandler : IQueryHandler<Query.GetPermissionById, Response.PermissionDetails>
 {
     private readonly IPermissionManagementService _permissionManagementService;
     private readonly ILogger<GetPermissionByIdQueryHandler> _logger;

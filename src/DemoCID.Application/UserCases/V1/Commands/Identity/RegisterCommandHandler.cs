@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DemoCICD.Application.UserCases.V1.Commands.Identity;
 
-public class RegisterCommandHandler : ICommandHandler<Command.Register, Response.UserCreated>
+public sealed class RegisterCommandHandler : ICommandHandler<Command.Register, Response.UserCreated>
 {
     private readonly IUserAuthenticationService _userAuthenticationService;
     private readonly ILogger<RegisterCommandHandler> _logger;

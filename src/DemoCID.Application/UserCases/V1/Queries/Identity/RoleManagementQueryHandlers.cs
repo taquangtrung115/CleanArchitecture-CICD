@@ -6,7 +6,7 @@ using Serilog;
 
 namespace DemoCICD.Application.UserCases.V1.Queries.Identity;
 
-public class GetRoleByIdQueryHandler : IQueryHandler<Query.GetRoleById, Response.RoleDetails>
+public sealed class GetRoleByIdQueryHandler : IQueryHandler<Query.GetRoleById, Response.RoleDetails>
 {
     private readonly IRoleManagementService _roleManagementService;
 
@@ -46,7 +46,7 @@ public class GetRoleByIdQueryHandler : IQueryHandler<Query.GetRoleById, Response
     }
 }
 
-public class GetRolesQueryHandler : IQueryHandler<Query.GetRoles, Response.RoleList>
+public sealed class GetRolesQueryHandler : IQueryHandler<Query.GetRoles, Response.RoleList>
 {
     private readonly IRoleManagementService _roleManagementService;
 
@@ -88,7 +88,7 @@ public class GetRolesQueryHandler : IQueryHandler<Query.GetRoles, Response.RoleL
     }
 }
 
-public class GetUsersInRoleQueryHandler : IQueryHandler<Query.GetUsersInRole, Response.UserList>
+public sealed class GetUsersInRoleQueryHandler : IQueryHandler<Query.GetUsersInRole, Response.UserList>
 {
     private readonly IRoleManagementService _roleManagementService;
 
@@ -128,7 +128,7 @@ public class GetUsersInRoleQueryHandler : IQueryHandler<Query.GetUsersInRole, Re
     }
 }
 
-public class GetRolePermissionsQueryHandler : IQueryHandler<Query.GetRolePermissions, Response.PermissionList>
+public sealed class GetRolePermissionsQueryHandler : IQueryHandler<Query.GetRolePermissions, Response.PermissionList>
 {
     private readonly IRoleManagementService _roleManagementService;
 

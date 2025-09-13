@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DemoCICD.Application.UserCases.V1.Commands.Identity;
 
-public class CreateUserCommandHandler : ICommandHandler<Command.CreateUser, Response.UserCreated>
+public sealed class CreateUserCommandHandler : ICommandHandler<Command.CreateUser, Response.UserCreated>
 {
     private readonly IUserManagementService _userManagementService;
     private readonly ILogger<CreateUserCommandHandler> _logger;
@@ -59,7 +59,7 @@ public class CreateUserCommandHandler : ICommandHandler<Command.CreateUser, Resp
     }
 }
 
-public class UpdateUserCommandHandler : ICommandHandler<Command.UpdateUser, Response.UserUpdated>
+public sealed class UpdateUserCommandHandler : ICommandHandler<Command.UpdateUser, Response.UserUpdated>
 {
     private readonly IUserManagementService _userManagementService;
     private readonly ILogger<UpdateUserCommandHandler> _logger;
