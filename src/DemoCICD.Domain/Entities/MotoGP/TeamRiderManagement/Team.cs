@@ -17,10 +17,13 @@ public class Team : AuditableEntity<Guid>
     public bool IsActive { get; private set; }
 
     private readonly List<Rider> _riders = new();
-    public IReadOnlyList<Rider> Riders => _riders.AsReadOnly();
+    public virtual IReadOnlyList<Rider> Riders => _riders.AsReadOnly();
 
     private readonly List<Bike> _bikes = new();
-    public IReadOnlyList<Bike> Bikes => _bikes.AsReadOnly();
+    public virtual IReadOnlyList<Bike> Bikes => _bikes.AsReadOnly();
+
+    // EF Core requires a parameterless constructor
+    private Team() { }
 
     public Team(Guid id, string name, string shortName, Country country, DateTime foundedYear, string? description = null)
     {

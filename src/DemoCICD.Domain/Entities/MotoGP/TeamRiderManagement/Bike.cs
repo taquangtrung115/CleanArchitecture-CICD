@@ -16,6 +16,9 @@ public class Bike : AuditableEntity<Guid>
     public bool IsActive { get; private set; }
     public string? Notes { get; private set; }
 
+    // EF Core requires a parameterless constructor
+    private Bike() { }
+
     public Bike(Guid id, string manufacturer, string model, int year, BikeSpec specifications, 
                string? chassisNumber = null, string? engineNumber = null)
     {

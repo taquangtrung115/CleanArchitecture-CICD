@@ -5,7 +5,7 @@ This document provides comprehensive documentation for the MotoGP APIs implement
 
 ## Base URL
 ```
-https://localhost:7157/api/carter/v1/motogp
+https://localhost:5258/api/carter/v1/motogp
 ```
 
 ## Authentication
@@ -227,7 +227,7 @@ All successful operations return appropriate HTTP status codes:
 ### Create and Transfer Rider Workflow
 ```bash
 # 1. Create a new rider
-curl -X POST "https://localhost:7157/api/carter/v1/motogp/riders" \
+curl -X POST "https://localhost:5258/api/carter/v1/motogp/riders" \
   -H "Authorization: Bearer $JWT_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -244,7 +244,7 @@ curl -X POST "https://localhost:7157/api/carter/v1/motogp/riders" \
   }'
 
 # 2. Create a team
-curl -X POST "https://localhost:7157/api/carter/v1/motogp/teams" \
+curl -X POST "https://localhost:5258/api/carter/v1/motogp/teams" \
   -H "Authorization: Bearer $JWT_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -258,7 +258,7 @@ curl -X POST "https://localhost:7157/api/carter/v1/motogp/teams" \
   }'
 
 # 3. Transfer rider to team
-curl -X PUT "https://localhost:7157/api/carter/v1/motogp/riders/{riderId}/transfer" \
+curl -X PUT "https://localhost:5258/api/carter/v1/motogp/riders/{riderId}/transfer" \
   -H "Authorization: Bearer $JWT_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{

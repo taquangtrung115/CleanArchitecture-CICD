@@ -97,9 +97,9 @@ internal sealed class BikeConfiguration : IEntityTypeConfiguration<Bike>
         builder.Property(b => b.DeletedBy)
             .HasMaxLength(100);
 
-        // Computed column for FullName
-        builder.Property(b => b.FullName)
-            .HasComputedColumnSql("[Manufacturer] + ' ' + [Model] + ' (' + CAST([Year] AS VARCHAR) + ')'", stored: false);
+        // Computed column for FullName (remove this line to avoid EF Core mapping error)
+        // builder.Property(b => b.FullName)
+        //     .HasComputedColumnSql("[Manufacturer] + ' ' + [Model] + ' (' + CAST([Year] AS VARCHAR) + ')'", stored: false);
 
         // Indexes
         builder.HasIndex(b => b.TeamId);

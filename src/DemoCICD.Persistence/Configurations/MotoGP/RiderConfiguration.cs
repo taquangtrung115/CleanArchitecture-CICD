@@ -80,10 +80,6 @@ internal sealed class RiderConfiguration : IEntityTypeConfiguration<Rider>
         builder.Property(r => r.DeletedBy)
             .HasMaxLength(100);
 
-        // Computed column for FullName
-        builder.Property(r => r.FullName)
-            .HasComputedColumnSql("[FirstName] + ' ' + [LastName]", stored: false);
-
         // Indexes
         builder.HasIndex(r => r.RacingNumber)
             .IsUnique()

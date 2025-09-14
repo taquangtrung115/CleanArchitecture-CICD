@@ -1,6 +1,4 @@
-﻿
-
-using DemoCICD.Domain.Entities;
+﻿using DemoCICD.Domain.Entities;
 using DemoCICD.Domain.Entities.Identity;
 using DemoCICD.Domain.Entities.MotoGP.RaceManagement;
 using DemoCICD.Domain.Entities.MotoGP.TeamRiderManagement;

@@ -1,5 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { login } from 'api/auth';
+import Loader from 'components/Loader';
 import { Link as RouterLink } from 'react-router-dom';
 
 // material-ui
@@ -31,8 +34,11 @@ import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
 
 export default function AuthLogin({ isDemo = false }) {
   const [checked, setChecked] = React.useState(false);
-
   const [showPassword, setShowPassword] = React.useState(false);
+  const [formError, setFormError] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+  const navigate = useNavigate();
+
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -41,43 +47,62 @@ export default function AuthLogin({ isDemo = false }) {
     event.preventDefault();
   };
 
+  const handleSubmit = async (values, { setSubmitting }) => {
+    if (loading) return; // Block nếu đang loading
+    setFormError('');
+    setLoading(true);
+    const res = await login(values.userName, values.password);
+    if (res.data && res.data.accessToken) {
+      localStorage.setItem('token', res.data.accessToken);
+      localStorage.setItem('refreshToken', res.data.refreshToken || '');
+      localStorage.setItem('refreshTokenExpiryTime', res.data.refreshTokenExpiryTime || '');
+      navigate('/');
+    } else {
+      setFormError(res.error || 'Login failed');
+    }
+    setSubmitting(false);
+    setLoading(false);
+  };
+
   return (
     <>
+      {loading && <Loader />}
       <Formik
         initialValues={{
-          email: 'info@codedthemes.com',
-          password: '123456',
+          userName: '',
+          password: '',
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+          userName: Yup.string().max(255).required('User Name is required'),
           password: Yup.string()
             .required('Password is required')
             .test('no-leading-trailing-whitespace', 'Password cannot start or end with spaces', (value) => value === value.trim())
-            .max(10, 'Password must be less than 10 characters')
+            .max(255, 'Password must be less than 255 characters')
         })}
+        onSubmit={handleSubmit}
       >
-        {({ errors, handleBlur, handleChange, touched, values }) => (
-          <form noValidate>
+        {({ errors, handleBlur, handleChange, touched, values, isSubmitting }) => (
+          <form noValidate onSubmit={e => { e.preventDefault(); handleSubmit(values, { setSubmitting: () => { } }); }}>
             <Grid container spacing={3}>
               <Grid size={12}>
                 <Stack sx={{ gap: 1 }}>
-                  <InputLabel htmlFor="email-login">Email Address</InputLabel>
+                  <InputLabel htmlFor="userName-login">User Name</InputLabel>
                   <OutlinedInput
-                    id="email-login"
-                    type="email"
-                    value={values.email}
-                    name="email"
+                    id="userName-login"
+                    type="text"
+                    value={values.userName}
+                    name="userName"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    placeholder="Enter email address"
+                    placeholder="Enter user name"
                     fullWidth
-                    error={Boolean(touched.email && errors.email)}
+                    error={Boolean(touched.userName && errors.userName)}
                   />
                 </Stack>
-                {touched.email && errors.email && (
-                  <FormHelperText error id="standard-weight-helper-text-email-login">
-                    {errors.email}
+                {touched.userName && errors.userName && (
+                  <FormHelperText error id="standard-weight-helper-text-userName-login">
+                    {errors.userName}
                   </FormHelperText>
                 )}
               </Grid>
@@ -135,8 +160,11 @@ export default function AuthLogin({ isDemo = false }) {
                 </Stack>
               </Grid>
               <Grid size={12}>
+                {formError && (
+                  <FormHelperText error>{formError}</FormHelperText>
+                )}
                 <AnimateButton>
-                  <Button fullWidth size="large" variant="contained" color="primary">
+                  <Button fullWidth size="large" variant="contained" color="primary" type="submit" disabled={isSubmitting}>
                     Login
                   </Button>
                 </AnimateButton>

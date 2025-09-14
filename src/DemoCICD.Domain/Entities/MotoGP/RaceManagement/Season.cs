@@ -21,7 +21,7 @@ public class Season : AuditableEntity<Guid>
     public bool IsCurrentSeason { get; private set; }
 
     private readonly List<Race> _races = new();
-    public IReadOnlyList<Race> Races => _races.AsReadOnly();
+    public virtual IReadOnlyList<Race> Races => _races.AsReadOnly();
 
     public Season(Guid id, int year, string name, DateTime startDate, DateTime endDate, string? description = null)
     {
