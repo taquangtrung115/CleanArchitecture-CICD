@@ -10,6 +10,7 @@ public static class Command
         int RacingNumber,
         string CountryCode,
         string CountryName,
+        string CountryFlag,
         DateTime DateOfBirth,
         decimal Height,
         decimal Weight,

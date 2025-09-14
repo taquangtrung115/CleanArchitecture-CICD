@@ -26,7 +26,7 @@ public sealed class CreateTeamCommandHandler : ICommandHandler<Command.CreateTea
 
     public async Task<Result> Handle(Command.CreateTeamCommand request, CancellationToken cancellationToken)
     {
-        var country = new Country(request.CountryCode, request.CountryName);
+        var country = new Country(request.CountryCode, request.CountryName, request.CountryFlag);
         
         var team = Domain.Entities.MotoGP.TeamRiderManagement.Team.Create(
             request.Name,

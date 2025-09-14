@@ -9,6 +9,7 @@ public static class Command
         string ShortName,
         string CountryCode,
         string CountryName,
+        string CountryFlag,
         DateTime FoundedYear,
         string? Description = null) : ICommand;
 
@@ -18,6 +19,7 @@ public static class Command
         string ShortName,
         string CountryCode,
         string CountryName,
+        string CountryFlag,
         string? Description) : ICommand;
 
     public record UpdateTeamVisualIdentityCommand(

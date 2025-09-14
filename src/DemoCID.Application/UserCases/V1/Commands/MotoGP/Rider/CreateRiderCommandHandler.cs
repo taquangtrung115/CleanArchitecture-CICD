@@ -34,7 +34,7 @@ public sealed class CreateRiderCommandHandler : ICommandHandler<Command.CreateRi
             return Result.Failure(Error.Validation("RacingNumber.NotAvailable", $"Racing number {request.RacingNumber} is already taken"));
         }
 
-        var country = new Country(request.CountryCode, request.CountryName);
+        var country = new Country(request.CountryCode, request.CountryName, request.CountryFlag);
         
         var rider = Domain.Entities.MotoGP.TeamRiderManagement.Rider.Create(
             request.FirstName,

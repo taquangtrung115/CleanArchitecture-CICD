@@ -16,6 +16,12 @@ public class Error : IEquatable<Error>
 
     public string Message { get; }
 
+    public static Error NotFound(string code, string message) => new(code, message);
+
+    public static Error Validation(string code, string message) => new(code, message);
+
+    public static Error Failure(string code, string message) => new(code, message);
+
     public static implicit operator string(Error error) => error.Code;
 
     public static bool operator ==(Error? a, Error? b)

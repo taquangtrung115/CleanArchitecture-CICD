@@ -10,6 +10,7 @@ public static class Response
         int RacingNumber,
         string CountryCode,
         string CountryName,
+        string CountryFlag,
         DateTime DateOfBirth,
         int Age,
         Guid? CurrentTeamId,
