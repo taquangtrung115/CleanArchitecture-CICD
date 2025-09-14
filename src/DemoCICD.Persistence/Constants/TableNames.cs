@@ -20,4 +20,15 @@ internal static class TableNames
 
     // *********** Singular Nouns ***********
     internal const string Product = nameof(Product);
+
+    // *********** MotoGP Tables ***********
+    internal const string Seasons = nameof(Seasons);
+    internal const string Races = nameof(Races);
+    internal const string RaceEntries = nameof(RaceEntries);
+    internal const string Teams = nameof(Teams);
+    internal const string Riders = nameof(Riders);
+    internal const string RiderTeamHistories = nameof(RiderTeamHistories);
+    internal const string Bikes = nameof(Bikes);
+    internal const string News = nameof(News);
+    internal const string Videos = nameof(Videos);
 }
