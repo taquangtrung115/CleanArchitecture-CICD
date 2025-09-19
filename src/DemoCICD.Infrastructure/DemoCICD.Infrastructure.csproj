@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DemoCICD.Persistence\DemoCICD.Persistence.csproj" />
-    <ProjectReference Include="..\DemoCID.Application\DemoCICD.Application.csproj" />
+    <ProjectReference Include="..\DemoCICD.Application\DemoCICD.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

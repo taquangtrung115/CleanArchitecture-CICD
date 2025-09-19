@@ -22,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{715D87E5-A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoCICD.API", "src\DemoCICD.API\DemoCICD.API.csproj", "{CC638A5B-288F-4444-B2FA-265D3387BB71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoCICD.Application", "src\DemoCID.Application\DemoCICD.Application.csproj", "{87C252FD-A89A-40FB-9A72-254E52241842}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoCICD.Application", "src\DemoCICD.Application\DemoCICD.Application.csproj", "{87C252FD-A89A-40FB-9A72-254E52241842}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoCICD.Infrastructure", "src\DemoCICD.Infrastructure\DemoCICD.Infrastructure.csproj", "{24A8CB7B-7595-483B-AF88-93589AA33FA0}"
 EndProject

@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DemoCID.Application\DemoCICD.Application.csproj" />
+    <ProjectReference Include="..\..\src\DemoCICD.Application\DemoCICD.Application.csproj" />
     <ProjectReference Include="..\..\src\DemoCICD.Contract\DemoCICD.Contract.csproj" />
     <ProjectReference Include="..\..\src\DemoCICD.Domain\DemoCICD.Domain.csproj" />
   </ItemGroup>

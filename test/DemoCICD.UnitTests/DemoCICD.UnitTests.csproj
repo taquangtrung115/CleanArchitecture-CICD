@@ -35,7 +35,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\DemoCICD.Infrastructure\DemoCICD.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\DemoCICD.Presentation\DemoCICD.Presentation.csproj" />
-    <ProjectReference Include="..\..\src\DemoCID.Application\DemoCICD.Application.csproj" />
+    <ProjectReference Include="..\..\src\DemoCICD.Application\DemoCICD.Application.csproj" />
     <ProjectReference Include="..\..\src\DemoCICD.Domain\DemoCICD.Domain.csproj" />
   </ItemGroup>
 
