@@ -1,5 +1,5 @@
 ﻿# Course1 - Structure code - Setup CI/CD of Mr. Tran Dong
-# Study and Practice, customy to my liking by Ta Quang Trung
+# Study and Practice, customy by Ta Quang Trung
 # Reference: https://www.facebook.com/groups/342670156801353
 
 # Applying Migrations in EF Core
