@@ -9,6 +9,7 @@ using DemoCICD.Infrastructure.Dapper.DependencyInjection.Extensions;
 using DemoCICD.Presentation.APIs.Products;
 using Carter;
 using DemoCICD.Infrastructure.DependencyInjection.Extensions;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
