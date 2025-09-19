@@ -3,20 +3,18 @@ using DemoCICD.Contract.Abstractions.Message;
 using DemoCICD.Contract.Abstractions.Shared;
 using DemoCICD.Contract.Services.V1.Identity;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace DemoCICD.Application.UserCases.V1.Queries.Identity;
 
 public sealed class GetUserByIdQueryHandler : IQueryHandler<Query.GetUserById, Response.UserDetails>
 {
     private readonly IUserManagementService _userManagementService;
-    private readonly ILogger<GetUserByIdQueryHandler> _logger;
 
     public GetUserByIdQueryHandler(
-        IUserManagementService userManagementService,
-        ILogger<GetUserByIdQueryHandler> logger)
+        IUserManagementService userManagementService)
     {
         _userManagementService = userManagementService;
-        _logger = logger;
     }
 
     public async Task<Result<Response.UserDetails>> Handle(Query.GetUserById request, CancellationToken cancellationToken)
@@ -50,7 +48,7 @@ public sealed class GetUserByIdQueryHandler : IQueryHandler<Query.GetUserById, R
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting user by ID: {UserId}", request.UserId);
+            Log.Error(ex, "Error getting user by ID: {UserId}", request.UserId);
             return Result.Failure<Response.UserDetails>(
                 new Error("User.GetError", "An error occurred while retrieving user"));
         }
@@ -60,14 +58,11 @@ public sealed class GetUserByIdQueryHandler : IQueryHandler<Query.GetUserById, R
 public sealed class GetUsersQueryHandler : IQueryHandler<Query.GetUsers, Response.UserList>
 {
     private readonly IUserManagementService _userManagementService;
-    private readonly ILogger<GetUsersQueryHandler> _logger;
 
     public GetUsersQueryHandler(
-        IUserManagementService userManagementService,
-        ILogger<GetUsersQueryHandler> logger)
+        IUserManagementService userManagementService)
     {
         _userManagementService = userManagementService;
-        _logger = logger;
     }
 
     public async Task<Result<Response.UserList>> Handle(Query.GetUsers request, CancellationToken cancellationToken)
@@ -96,7 +91,7 @@ public sealed class GetUsersQueryHandler : IQueryHandler<Query.GetUsers, Respons
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting users with page: {Page}, pageSize: {PageSize}, searchTerm: {SearchTerm}", 
+            Log.Error(ex, "Error getting users with page: {Page}, pageSize: {PageSize}, searchTerm: {SearchTerm}", 
                 request.Page, request.PageSize, request.SearchTerm);
             return Result.Failure<Response.UserList>(
                 new Error("Users.GetError", "An error occurred while retrieving users"));
@@ -107,14 +102,11 @@ public sealed class GetUsersQueryHandler : IQueryHandler<Query.GetUsers, Respons
 public sealed class GetUserRolesQueryHandler : IQueryHandler<Query.GetUserRoles, Response.UserRoleList>
 {
     private readonly IUserManagementService _userManagementService;
-    private readonly ILogger<GetUserRolesQueryHandler> _logger;
 
     public GetUserRolesQueryHandler(
-        IUserManagementService userManagementService,
-        ILogger<GetUserRolesQueryHandler> logger)
+        IUserManagementService userManagementService)
     {
         _userManagementService = userManagementService;
-        _logger = logger;
     }
 
     public async Task<Result<Response.UserRoleList>> Handle(Query.GetUserRoles request, CancellationToken cancellationToken)
@@ -137,7 +129,7 @@ public sealed class GetUserRolesQueryHandler : IQueryHandler<Query.GetUserRoles,
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting user roles for user: {UserId}", request.UserId);
+            Log.Error(ex, "Error getting user roles for user: {UserId}", request.UserId);
             return Result.Failure<Response.UserRoleList>(
                 new Error("UserRoles.GetError", "An error occurred while retrieving user roles"));
         }

@@ -3,20 +3,18 @@ using DemoCICD.Domain.Entities.Identity;
 using DemoCICD.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace DemoCICD.Infrastructure.Authentication;
 
 public class PermissionManagementService : IPermissionManagementService
 {
     private readonly ApplicationDbContext _context;
-    private readonly ILogger<PermissionManagementService> _logger;
 
     public PermissionManagementService(
-        ApplicationDbContext context,
-        ILogger<PermissionManagementService> logger)
+        ApplicationDbContext context)
     {
         _context = context;
-        _logger = logger;
     }
 
     public async Task<(IEnumerable<Permission> Permissions, int TotalCount)> GetPermissionsAsync(int page, int pageSize)
@@ -35,7 +33,7 @@ public class PermissionManagementService : IPermissionManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting permissions with page: {Page}, pageSize: {PageSize}", page, pageSize);
+            Log.Error(ex, "Error getting permissions with page: {Page}, pageSize: {PageSize}", page, pageSize);
             return (Enumerable.Empty<Permission>(), 0);
         }
     }
@@ -51,7 +49,7 @@ public class PermissionManagementService : IPermissionManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting permission for role: {RoleId}, function: {FunctionId}, action: {ActionId}", 
+            Log.Error(ex, "Error getting permission for role: {RoleId}, function: {FunctionId}, action: {ActionId}", 
                 roleId, functionId, actionId);
             return null;
         }
@@ -82,7 +80,7 @@ public class PermissionManagementService : IPermissionManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error creating permission for role: {RoleId}, function: {FunctionId}, action: {ActionId}", 
+            Log.Error(ex, "Error creating permission for role: {RoleId}, function: {FunctionId}, action: {ActionId}", 
                 roleId, functionId, actionId);
             throw;
         }
@@ -104,7 +102,7 @@ public class PermissionManagementService : IPermissionManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error deleting permission for role: {RoleId}, function: {FunctionId}, action: {ActionId}", 
+            Log.Error(ex, "Error deleting permission for role: {RoleId}, function: {FunctionId}, action: {ActionId}", 
                 roleId, functionId, actionId);
             return false;
         }

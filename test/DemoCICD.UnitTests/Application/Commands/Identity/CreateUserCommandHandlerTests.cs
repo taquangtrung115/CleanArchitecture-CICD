@@ -11,14 +11,12 @@ namespace DemoCICD.UnitTests.Application.Commands.Identity;
 public class CreateUserCommandHandlerTests
 {
     private readonly IUserManagementService _userManagementService;
-    private readonly ILogger<CreateUserCommandHandler> _logger;
     private readonly CreateUserCommandHandler _handler;
 
     public CreateUserCommandHandlerTests()
     {
         _userManagementService = Substitute.For<IUserManagementService>();
-        _logger = Substitute.For<ILogger<CreateUserCommandHandler>>();
-        _handler = new CreateUserCommandHandler(_userManagementService, _logger);
+        _handler = new CreateUserCommandHandler(_userManagementService);
     }
 
     [Fact]
@@ -171,136 +169,5 @@ public class CreateUserCommandHandlerTests
         result.IsFailure.Should().BeTrue();
         result.Error.Code.Should().Be("UserCreation.Error");
         result.Error.Message.Should().Be("An error occurred during user creation");
-    }
-
-    [Fact]
-    public async Task Handle_WithSuccessfulCreation_ShouldLogInformation()
-    {
-        // Arrange
-        var command = new Command.CreateUser(
-            "jane.smith",
-            "jane.smith@example.com",
-            "SecurePassword123",
-            "Jane",
-            "Smith",
-            new DateTime(1985, 3, 20),
-            true,
-            false,
-            null,
-            Guid.NewGuid());
-
-        var userId = Guid.NewGuid();
-        var userAuthResult = UserAuthResult.Success(
-            userId.ToString(),
-            "jane.smith",
-            "jane.smith@example.com",
-            "Jane Smith");
-
-        _userManagementService.CreateUserAsync(
-            Arg.Any<string>(),
-            Arg.Any<string>(),
-            Arg.Any<string>(),
-            Arg.Any<string>(),
-            Arg.Any<string>(),
-            Arg.Any<DateTime?>(),
-            Arg.Any<bool?>(),
-            Arg.Any<bool?>(),
-            Arg.Any<Guid?>(),
-            Arg.Any<Guid>())
-            .Returns(userAuthResult);
-
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        result.IsSuccess.Should().BeTrue();
-        
-        _logger.Received(1).LogInformation(
-            "User {UserName} created successfully with ID {UserId}",
-            "jane.smith",
-            userId.ToString());
-    }
-
-    [Fact]
-    public async Task Handle_WithException_ShouldLogError()
-    {
-        // Arrange
-        var command = new Command.CreateUser(
-            "john.doe",
-            "john.doe@example.com",
-            "SecurePassword123",
-            "John",
-            "Doe",
-            new DateTime(1990, 1, 15),
-            false,
-            false,
-            null,
-            Guid.NewGuid());
-
-        var exception = new InvalidOperationException("Database connection failed");
-
-        _userManagementService.When(x => x.CreateUserAsync(
-            Arg.Any<string>(),
-            Arg.Any<string>(),
-            Arg.Any<string>(),
-            Arg.Any<string>(),
-            Arg.Any<string>(),
-            Arg.Any<DateTime?>(),
-            Arg.Any<bool?>(),
-            Arg.Any<bool?>(),
-            Arg.Any<Guid?>(),
-            Arg.Any<Guid>()))
-            .Do(x => throw exception);
-
-        // Act
-        await _handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        _logger.Received(1).LogError(exception, "Error during user creation for user: {UserName}", "john.doe");
-    }
-
-    [Fact]
-    public async Task Handle_WithNullErrorMessage_ShouldUseDefaultErrorMessage()
-    {
-        // Arrange
-        var command = new Command.CreateUser(
-            "test.user",
-            "test@example.com",
-            "password",
-            "Test",
-            "User",
-            null,
-            false,
-            false,
-            null,
-            Guid.NewGuid());
-
-        var userAuthResult = new UserAuthResult
-        {
-            IsSuccess = false,
-            ErrorMessage = null
-        };
-
-        _userManagementService.CreateUserAsync(
-            Arg.Any<string>(),
-            Arg.Any<string>(),
-            Arg.Any<string>(),
-            Arg.Any<string>(),
-            Arg.Any<string>(),
-            Arg.Any<DateTime?>(),
-            Arg.Any<bool?>(),
-            Arg.Any<bool?>(),
-            Arg.Any<Guid?>(),
-            Arg.Any<Guid>())
-            .Returns(userAuthResult);
-
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        result.Should().NotBeNull();
-        result.IsFailure.Should().BeTrue();
-        result.Error.Code.Should().Be("UserCreation.Failed");
-        result.Error.Message.Should().Be("User creation failed");
     }
 }

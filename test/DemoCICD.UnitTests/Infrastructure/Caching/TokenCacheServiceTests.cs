@@ -10,14 +10,12 @@ namespace DemoCICD.UnitTests.Infrastructure.Caching;
 public class TokenCacheServiceTests
 {
     private readonly IDistributedCache _distributedCache;
-    private readonly ILogger<TokenCacheService> _logger;
     private readonly TokenCacheService _tokenCacheService;
 
     public TokenCacheServiceTests()
     {
         _distributedCache = Substitute.For<IDistributedCache>();
-        _logger = Substitute.For<ILogger<TokenCacheService>>();
-        _tokenCacheService = new TokenCacheService(_distributedCache, _logger);
+        _tokenCacheService = new TokenCacheService(_distributedCache);
     }
 
     [Fact]

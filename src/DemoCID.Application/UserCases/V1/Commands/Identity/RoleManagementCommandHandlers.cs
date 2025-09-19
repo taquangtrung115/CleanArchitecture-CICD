@@ -192,6 +192,3 @@ public sealed class RevokePermissionFromRoleCommandHandler : ICommandHandler<Com
         }
     }
 }
-
-// For other command handlers (DeleteRoleCommandHandler, GrantPermissionToRoleCommandHandler, RevokePermissionFromRoleCommandHandler),
-// remove ILogger fields/parameters and use Log.Error/Log.Information as above.

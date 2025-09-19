@@ -3,6 +3,7 @@ using DemoCICD.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace DemoCICD.Infrastructure.Authentication;
 
@@ -10,16 +11,13 @@ public class UserManagementService : IUserManagementService
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly RoleManager<AppRole> _roleManager;
-    private readonly ILogger<UserManagementService> _logger;
 
     public UserManagementService(
         UserManager<AppUser> userManager,
-        RoleManager<AppRole> roleManager,
-        ILogger<UserManagementService> logger)
+        RoleManager<AppRole> roleManager)
     {
         _userManager = userManager;
         _roleManager = roleManager;
-        _logger = logger;
     }
 
     public async Task<AppUser?> GetUserByIdAsync(Guid userId)
@@ -90,7 +88,7 @@ public class UserManagementService : IUserManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error creating user: {UserName}", userName);
+            Log.Error(ex, "Error creating user: {UserName}", userName);
             return UserAuthResult.Failure("An error occurred during user creation");
         }
     }
@@ -120,7 +118,7 @@ public class UserManagementService : IUserManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error updating user: {UserId}", userId);
+            Log.Error(ex, "Error updating user: {UserId}", userId);
             return false;
         }
     }
@@ -140,7 +138,7 @@ public class UserManagementService : IUserManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error deleting user: {UserId}", userId);
+            Log.Error(ex, "Error deleting user: {UserId}", userId);
             return false;
         }
     }
@@ -160,7 +158,7 @@ public class UserManagementService : IUserManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error changing password for user: {UserId}", userId);
+            Log.Error(ex, "Error changing password for user: {UserId}", userId);
             return false;
         }
     }
@@ -181,7 +179,7 @@ public class UserManagementService : IUserManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error resetting password for user: {UserId}", userId);
+            Log.Error(ex, "Error resetting password for user: {UserId}", userId);
             return false;
         }
     }
@@ -201,7 +199,7 @@ public class UserManagementService : IUserManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error locking user: {UserId}", userId);
+            Log.Error(ex, "Error locking user: {UserId}", userId);
             return false;
         }
     }
@@ -221,7 +219,7 @@ public class UserManagementService : IUserManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error unlocking user: {UserId}", userId);
+            Log.Error(ex, "Error unlocking user: {UserId}", userId);
             return false;
         }
     }
@@ -247,7 +245,7 @@ public class UserManagementService : IUserManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error assigning user {UserId} to role {RoleId}", userId, roleId);
+            Log.Error(ex, "Error assigning user {UserId} to role {RoleId}", userId, roleId);
             return false;
         }
     }
@@ -273,7 +271,7 @@ public class UserManagementService : IUserManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error removing user {UserId} from role {RoleId}", userId, roleId);
+            Log.Error(ex, "Error removing user {UserId} from role {RoleId}", userId, roleId);
             return false;
         }
     }
@@ -304,7 +302,7 @@ public class UserManagementService : IUserManagementService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting roles for user: {UserId}", userId);
+            Log.Error(ex, "Error getting roles for user: {UserId}", userId);
             return Enumerable.Empty<AppRole>();
         }
     }

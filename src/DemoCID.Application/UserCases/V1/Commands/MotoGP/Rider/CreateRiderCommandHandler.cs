@@ -50,7 +50,7 @@ public sealed class CreateRiderCommandHandler : ICommandHandler<Command.CreateRi
         await _context.SaveChangesAsync(cancellationToken);
 
         // Publish domain event (if needed)
-        // await _publisher.Publish(new DomainEvent.RiderCreated(rider.Id), cancellationToken);
+        //await _publisher.Publish(new DomainEvent.RiderCreated(rider.Id), cancellationToken);
 
         return Result.Success();
     }

@@ -1,15 +1,14 @@
 ﻿using System.Text.Json;
 using System;
 using DemoCICD.Domain.Exceptions;
+using Serilog;
 
 namespace DemoCICD.API.Middleware;
 
 internal sealed class ExceptionHandlingMiddleware : IMiddleware
 {
-    private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
-    public ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> logger)
-        => _logger = logger;
+    public ExceptionHandlingMiddleware() { }
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
@@ -19,7 +18,7 @@ internal sealed class ExceptionHandlingMiddleware : IMiddleware
         }
         catch (Exception e)
         {
-            _logger.LogError(e, e.Message);
+            Log.Error(e, e.Message);
 
             await HandleExceptionAsync(context, e);
         }

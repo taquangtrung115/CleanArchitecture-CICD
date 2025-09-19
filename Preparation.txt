@@ -73,7 +73,7 @@ pipeline {
         }
         stage('Unit Test') {
             steps {
-                bat "dotnet test ${env.SlnUnitTest} -l:trx;LogFileName=${env.TestResultFileName}"
+                bat "dotnet test ${env.SlnUnitTest} -l:trx --no-build;LogFileName=${env.TestResultFileName}"
                 bat "if not exist ${env.MainDirectory} mkdir ${env.MainDirectory}"
                 bat "copy ${env.TrxFilePath}\\${env.TestResultFileName} ${env.MainDirectory}"
             }

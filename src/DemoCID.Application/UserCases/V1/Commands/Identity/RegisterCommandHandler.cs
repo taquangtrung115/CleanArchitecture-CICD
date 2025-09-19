@@ -3,20 +3,18 @@ using DemoCICD.Contract.Abstractions.Message;
 using DemoCICD.Contract.Abstractions.Shared;
 using DemoCICD.Contract.Services.V1.Identity;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace DemoCICD.Application.UserCases.V1.Commands.Identity;
 
 public sealed class RegisterCommandHandler : ICommandHandler<Command.Register, Response.UserCreated>
 {
     private readonly IUserAuthenticationService _userAuthenticationService;
-    private readonly ILogger<RegisterCommandHandler> _logger;
 
     public RegisterCommandHandler(
-        IUserAuthenticationService userAuthenticationService,
-        ILogger<RegisterCommandHandler> logger)
+        IUserAuthenticationService userAuthenticationService)
     {
         _userAuthenticationService = userAuthenticationService;
-        _logger = logger;
     }
 
     public async Task<Result<Response.UserCreated>> Handle(Command.Register request, CancellationToken cancellationToken)
@@ -37,7 +35,7 @@ public sealed class RegisterCommandHandler : ICommandHandler<Command.Register, R
                     new Error("Registration.Failed", result.ErrorMessage ?? "Registration failed"));
             }
 
-            _logger.LogInformation("User {UserName} registered successfully with ID {UserId}", request.UserName, result.UserId);
+            Log.Information("User {UserName} registered successfully with ID {UserId}", request.UserName, result.UserId);
 
             var response = new Response.UserCreated(
                 Guid.Parse(result.UserId!),
@@ -48,7 +46,7 @@ public sealed class RegisterCommandHandler : ICommandHandler<Command.Register, R
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during registration for user: {UserName}", request.UserName);
+            Log.Error(ex, "Error during registration for user: {UserName}", request.UserName);
             return Result.Failure<Response.UserCreated>(
                 new Error("Registration.Error", "An error occurred during registration"));
         }

@@ -9,6 +9,7 @@ using DemoCICD.Contract.Abstractions.Message;
 using DemoCICD.Contract.Abstractions.Shared;
 using DemoCICD.Contract.Services.V1.Identity;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace DemoCICD.Application.UserCases.V1.Queries.Identity;
 
@@ -17,18 +18,15 @@ public sealed class GetLoginQueryHandler : IQueryHandler<Query.Login, Response.A
     private readonly IJwtTokenService _jwtTokenService;
     private readonly ITokenCacheService _tokenCacheService;
     private readonly IUserAuthenticationService _userAuthenticationService;
-    private readonly ILogger<GetLoginQueryHandler> _logger;
 
     public GetLoginQueryHandler(
         IJwtTokenService jwtTokenService,
         ITokenCacheService tokenCacheService,
-        IUserAuthenticationService userAuthenticationService,
-        ILogger<GetLoginQueryHandler> logger)
+        IUserAuthenticationService userAuthenticationService)
     {
         _jwtTokenService = jwtTokenService;
         _tokenCacheService = tokenCacheService;
         _userAuthenticationService = userAuthenticationService;
-        _logger = logger;
     }
 
     public async Task<Result<Response.Authenticated>> Handle(Query.Login request, CancellationToken cancellationToken)
@@ -67,7 +65,7 @@ public sealed class GetLoginQueryHandler : IQueryHandler<Query.Login, Response.A
             var refreshTokenExpiration = TimeSpan.FromDays(7);
             await _tokenCacheService.SetRefreshTokenAsync(authResult.UserId!, refreshToken, refreshTokenExpiration);
 
-            _logger.LogInformation("User {UserId} logged in successfully", authResult.UserId);
+            Log.Information("User {UserId} logged in successfully", authResult.UserId);
 
             var response = new Response.Authenticated(
                 accessToken,
@@ -79,7 +77,7 @@ public sealed class GetLoginQueryHandler : IQueryHandler<Query.Login, Response.A
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during login for user: {UserName}", request.UserName);
+            Log.Error(ex, "Error during login for user: {UserName}", request.UserName);
             return Result.Failure<Response.Authenticated>(
                 new Error("Authentication.LoginError", "An error occurred during login"));
         }

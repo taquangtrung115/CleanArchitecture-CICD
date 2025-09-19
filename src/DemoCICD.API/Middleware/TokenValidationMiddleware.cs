@@ -6,18 +6,17 @@ using System.Threading.Tasks;
 using DemoCICD.Application.Abstractions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace DemoCICD.API.Middleware;
 
 public class TokenValidationMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly ILogger<TokenValidationMiddleware> _logger;
 
-    public TokenValidationMiddleware(RequestDelegate next, ILogger<TokenValidationMiddleware> logger)
+    public TokenValidationMiddleware(RequestDelegate next)
     {
         _next = next;
-        _logger = logger;
     }
 
     public async Task InvokeAsync(HttpContext context, IJwtTokenService jwtTokenService, ITokenCacheService tokenCacheService)
@@ -42,7 +41,7 @@ public class TokenValidationMiddleware
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error validating token in middleware");
+                Log.Error(ex, "Error validating token in middleware");
             }
         }
 

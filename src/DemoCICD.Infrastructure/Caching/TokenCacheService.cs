@@ -6,20 +6,19 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using DemoCICD.Application.Abstractions;
+using Serilog;
 
 namespace DemoCICD.Infrastructure.Caching;
 
 public class TokenCacheService : ITokenCacheService
 {
     private readonly IDistributedCache _distributedCache;
-    private readonly ILogger<TokenCacheService> _logger;
     private const string RefreshTokenPrefix = "refresh_token:";
     private const string BlacklistTokenPrefix = "blacklist_token:";
 
-    public TokenCacheService(IDistributedCache distributedCache, ILogger<TokenCacheService> logger)
+    public TokenCacheService(IDistributedCache distributedCache)
     {
         _distributedCache = distributedCache;
-        _logger = logger;
     }
 
     public async Task<string?> GetRefreshTokenAsync(string userId)
@@ -32,7 +31,7 @@ public class TokenCacheService : ITokenCacheService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting refresh token for user {UserId}", userId);
+            Log.Error(ex, "Error getting refresh token for user {UserId}", userId);
             return null;
         }
     }
@@ -47,11 +46,11 @@ public class TokenCacheService : ITokenCacheService
                 AbsoluteExpirationRelativeToNow = expiration
             };
             await _distributedCache.SetStringAsync(key, refreshToken, options);
-            _logger.LogInformation("Refresh token set for user {UserId}", userId);
+            Log.Information("Refresh token set for user {UserId}", userId);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error setting refresh token for user {UserId}", userId);
+            Log.Error(ex, "Error setting refresh token for user {UserId}", userId);
         }
     }
 
@@ -61,11 +60,11 @@ public class TokenCacheService : ITokenCacheService
         {
             var key = $"{RefreshTokenPrefix}{userId}";
             await _distributedCache.RemoveAsync(key);
-            _logger.LogInformation("Refresh token removed for user {UserId}", userId);
+            Log.Information("Refresh token removed for user {UserId}", userId);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error removing refresh token for user {UserId}", userId);
+            Log.Error(ex, "Error removing refresh token for user {UserId}", userId);
         }
     }
 
@@ -79,11 +78,11 @@ public class TokenCacheService : ITokenCacheService
                 AbsoluteExpirationRelativeToNow = expiration
             };
             await _distributedCache.SetStringAsync(key, "blacklisted", options);
-            _logger.LogInformation("Token {TokenId} blacklisted", tokenId);
+            Log.Information("Token {TokenId} blacklisted", tokenId);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error blacklisting token {TokenId}", tokenId);
+            Log.Error(ex, "Error blacklisting token {TokenId}", tokenId);
         }
     }
 
@@ -97,7 +96,7 @@ public class TokenCacheService : ITokenCacheService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error checking if token {TokenId} is blacklisted", tokenId);
+            Log.Error(ex, "Error checking if token {TokenId} is blacklisted", tokenId);
             return false;
         }
     }
@@ -107,11 +106,11 @@ public class TokenCacheService : ITokenCacheService
         try
         {
             await RemoveRefreshTokenAsync(userId);
-            _logger.LogInformation("All tokens removed for user {UserId}", userId);
+            Log.Information("All tokens removed for user {UserId}", userId);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error removing all tokens for user {UserId}", userId);
+            Log.Error(ex, "Error removing all tokens for user {UserId}", userId);
         }
     }
 }

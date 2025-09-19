@@ -3,20 +3,18 @@ using DemoCICD.Contract.Abstractions.Message;
 using DemoCICD.Contract.Abstractions.Shared;
 using DemoCICD.Contract.Services.V1.Identity;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace DemoCICD.Application.UserCases.V1.Commands.Identity;
 
 public sealed class CreateUserCommandHandler : ICommandHandler<Command.CreateUser, Response.UserCreated>
 {
     private readonly IUserManagementService _userManagementService;
-    private readonly ILogger<CreateUserCommandHandler> _logger;
 
     public CreateUserCommandHandler(
-        IUserManagementService userManagementService,
-        ILogger<CreateUserCommandHandler> logger)
+        IUserManagementService userManagementService)
     {
         _userManagementService = userManagementService;
-        _logger = logger;
     }
 
     public async Task<Result<Response.UserCreated>> Handle(Command.CreateUser request, CancellationToken cancellationToken)
@@ -41,7 +39,7 @@ public sealed class CreateUserCommandHandler : ICommandHandler<Command.CreateUse
                     new Error("UserCreation.Failed", result.ErrorMessage ?? "User creation failed"));
             }
 
-            _logger.LogInformation("User {UserName} created successfully with ID {UserId}", request.UserName, result.UserId);
+            Log.Information("User {UserName} created successfully with ID {UserId}", request.UserName, result.UserId);
 
             var response = new Response.UserCreated(
                 Guid.Parse(result.UserId!),
@@ -52,7 +50,7 @@ public sealed class CreateUserCommandHandler : ICommandHandler<Command.CreateUse
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during user creation for user: {UserName}", request.UserName);
+            Log.Error(ex, "Error during user creation for user: {UserName}", request.UserName);
             return Result.Failure<Response.UserCreated>(
                 new Error("UserCreation.Error", "An error occurred during user creation"));
         }
@@ -62,14 +60,11 @@ public sealed class CreateUserCommandHandler : ICommandHandler<Command.CreateUse
 public sealed class UpdateUserCommandHandler : ICommandHandler<Command.UpdateUser, Response.UserUpdated>
 {
     private readonly IUserManagementService _userManagementService;
-    private readonly ILogger<UpdateUserCommandHandler> _logger;
 
     public UpdateUserCommandHandler(
-        IUserManagementService userManagementService,
-        ILogger<UpdateUserCommandHandler> logger)
+        IUserManagementService userManagementService)
     {
         _userManagementService = userManagementService;
-        _logger = logger;
     }
 
     public async Task<Result<Response.UserUpdated>> Handle(Command.UpdateUser request, CancellationToken cancellationToken)
@@ -93,7 +88,7 @@ public sealed class UpdateUserCommandHandler : ICommandHandler<Command.UpdateUse
                     new Error("UserUpdate.Failed", "User update failed"));
             }
 
-            _logger.LogInformation("User {UserId} updated successfully", request.UserId);
+            Log.Information("User {UserId} updated successfully", request.UserId);
 
             var response = new Response.UserUpdated(
                 request.UserId,
@@ -104,7 +99,7 @@ public sealed class UpdateUserCommandHandler : ICommandHandler<Command.UpdateUse
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during user update for user: {UserId}", request.UserId);
+            Log.Error(ex, "Error during user update for user: {UserId}", request.UserId);
             return Result.Failure<Response.UserUpdated>(
                 new Error("UserUpdate.Error", "An error occurred during user update"));
         }
@@ -114,14 +109,11 @@ public sealed class UpdateUserCommandHandler : ICommandHandler<Command.UpdateUse
 public sealed class DeleteUserCommandHandler : ICommandHandler<Command.DeleteUser>
 {
     private readonly IUserManagementService _userManagementService;
-    private readonly ILogger<DeleteUserCommandHandler> _logger;
 
     public DeleteUserCommandHandler(
-        IUserManagementService userManagementService,
-        ILogger<DeleteUserCommandHandler> logger)
+        IUserManagementService userManagementService)
     {
         _userManagementService = userManagementService;
-        _logger = logger;
     }
 
     public async Task<Result> Handle(Command.DeleteUser request, CancellationToken cancellationToken)
@@ -135,12 +127,12 @@ public sealed class DeleteUserCommandHandler : ICommandHandler<Command.DeleteUse
                 return Result.Failure(new Error("UserDeletion.Failed", "User deletion failed"));
             }
 
-            _logger.LogInformation("User {UserId} deleted successfully", request.UserId);
+            Log.Information("User {UserId} deleted successfully", request.UserId);
             return Result.Success();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during user deletion for user: {UserId}", request.UserId);
+            Log.Error(ex, "Error during user deletion for user: {UserId}", request.UserId);
             return Result.Failure(new Error("UserDeletion.Error", "An error occurred during user deletion"));
         }
     }

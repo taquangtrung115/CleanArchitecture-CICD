@@ -3,20 +3,18 @@ using DemoCICD.Contract.Abstractions.Message;
 using DemoCICD.Contract.Abstractions.Shared;
 using DemoCICD.Contract.Services.V1.Identity;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace DemoCICD.Application.UserCases.V1.Queries.Identity;
 
 public sealed class GetPermissionsQueryHandler : IQueryHandler<Query.GetPermissions, Response.PermissionList>
 {
     private readonly IPermissionManagementService _permissionManagementService;
-    private readonly ILogger<GetPermissionsQueryHandler> _logger;
 
     public GetPermissionsQueryHandler(
-        IPermissionManagementService permissionManagementService,
-        ILogger<GetPermissionsQueryHandler> logger)
+        IPermissionManagementService permissionManagementService)
     {
         _permissionManagementService = permissionManagementService;
-        _logger = logger;
     }
 
     public async Task<Result<Response.PermissionList>> Handle(Query.GetPermissions request, CancellationToken cancellationToken)
@@ -45,7 +43,7 @@ public sealed class GetPermissionsQueryHandler : IQueryHandler<Query.GetPermissi
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting permissions with page: {Page}, pageSize: {PageSize}", 
+            Log.Error(ex, "Error getting permissions with page: {Page}, pageSize: {PageSize}", 
                 request.Page, request.PageSize);
             return Result.Failure<Response.PermissionList>(
                 new Error("Permissions.GetError", "An error occurred while retrieving permissions"));
@@ -56,14 +54,11 @@ public sealed class GetPermissionsQueryHandler : IQueryHandler<Query.GetPermissi
 public sealed class GetPermissionByIdQueryHandler : IQueryHandler<Query.GetPermissionById, Response.PermissionDetails>
 {
     private readonly IPermissionManagementService _permissionManagementService;
-    private readonly ILogger<GetPermissionByIdQueryHandler> _logger;
 
     public GetPermissionByIdQueryHandler(
-        IPermissionManagementService permissionManagementService,
-        ILogger<GetPermissionByIdQueryHandler> logger)
+        IPermissionManagementService permissionManagementService)
     {
         _permissionManagementService = permissionManagementService;
-        _logger = logger;
     }
 
     public async Task<Result<Response.PermissionDetails>> Handle(Query.GetPermissionById request, CancellationToken cancellationToken)
@@ -93,7 +88,7 @@ public sealed class GetPermissionByIdQueryHandler : IQueryHandler<Query.GetPermi
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting permission by role: {RoleId}, function: {FunctionId}, action: {ActionId}", 
+            Log.Error(ex, "Error getting permission by role: {RoleId}, function: {FunctionId}, action: {ActionId}", 
                 request.RoleId, request.FunctionId, request.ActionId);
             return Result.Failure<Response.PermissionDetails>(
                 new Error("Permission.GetError", "An error occurred while retrieving permission"));

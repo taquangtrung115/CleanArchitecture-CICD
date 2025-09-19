@@ -9,6 +9,7 @@ using DemoCICD.Contract.Abstractions.Message;
 using DemoCICD.Contract.Abstractions.Shared;
 using DemoCICD.Contract.Services.V1.Identity;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace DemoCICD.Application.UserCases.V1.Commands.Identity;
 
@@ -17,18 +18,15 @@ public sealed class RefreshTokenCommandHandler : ICommandHandler<Command.Refresh
     private readonly IJwtTokenService _jwtTokenService;
     private readonly ITokenCacheService _tokenCacheService;
     private readonly IUserAuthenticationService _userAuthenticationService;
-    private readonly ILogger<RefreshTokenCommandHandler> _logger;
 
     public RefreshTokenCommandHandler(
         IJwtTokenService jwtTokenService,
         ITokenCacheService tokenCacheService,
-        IUserAuthenticationService userAuthenticationService,
-        ILogger<RefreshTokenCommandHandler> logger)
+        IUserAuthenticationService userAuthenticationService)
     {
         _jwtTokenService = jwtTokenService;
         _tokenCacheService = tokenCacheService;
         _userAuthenticationService = userAuthenticationService;
-        _logger = logger;
     }
 
     public async Task<Result<Response.Authenticated>> Handle(Command.RefreshTokenRequest request, CancellationToken cancellationToken)
@@ -94,7 +92,7 @@ public sealed class RefreshTokenCommandHandler : ICommandHandler<Command.Refresh
             var refreshTokenExpiration = TimeSpan.FromDays(7);
             await _tokenCacheService.SetRefreshTokenAsync(userId, newRefreshToken, refreshTokenExpiration);
 
-            _logger.LogInformation("Token refreshed successfully for user {UserId}", userId);
+            Log.Information("Token refreshed successfully for user {UserId}", userId);
 
             var response = new Response.Authenticated(
                 newAccessToken,
@@ -106,7 +104,7 @@ public sealed class RefreshTokenCommandHandler : ICommandHandler<Command.Refresh
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during token refresh");
+            Log.Error(ex, "Error during token refresh");
             return Result.Failure<Response.Authenticated>(
                 new Error("Authentication.RefreshError", "An error occurred during token refresh"));
         }

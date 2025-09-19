@@ -8,6 +8,7 @@ using DemoCICD.Contract.Abstractions.Message;
 using DemoCICD.Contract.Abstractions.Shared;
 using DemoCICD.Contract.Services.V1.Identity;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace DemoCICD.Application.UserCases.V1.Commands.Identity;
 
@@ -15,16 +16,13 @@ public sealed class LogoutCommandHandler : ICommandHandler<Command.Logout>
 {
     private readonly IJwtTokenService _jwtTokenService;
     private readonly ITokenCacheService _tokenCacheService;
-    private readonly ILogger<LogoutCommandHandler> _logger;
 
     public LogoutCommandHandler(
         IJwtTokenService jwtTokenService,
-        ITokenCacheService tokenCacheService,
-        ILogger<LogoutCommandHandler> logger)
+        ITokenCacheService tokenCacheService)
     {
         _jwtTokenService = jwtTokenService;
         _tokenCacheService = tokenCacheService;
-        _logger = logger;
     }
 
     public async Task<Result> Handle(Command.Logout request, CancellationToken cancellationToken)
@@ -52,13 +50,13 @@ public sealed class LogoutCommandHandler : ICommandHandler<Command.Logout>
             // Assuming access token expires in 15 minutes (as per JWT configuration)
             await _tokenCacheService.BlacklistTokenAsync(tokenId, TimeSpan.FromMinutes(15));
 
-            _logger.LogInformation("User {UserId} logged out successfully", userId);
+            Log.Information("User {UserId} logged out successfully", userId);
 
             return Result.Success();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during logout");
+            Log.Error(ex, "Error during logout");
             return Result.Failure(new Error("Authentication.LogoutError", "An error occurred during logout"));
         }
     }
