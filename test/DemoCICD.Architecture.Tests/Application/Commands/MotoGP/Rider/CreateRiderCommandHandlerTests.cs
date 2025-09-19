@@ -1,5 +1,4 @@
 using DemoCICD.Application.UserCases.V1.Commands.MotoGP.Rider;
-using DemoCICD.Contract.Abstractions.Shared;
 using DemoCICD.Contract.Services.V1.MotoGP.Rider;
 using DemoCICD.Domain.Abstractions.Reponsitories.MotoGP;
 using DemoCICD.Persistence;
@@ -8,7 +7,7 @@ using MediatR;
 using NSubstitute;
 using Microsoft.EntityFrameworkCore;
 
-namespace DemoCICD.UnitTests.Application.Commands.MotoGP.Rider;
+namespace DemoCICD.Architecture.Application.Commands.MotoGP.Rider;
 
 public class CreateRiderCommandHandlerTests
 {

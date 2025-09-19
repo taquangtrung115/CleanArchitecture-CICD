@@ -1,7 +1,7 @@
 // src/api/permission.js
 import axiosInstance from './axios';
 
-const PERMISSION_ENDPOINT = '/api/carter/v1/permissions';
+const PERMISSION_ENDPOINT = '/api/v1/permissions';
 
 // Tạo mới permission
 export const createPermission = async ({ roleId, functionId, actionId }) => {

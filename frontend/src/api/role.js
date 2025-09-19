@@ -1,7 +1,7 @@
 // src/api/role.js
 import axiosInstance from './axios';
 
-const ROLE_ENDPOINT = '/api/carter/v1/roles';
+const ROLE_ENDPOINT = '/api/v1/roles';
 
 // 1. Tạo vai trò mới
 export const createRole = async ({ name, description, roleCode }) => {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://localhost:5258/api/carter/v1/motogp/teams';
+const BASE_URL = 'https://localhost:5258/api/v1/motogp/teams';
 
 export const getTeams = (params, token) =>
     axios.get(BASE_URL, {

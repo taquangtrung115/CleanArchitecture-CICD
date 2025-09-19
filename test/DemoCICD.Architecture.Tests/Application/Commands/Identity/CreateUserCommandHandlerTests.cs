@@ -6,7 +6,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 
-namespace DemoCICD.UnitTests.Application.Commands.Identity;
+namespace DemoCICD.Architecture.Application.Commands.Identity;
 
 public class CreateUserCommandHandlerTests
 {

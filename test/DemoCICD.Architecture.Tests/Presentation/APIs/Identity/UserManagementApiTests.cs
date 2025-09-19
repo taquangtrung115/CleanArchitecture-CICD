@@ -5,8 +5,9 @@ using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
+using static DemoCICD.Contract.Services.V1.Identity.Response;
 
-namespace DemoCICD.UnitTests.Presentation.APIs.Identity;
+namespace DemoCICD.Architecture.Presentation.APIs.Identity;
 
 public class UserManagementApiTests
 {
@@ -80,7 +81,7 @@ public class UserManagementApiTests
     {
         // Arrange
         var expectedResponse = Result.Success(new Response.UserList(
-            [],
+            new List<UserSummary>(),
             0,
             1,
             10));
@@ -100,7 +101,7 @@ public class UserManagementApiTests
     {
         // Arrange
         var expectedResponse = Result.Success(new Response.UserList(
-            [new Response.UserSummary(Guid.NewGuid(), "john.doe", "john.doe@example.com", "John Doe", false)],
+            new List<UserSummary> { new Response.UserSummary(Guid.NewGuid(), "john.doe", "john.doe@example.com", "John Doe", false) },
             1,
             1,
             10));
@@ -331,7 +332,7 @@ public class UserManagementApiTests
         var userId = Guid.NewGuid();
         var expectedResponse = Result.Success(new Response.UserRoleList(
             userId,
-            []));
+            new List<RoleSummary>()));
 
         _sender.Send(Arg.Any<Query.GetUserRoles>()).Returns(expectedResponse);
 

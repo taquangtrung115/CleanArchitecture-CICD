@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 
-namespace DemoCICD.UnitTests.Infrastructure.Authentication;
+namespace DemoCICD.Architecture.Infrastructure.Authentication;
 
 public class UserAuthenticationServiceTests
 {

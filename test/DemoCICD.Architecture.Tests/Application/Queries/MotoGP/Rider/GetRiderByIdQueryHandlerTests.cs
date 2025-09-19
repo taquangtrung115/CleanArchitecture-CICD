@@ -7,7 +7,7 @@ using DemoCICD.Domain.Entities.MotoGP.ValueObjects;
 using FluentAssertions;
 using NSubstitute;
 
-namespace DemoCICD.UnitTests.Application.Queries.MotoGP.Rider;
+namespace DemoCICD.Architecture.Application.Queries.MotoGP.Rider;
 
 public class GetRiderByIdQueryHandlerTests
 {

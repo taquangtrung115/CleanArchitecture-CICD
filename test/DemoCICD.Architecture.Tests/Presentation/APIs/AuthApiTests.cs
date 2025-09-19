@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 
-namespace DemoCICD.UnitTests.Presentation.APIs;
+namespace DemoCICD.Architecture.Presentation.APIs;
 
 public class AuthApiTests
 {

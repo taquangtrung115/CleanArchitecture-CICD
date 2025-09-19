@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using System.Text;
 
-namespace DemoCICD.UnitTests.Infrastructure.Caching;
+namespace DemoCICD.Architecture.Infrastructure.Caching;
 
 public class TokenCacheServiceTests
 {

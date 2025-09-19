@@ -71,7 +71,7 @@ public class ArchitectureTests
     public void Infrastructure_Should_Not_HaveDependencyOnOtherProjects()
     {
         // Arrange
-        var assembly = Infrastructure.AssemblyReference.Assembly;
+        var assembly = DemoCICD.Infrastructure.AssemblyReference.Assembly;
 
         var otherProjects = new[]
         {
@@ -119,7 +119,7 @@ public class ArchitectureTests
     public void Presentation_Should_Not_HaveDependencyOnOtherProjects()
     {
         // Arrange
-        var assembly = Presentation.AssemblyReference.Assembly;
+        var assembly = DemoCICD.Presentation.AssemblyReference.Assembly;
 
         var otherProjects = new[]
         {

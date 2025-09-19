@@ -5,8 +5,9 @@ using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
+using static DemoCICD.Contract.Services.V1.Identity.Response;
 
-namespace DemoCICD.UnitTests.Presentation.APIs.Identity;
+namespace DemoCICD.Architecture.Presentation.APIs.Identity;
 
 public class PermissionManagementApiTests
 {
@@ -67,7 +68,7 @@ public class PermissionManagementApiTests
     {
         // Arrange
         var expectedResponse = Result.Success(new Response.PermissionList(
-            [],
+            new List<PermissionSummary>(),
             0,
             1,
             10));
@@ -219,7 +220,7 @@ public class PermissionManagementApiTests
     {
         // Arrange
         var expectedResponse = Result.Success(new Response.PermissionList(
-            [],
+            new List<PermissionSummary>(),
             0,
             1,
             10));

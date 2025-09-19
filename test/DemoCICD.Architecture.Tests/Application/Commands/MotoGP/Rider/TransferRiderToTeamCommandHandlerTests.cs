@@ -9,7 +9,7 @@ using FluentAssertions;
 using NSubstitute;
 using Microsoft.EntityFrameworkCore;
 
-namespace DemoCICD.UnitTests.Application.Commands.MotoGP.Rider;
+namespace DemoCICD.Architecture.Application.Commands.MotoGP.Rider;
 
 public class TransferRiderToTeamCommandHandlerTests
 {

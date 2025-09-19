@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getTeamById, updateTeam, getTeamWithRiders, deleteTeam } from '../api/teams';
+import { getTeamById, updateTeam, getTeamWithRiders } from '../api/teams';
 import { getRiders, transferRider } from '../api/riders';
 import RemoveRiderButton from '../components/Team/RemoveRiderButton';
 
@@ -17,15 +17,15 @@ export default function TeamDetailPage() {
     const [error, setError] = useState(null);
 
     const handleDeleteTeam = async () => {
-        if (!window.confirm('Are you sure you want to delete this team?')) return;
-        setLoading(true);
-        const res = await deleteTeam(id, localStorage.getItem('accessToken'));
-        setLoading(false);
-        if (res.status === 200) {
-            navigate('/teams');
-        } else {
-            setError(res.error?.message || 'Delete team failed');
-        }
+        // if (!window.confirm('Are you sure you want to delete this team?')) return;
+        // setLoading(true);
+        // const res = await deleteTeam(id, localStorage.getItem('accessToken'));
+        // setLoading(false);
+        // if (res.status === 200) {
+        //     navigate('/teams');
+        // } else {
+        //     setError(res.error?.message || 'Delete team failed');
+        // }
     };
 
     useEffect(() => {

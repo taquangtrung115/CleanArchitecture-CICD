@@ -8,7 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace DemoCICD.UnitTests.Infrastructure.Authentication;
+namespace DemoCICD.Architecture.Infrastructure.Authentication;
 
 public class JwtTokenServiceTests
 {

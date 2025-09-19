@@ -2,7 +2,7 @@
 // API functions for authentication (Login & Logout)
 import axiosInstance from './axios';
 
-const AUTH_ENDPOINT = '/api/carter/v1/auth';
+const AUTH_ENDPOINT = '/api/v1/auth';
 // Đăng ký tài khoản mới
 export const register = async ({ userName, email, password, firstName, lastName, dayOfBirth }) => {
     try {

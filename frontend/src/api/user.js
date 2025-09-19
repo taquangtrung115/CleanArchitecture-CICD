@@ -1,7 +1,7 @@
 // src/api/user.js
 import axiosInstance from './axios';
 
-const USER_ENDPOINT = '/api/carter/v1/users';
+const USER_ENDPOINT = '/api/v1/users';
 
 // 1. Tạo user mới
 export const createUser = async (payload) => {
