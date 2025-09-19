@@ -13,7 +13,7 @@ public class RiderApi : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/carter/v1/motogp/riders")
+        var group = app.MapGroup("/api/v1/motogp/riders")
             .WithTags("MotoGP - Riders")
             .RequireAuthorization();
 
@@ -89,7 +89,7 @@ public class RiderApi : ICarterModule
         if (result.IsFailure)
             return HandleFailure(result);
 
-        return Results.Created($"/api/carter/v1/motogp/riders", result);
+        return Results.Created($"/api/v1/motogp/riders", result);
     }
 
     public static async Task<IResult> GetRiders(

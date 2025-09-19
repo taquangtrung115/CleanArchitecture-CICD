@@ -10,7 +10,7 @@ namespace DemoCICD.Presentation.APIs.Identity;
 
 public class UserManagementApi : ApiEndpoint, ICarterModule
 {
-    private const string BaseUrl = "/api/carter/v{version:apiVersion}/users";
+    private const string BaseUrl = "/api/v{version:apiVersion}/users";
 
     public void AddRoutes(IEndpointRouteBuilder app)
     {
@@ -42,7 +42,7 @@ public class UserManagementApi : ApiEndpoint, ICarterModule
         if (result.IsFailure)
             return HandlerFailure(result);
 
-        return Results.Created($"/api/carter/v1/users/{result.Value.UserId}", result);
+        return Results.Created($"/api/v1/users/{result.Value.UserId}", result);
     }
 
     public static async Task<IResult> GetUsersV1(ISender sender, [FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchTerm = null)

@@ -16,7 +16,7 @@ namespace DemoCICD.Presentation.APIs.Products;
 
 public class ProductCarterApi : ApiEndpoint, ICarterModule
 {
-    private const string BaseUrl = "/api/carter/v{version:apiVersion}/products";
+    private const string BaseUrl = "/api/v{version:apiVersion}/products";
 
     public void AddRoutes(IEndpointRouteBuilder app)
     {

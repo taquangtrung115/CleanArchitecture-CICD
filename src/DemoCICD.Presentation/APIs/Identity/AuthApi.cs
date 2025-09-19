@@ -15,7 +15,7 @@ namespace DemoCICD.Presentation.APIs.Identity;
 
 public class AuthApi : ApiEndpoint, ICarterModule
 {
-    private const string BaseUrl = "/api/carter/v{version:apiVersion}/auth";
+    private const string BaseUrl = "/api/v{version:apiVersion}/auth";
 
     public void AddRoutes(IEndpointRouteBuilder app)
     {

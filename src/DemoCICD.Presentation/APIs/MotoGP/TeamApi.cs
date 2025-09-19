@@ -13,7 +13,7 @@ public class TeamApi : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/carter/v1/motogp/teams")
+        var group = app.MapGroup("/api/v1/motogp/teams")
             .WithTags("MotoGP - Teams")
             .RequireAuthorization();
 
@@ -52,7 +52,7 @@ public class TeamApi : ICarterModule
         if (result.IsFailure)
             return HandleFailure(result);
 
-        return Results.Created($"/api/carter/v1/motogp/teams", result);
+        return Results.Created($"/api/v1/motogp/teams", result);
     }
 
     public static async Task<IResult> GetTeams(

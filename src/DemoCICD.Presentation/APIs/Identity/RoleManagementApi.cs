@@ -10,7 +10,7 @@ namespace DemoCICD.Presentation.APIs.Identity;
 
 public class RoleManagementApi : ApiEndpoint, ICarterModule
 {
-    private const string BaseUrl = "/api/carter/v{version:apiVersion}/roles";
+    private const string BaseUrl = "/api/v{version:apiVersion}/roles";
 
     public void AddRoutes(IEndpointRouteBuilder app)
     {
@@ -39,7 +39,7 @@ public class RoleManagementApi : ApiEndpoint, ICarterModule
         if (result.IsFailure)
             return HandlerFailure(result);
 
-        return Results.Created($"/api/carter/v1/roles/{result.Value.RoleId}", result);
+        return Results.Created($"/api/v1/roles/{result.Value.RoleId}", result);
     }
 
     public static async Task<IResult> GetRolesV1(ISender sender, [FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchTerm = null)
