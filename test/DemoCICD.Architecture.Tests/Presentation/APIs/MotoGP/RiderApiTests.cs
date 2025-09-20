@@ -76,7 +76,7 @@ public class RiderApiTests
     {
         // Arrange
         var expectedResponse = PagedResult<Response.RiderResponse>.Create(
-            [],
+            new List<Response.RiderResponse>(),
             1,
             10,
             0);
@@ -96,7 +96,7 @@ public class RiderApiTests
     {
         // Arrange
         var expectedResponse = PagedResult<Response.RiderResponse>.Create(
-            [],
+            new List<Response.RiderResponse>(),
             1,
             10,
             0);

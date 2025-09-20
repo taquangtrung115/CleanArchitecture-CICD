@@ -5,6 +5,7 @@ using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
+using static DemoCICD.Contract.Services.V1.MotoGP.Team.Response;
 
 namespace DemoCICD.Architecture.Presentation.APIs.MotoGP;
 
@@ -70,7 +71,7 @@ public class TeamApiTests
     {
         // Arrange
         var expectedResponse = PagedResult<Response.TeamResponse>.Create(
-            [],
+            new List<Response.TeamResponse>(),
             1,
             10,
             0);
@@ -90,7 +91,7 @@ public class TeamApiTests
     {
         // Arrange
         var expectedResponse = PagedResult<Response.TeamResponse>.Create(
-            [],
+            new List<Response.TeamResponse>(),
             1,
             10,
             0);
@@ -183,7 +184,7 @@ public class TeamApiTests
             true,
             DateTime.UtcNow,
             null,
-            []));
+            new List<TeamRiderResponse>()));
 
         _sender.Send(Arg.Any<Query.GetTeamWithRidersQuery>()).Returns(expectedResponse);
 
