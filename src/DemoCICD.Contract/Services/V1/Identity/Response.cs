@@ -19,6 +19,10 @@ public static class Response
     public record UserSummary(Guid UserId, string UserName, string Email, string FullName, bool IsLocked);
     public record UserRoleList(Guid UserId, IEnumerable<RoleSummary> Roles);
     
+    // Profile Management Responses
+    public record ProfileDetails(Guid UserId, string UserName, string Email, string FirstName, string LastName, string FullName, DateTime? DayOfBirth);
+    public record ProfileUpdated(Guid UserId, string UserName, string Email);
+    
     // Role Management Responses
     public record RoleCreated(Guid RoleId, string Name, string RoleCode);
     public record RoleUpdated(Guid RoleId, string Name, string RoleCode);

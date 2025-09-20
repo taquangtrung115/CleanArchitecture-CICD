@@ -26,6 +26,9 @@ public static class Command
     public record AssignUserToRole(Guid UserId, Guid RoleId) : ICommand;
     public record RemoveUserFromRole(Guid UserId, Guid RoleId) : ICommand;
     
+    // Profile Management Commands
+    public record UpdateMyProfile(string Email, string FirstName, string LastName, DateTime? DayOfBirth) : ICommand<Response.ProfileUpdated>;
+    
     // Role Management Commands
     public record CreateRole(string Name, string Description, string RoleCode) : ICommand<Response.RoleCreated>;
     public record UpdateRole(Guid RoleId, string Name, string Description, string RoleCode) : ICommand<Response.RoleUpdated>;

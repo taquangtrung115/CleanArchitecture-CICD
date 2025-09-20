@@ -28,6 +28,10 @@ public interface IUserManagementService
     Task<bool> AssignUserToRoleAsync(Guid userId, Guid roleId);
     Task<bool> RemoveUserFromRoleAsync(Guid userId, Guid roleId);
     Task<IEnumerable<AppRole>> GetUserRolesAsync(Guid userId);
+    
+    // Profile Management Methods
+    Task<AppUser?> GetUserProfileAsync(Guid userId);
+    Task<bool> UpdateUserProfileAsync(Guid userId, string email, string firstName, string lastName, DateTime? dayOfBirth);
 }
 
 public interface IRoleManagementService
