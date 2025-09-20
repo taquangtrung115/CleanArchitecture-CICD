@@ -15,6 +15,11 @@ public static class Command
     public record RefreshTokenRequest(string AccessToken, string RefreshToken) : ICommand<Response.Authenticated>;
     public record Register(string UserName, string Email, string Password, string FirstName, string LastName, DateTime? DayOfBirth) : ICommand<Response.UserCreated>;
     
+    // Password Reset Commands
+    public record ForgotPassword(string Email) : ICommand<Response.ForgotPasswordSent>;
+    public record VerifyResetCode(string Email, string Code) : ICommand<Response.ResetCodeVerified>;
+    public record ResetPasswordWithCode(string Email, string Code, string NewPassword) : ICommand;
+    
     // User Management Commands
     public record CreateUser(string UserName, string Email, string Password, string FirstName, string LastName, DateTime? DayOfBirth, bool? IsDirector, bool? IsHeadOfDepartment, Guid? ManagerId, Guid PositionId) : ICommand<Response.UserCreated>;
     public record UpdateUser(Guid UserId, string Email, string FirstName, string LastName, DateTime? DayOfBirth, bool? IsDirector, bool? IsHeadOfDepartment, Guid? ManagerId, Guid PositionId, string? Phone = null, string? Address = null, string? City = null, string? Country = null, string? Bio = null, string? Website = null) : ICommand<Response.UserUpdated>;

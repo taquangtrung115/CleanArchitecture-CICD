@@ -122,4 +122,54 @@ public class UserAuthenticationService : IUserAuthenticationService
             return UserAuthResult.Failure("An error occurred during registration");
         }
     }
+
+    public async Task<bool> UserExistsByEmailAsync(string email)
+    {
+        try
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            return user != null;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error checking if user exists by email: {Email}", email);
+            return false;
+        }
+    }
+
+    public async Task<bool> ResetPasswordByEmailAsync(string email, string newPassword)
+    {
+        try
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                Log.Warning("Password reset attempted for non-existent email: {Email}", email);
+                return false;
+            }
+
+            // Generate password reset token
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            
+            // Reset password using the token
+            var result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
+            
+            if (result.Succeeded)
+            {
+                Log.Information("Password reset successfully for user: {UserId}", user.Id);
+                return true;
+            }
+            else
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                Log.Warning("Password reset failed for user {UserId}: {Errors}", user.Id, errors);
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error resetting password for email: {Email}", email);
+            return false;
+        }
+    }
 }

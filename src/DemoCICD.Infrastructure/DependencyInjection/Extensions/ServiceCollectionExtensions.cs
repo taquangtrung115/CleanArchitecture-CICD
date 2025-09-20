@@ -8,6 +8,8 @@ using DemoCICD.Domain.Entities.Identity;
 using DemoCICD.Infrastructure.Authentication;
 using DemoCICD.Infrastructure.Caching;
 using DemoCICD.Infrastructure.AI;
+using DemoCICD.Infrastructure.Email;
+using DemoCICD.Infrastructure.PasswordReset;
 using DemoCICD.Infrastructure.DependencyInjection.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +29,10 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IUserManagementService, UserManagementService>();
         services.AddTransient<IRoleManagementService, RoleManagementService>();
         services.AddTransient<IPermissionManagementService, PermissionManagementService>();
+        
+        // Add password reset services
+        services.AddTransient<IEmailService, EmailService>();
+        services.AddTransient<IPasswordResetService, PasswordResetService>();
         
         // Add AI services
         services.AddScoped<IAiChatService, OpenAiChatService>();

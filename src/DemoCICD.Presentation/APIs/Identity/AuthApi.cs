@@ -26,6 +26,11 @@ public class AuthApi : ApiEndpoint, ICarterModule
         group1.MapPost("register", RegisterV1).AllowAnonymous();
         group1.MapPost("logout", LogoutV1).RequireAuthorization();
         group1.MapPost("refresh-token", RefreshTokenV1).AllowAnonymous();
+        
+        // Password reset endpoints
+        group1.MapPost("forgot-password", ForgotPasswordV1).AllowAnonymous();
+        group1.MapPost("verify-reset-code", VerifyResetCodeV1).AllowAnonymous();
+        group1.MapPost("reset-password", ResetPasswordWithCodeV1).AllowAnonymous();
 
         //var group2 = app.NewVersionedApi("auth-cater-name-show-on-swagger")
         //    .MapGroup(BaseUrl).HasApiVersion(2);

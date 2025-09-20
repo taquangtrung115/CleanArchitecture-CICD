@@ -11,6 +11,10 @@ public static class Response
     // Authentication Responses
     public record Authenticated(string? AccessToken, string? RefreshToken, DateTime? RefreshTokenExpiryTime);
     
+    // Password Reset Responses
+    public record ForgotPasswordSent(string Email, string Message);
+    public record ResetCodeVerified(string Email, bool IsValid);
+    
     // User Management Responses
     public record UserCreated(Guid UserId, string UserName, string Email);
     public record UserUpdated(Guid UserId, string UserName, string Email);
