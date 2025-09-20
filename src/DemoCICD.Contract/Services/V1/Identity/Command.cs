@@ -17,7 +17,8 @@ public static class Command
     
     // User Management Commands
     public record CreateUser(string UserName, string Email, string Password, string FirstName, string LastName, DateTime? DayOfBirth, bool? IsDirector, bool? IsHeadOfDepartment, Guid? ManagerId, Guid PositionId) : ICommand<Response.UserCreated>;
-    public record UpdateUser(Guid UserId, string Email, string FirstName, string LastName, DateTime? DayOfBirth, bool? IsDirector, bool? IsHeadOfDepartment, Guid? ManagerId, Guid PositionId) : ICommand<Response.UserUpdated>;
+    public record UpdateUser(Guid UserId, string Email, string FirstName, string LastName, DateTime? DayOfBirth, bool? IsDirector, bool? IsHeadOfDepartment, Guid? ManagerId, Guid PositionId, string? Phone = null, string? Address = null, string? City = null, string? Country = null, string? Bio = null, string? Website = null) : ICommand<Response.UserUpdated>;
+    public record UpdateProfile(Guid UserId, string FirstName, string LastName, string? Phone = null, string? Address = null, string? City = null, string? Country = null, string? Bio = null, string? Website = null) : ICommand<Response.UserUpdated>;
     public record DeleteUser(Guid UserId) : ICommand;
     public record ChangePassword(Guid UserId, string CurrentPassword, string NewPassword) : ICommand;
     public record ResetPassword(Guid UserId, string NewPassword) : ICommand;

@@ -21,6 +21,7 @@ public class UserManagementApi : ApiEndpoint, ICarterModule
         group1.MapPost(string.Empty, CreateUserV1).RequireAuthorization();
         group1.MapGet(string.Empty, GetUsersV1).RequireAuthorization();
         group1.MapGet("profile/me", GetCurrentUserProfileV1).RequireAuthorization();
+        group1.MapPut("profile/me", UpdateCurrentUserProfileV1).RequireAuthorization();
         group1.MapGet("{userId:guid}", GetUserByIdV1).RequireAuthorization();
         group1.MapPut("{userId:guid}", UpdateUserV1).RequireAuthorization();
         group1.MapDelete("{userId:guid}", DeleteUserV1).RequireAuthorization();
@@ -79,6 +80,15 @@ public class UserManagementApi : ApiEndpoint, ICarterModule
     {
         var query = new DemoCICD.Contract.Services.V1.Identity.Query.GetCurrentUserProfile();
         var result = await sender.Send(query);
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Results.Ok(result);
+    }
+
+    public static async Task<IResult> UpdateCurrentUserProfileV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.UpdateProfile command)
+    {
+        var result = await sender.Send(command);
         if (result.IsFailure)
             return HandlerFailure(result);
 
@@ -179,5 +189,80 @@ public class UserManagementApi : ApiEndpoint, ICarterModule
             return HandlerFailure(result);
 
         return Results.Ok(result);
+    }
+
+    // Account Settings Methods
+    public static async Task<IResult> GetNotificationSettingsV1(ISender sender, [FromRoute] Guid userId)
+    {
+        var query = new DemoCICD.Contract.Services.V1.Identity.Query.GetNotificationSettings(userId);
+        var result = await sender.Send(query);
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Results.Ok(result);
+    }
+
+    public static async Task<IResult> UpdateNotificationSettingsV1(ISender sender, [FromRoute] Guid userId, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.UpdateNotificationSettings command)
+    {
+        if (userId != command.UserId)
+            return Results.BadRequest("User ID mismatch");
+
+        var result = await sender.Send(command);
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Results.Ok(result);
+    }
+
+    public static async Task<IResult> GetPrivacySettingsV1(ISender sender, [FromRoute] Guid userId)
+    {
+        var query = new DemoCICD.Contract.Services.V1.Identity.Query.GetPrivacySettings(userId);
+        var result = await sender.Send(query);
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Results.Ok(result);
+    }
+
+    public static async Task<IResult> UpdatePrivacySettingsV1(ISender sender, [FromRoute] Guid userId, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.UpdatePrivacySettings command)
+    {
+        if (userId != command.UserId)
+            return Results.BadRequest("User ID mismatch");
+
+        var result = await sender.Send(command);
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Results.Ok(result);
+    }
+
+    public static async Task<IResult> GetUserSessionsV1(ISender sender, [FromRoute] Guid userId)
+    {
+        var query = new DemoCICD.Contract.Services.V1.Identity.Query.GetUserSessions(userId);
+        var result = await sender.Send(query);
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Results.Ok(result);
+    }
+
+    public static async Task<IResult> RevokeUserSessionV1(ISender sender, [FromRoute] Guid userId, [FromRoute] string sessionId)
+    {
+        var command = new DemoCICD.Contract.Services.V1.Identity.Command.RevokeUserSession(userId, sessionId);
+        var result = await sender.Send(command);
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Results.NoContent();
+    }
+
+    public static async Task<IResult> RevokeAllUserSessionsV1(ISender sender, [FromRoute] Guid userId)
+    {
+        var command = new DemoCICD.Contract.Services.V1.Identity.Command.RevokeAllUserSessions(userId);
+        var result = await sender.Send(command);
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Results.NoContent();
     }
 }
