@@ -12,14 +12,12 @@ namespace DemoCICD.Tests.Application.Identity;
 public class RegisterCommandHandlerTests
 {
     private readonly Mock<IUserAuthenticationService> _mockUserAuthService;
-    private readonly Mock<ILogger<RegisterCommandHandler>> _mockLogger;
     private readonly RegisterCommandHandler _handler;
 
     public RegisterCommandHandlerTests()
     {
         _mockUserAuthService = new Mock<IUserAuthenticationService>();
-        _mockLogger = new Mock<ILogger<RegisterCommandHandler>>();
-        _handler = new RegisterCommandHandler(_mockUserAuthService.Object, _mockLogger.Object);
+        _handler = new RegisterCommandHandler(_mockUserAuthService.Object);
     }
 
     [Fact]
@@ -35,7 +33,7 @@ public class RegisterCommandHandlerTests
             null
         );
 
-        var authResult = UserAuthResult.Success("123", "testuser", "test@example.com", "Test User");
+        var authResult = UserAuthResult.Success("12345678-1234-1234-1234-123456789012", "testuser", "test@example.com", "Test User");
         _mockUserAuthService.Setup(x => x.RegisterUserAsync(
             It.IsAny<string>(),
             It.IsAny<string>(),
