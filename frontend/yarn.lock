@@ -432,6 +432,18 @@
   resolved "https://registry.npmjs.org/@fontsource/roboto/-/roboto-5.2.6.tgz"
   integrity sha512-hzarG7yAhMoP418smNgfY4fO7UmuUEm5JUtbxCoCcFHT0hOJB+d/qAEyoNjz7YkPU5OjM2LM8rJnW8hfm0JLaA==
 
+"@googlemaps/js-api-loader@^1.16.6":
+  version "1.16.10"
+  resolved "https://registry.npmjs.org/@googlemaps/js-api-loader/-/js-api-loader-1.16.10.tgz"
+  integrity sha512-c2erv2k7P2ilYzMmtYcMgAR21AULosQuUHJbStnrvRk2dG93k5cqptDrh9A8p+ZNlyhiqEOgHW7N9PAizdUM7Q==
+
+"@googlemaps/react-wrapper@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.npmjs.org/@googlemaps/react-wrapper/-/react-wrapper-1.2.0.tgz"
+  integrity sha512-8gloOyRDKcjfuMW2VvsDQ3jSnIpa+e1IBJkQL75ORMSQ/TVj6lyGeMLwGE94pj/IlTpWp7yo0LyJuVqxaK7ByA==
+  dependencies:
+    "@googlemaps/js-api-loader" "^1.16.6"
+
 "@humanfs/core@^0.19.1":
   version "0.19.1"
   resolved "https://registry.npmjs.org/@humanfs/core/-/core-0.19.1.tgz"
