@@ -17,6 +17,7 @@ const ChatPage = Loadable(lazy(() => import('pages/chat/ChatPage')));
 const RidersPage = Loadable(lazy(() => import('pages/RidersPage')));
 const TeamsPage = Loadable(lazy(() => import('pages/TeamsPage')));
 const ProductPage = Loadable(lazy(() => import('pages/product/ProductPage')));
+const VideoManagementPage = Loadable(lazy(() => import('pages/VideoManagementPage')));
 
 // ==============================|| ADMIN ROUTING ||============================== //
 
@@ -76,6 +77,10 @@ const AdminRoutes = [
       {
         path: 'products',
         element: <ProductPage />
+      },
+      {
+        path: 'videos',
+        element: <VideoManagementPage />
       }
     ]
   }

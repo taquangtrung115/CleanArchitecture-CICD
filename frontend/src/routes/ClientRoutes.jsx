@@ -15,6 +15,7 @@ const RiderDetailPage = Loadable(lazy(() => import('pages/RiderDetailPage')));
 const BikePage = Loadable(lazy(() => import('client/pages/bike/BikePage')));
 const NewsPage = Loadable(lazy(() => import('client/pages/news/NewsPage')));
 const MediaPage = Loadable(lazy(() => import('client/pages/media/MediaPage')));
+const VideoPage = Loadable(lazy(() => import('client/pages/video/VideoPage')));
 const SearchPage = Loadable(lazy(() => import('client/pages/search/SearchPage')));
 
 // ==============================|| CLIENT ROUTING ||============================== //
@@ -63,6 +64,10 @@ const ClientRoutes = [
       {
         path: 'media',
         element: <MediaPage />
+      },
+      {
+        path: 'videos',
+        element: <VideoPage />
       },
       {
         path: 'search',
