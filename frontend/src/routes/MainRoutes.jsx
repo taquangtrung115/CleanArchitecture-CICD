@@ -21,7 +21,6 @@ const ChatPage = Loadable(lazy(() => import('pages/chat/ChatPage')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
-
 import ClientApp from '../client/index';
 import RidersPage from 'pages/RidersPage';
 import TeamsPage from 'pages/TeamsPage';

@@ -17,23 +17,23 @@ import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
 
 export default function ClientApp() {
-    return (
-        <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/" element={<ClientLayout />}>
-                <Route index element={<HomePage />} />
-                <Route path="seasons" element={<SeasonPage />} />
-                <Route path="races" element={<RacePage />} />
-                <Route path="teams" element={<TeamPage />} />
-                <Route path="teams/:id" element={<TeamDetailPage />} />
-                <Route path="riders" element={<RiderPage />} />
-                <Route path="riders/:id" element={<RiderDetailPage />} />
-                <Route path="bikes" element={<BikePage />} />
-                <Route path="news" element={<NewsPage />} />
-                <Route path="media" element={<MediaPage />} />
-                <Route path="search" element={<SearchPage />} />
-            </Route>
-        </Routes>
-    );
+  return (
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/" element={<ClientLayout />}>
+        <Route index element={<HomePage />} />
+        <Route path="seasons" element={<SeasonPage />} />
+        <Route path="races" element={<RacePage />} />
+        <Route path="teams" element={<TeamPage />} />
+        <Route path="teams/:id" element={<TeamDetailPage />} />
+        <Route path="riders" element={<RiderPage />} />
+        <Route path="riders/:id" element={<RiderDetailPage />} />
+        <Route path="bikes" element={<BikePage />} />
+        <Route path="news" element={<NewsPage />} />
+        <Route path="media" element={<MediaPage />} />
+        <Route path="search" element={<SearchPage />} />
+      </Route>
+    </Routes>
+  );
 }
