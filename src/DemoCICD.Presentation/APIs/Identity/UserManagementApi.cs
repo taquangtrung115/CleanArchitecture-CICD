@@ -20,6 +20,7 @@ public class UserManagementApi : ApiEndpoint, ICarterModule
         // User CRUD operations
         group1.MapPost(string.Empty, CreateUserV1).RequireAuthorization();
         group1.MapGet(string.Empty, GetUsersV1).RequireAuthorization();
+        group1.MapGet("profile/me", GetCurrentUserProfileV1).RequireAuthorization();
         group1.MapGet("{userId:guid}", GetUserByIdV1).RequireAuthorization();
         group1.MapPut("{userId:guid}", UpdateUserV1).RequireAuthorization();
         group1.MapDelete("{userId:guid}", DeleteUserV1).RequireAuthorization();
@@ -58,6 +59,16 @@ public class UserManagementApi : ApiEndpoint, ICarterModule
     public static async Task<IResult> GetUserByIdV1(ISender sender, [FromRoute] Guid userId)
     {
         var query = new DemoCICD.Contract.Services.V1.Identity.Query.GetUserById(userId);
+        var result = await sender.Send(query);
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Results.Ok(result);
+    }
+
+    public static async Task<IResult> GetCurrentUserProfileV1(ISender sender)
+    {
+        var query = new DemoCICD.Contract.Services.V1.Identity.Query.GetCurrentUserProfile();
         var result = await sender.Send(query);
         if (result.IsFailure)
             return HandlerFailure(result);

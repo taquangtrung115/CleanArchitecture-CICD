@@ -18,6 +18,7 @@ const UserPage = Loadable(lazy(() => import('pages/user/UserPage')));
 const RolePage = Loadable(lazy(() => import('pages/role/RolePage')));
 const PermissionPage = Loadable(lazy(() => import('pages/permission/PermissionPage')));
 const ChatPage = Loadable(lazy(() => import('pages/chat/ChatPage')));
+const ProfileViewPage = Loadable(lazy(() => import('pages/profile/ProfileViewPage')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -86,6 +87,10 @@ const MainRoutes = [
       {
         path: 'chat',
         element: <ChatPage />
+      },
+      {
+        path: 'profile',
+        element: <ProfileViewPage />
       }
     ]
   }
