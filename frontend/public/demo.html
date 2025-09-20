@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token Refresh Demo</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        .token { font-family: monospace; background: #f5f5f5; padding: 10px; word-break: break-all; }
+        button { padding: 10px 15px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <h1>🔐 Token Refresh Implementation Demo</h1>
+    
+    <div class="section">
+        <h2>Implementation Overview</h2>
+        <p>This demonstrates the token refresh functionality implemented in the CleanArchitecture-CICD project:</p>
+        <ul>
+            <li>✅ Fixed token storage consistency (standardized on 'token' key)</li>
+            <li>✅ Implemented automatic token refresh on 401 errors in axios interceptor</li>
+            <li>✅ Enhanced ProtectedRoute to validate and refresh tokens</li>
+            <li>✅ Added app initialization logic for page refresh scenarios</li>
+            <li>✅ Updated refresh token API to include both accessToken and refreshToken</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Current Storage State</h2>
+        <div id="storage-state">
+            <p><strong>Access Token:</strong> <span id="access-token" class="token">None</span></p>
+            <p><strong>Refresh Token:</strong> <span id="refresh-token" class="token">None</span></p>
+            <p><strong>Expiry Time:</strong> <span id="expiry-time" class="token">None</span></p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Demo Actions</h2>
+        <button onclick="simulateLogin()">1. Simulate Login</button>
+        <button onclick="simulatePageRefresh()">2. Simulate Page Refresh</button>
+        <button onclick="simulateTokenExpiry()">3. Simulate Token Expiry</button>
+        <button onclick="clearTokens()">4. Clear All Tokens</button>
+    </div>
+
+    <div class="section">
+        <h2>Action Log</h2>
+        <div id="log" style="height: 200px; overflow-y: auto; background: #f8f9fa; padding: 10px; border: 1px solid #dee2e6;"></div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : 'info';
+            logDiv.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function updateStorageDisplay() {
+            document.getElementById('access-token').textContent = localStorage.getItem('token') || 'None';
+            document.getElementById('refresh-token').textContent = localStorage.getItem('refreshToken') || 'None';
+            document.getElementById('expiry-time').textContent = localStorage.getItem('refreshTokenExpiryTime') || 'None';
+        }
+
+        function simulateLogin() {
+            const mockTokens = {
+                accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMTIzIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+                refreshToken: 'refresh_token_abc123def456',
+                refreshTokenExpiryTime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+            };
+
+            localStorage.setItem('token', mockTokens.accessToken);
+            localStorage.setItem('refreshToken', mockTokens.refreshToken);
+            localStorage.setItem('refreshTokenExpiryTime', mockTokens.refreshTokenExpiryTime);
+
+            log('✅ Login successful! Tokens stored in localStorage', 'success');
+            log(`📝 Access Token: ${mockTokens.accessToken.substring(0, 50)}...`);
+            log(`🔄 Refresh Token: ${mockTokens.refreshToken}`);
+            log(`⏰ Expiry: ${mockTokens.refreshTokenExpiryTime}`);
+            updateStorageDisplay();
+        }
+
+        function simulatePageRefresh() {
+            log('🔄 Simulating page refresh...');
+            
+            const token = localStorage.getItem('token');
+            const refreshToken = localStorage.getItem('refreshToken');
+
+            if (!token && !refreshToken) {
+                log('❌ No tokens found - would redirect to login', 'error');
+                return;
+            }
+
+            if (token) {
+                log('✅ Access token found - user remains authenticated', 'success');
+            } else if (refreshToken) {
+                log('🔄 No access token but refresh token exists - attempting refresh...', 'info');
+                // Simulate refresh token call
+                setTimeout(() => {
+                    const newAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMTIzIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.NEW_TOKEN_SIGNATURE';
+                    localStorage.setItem('token', newAccessToken);
+                    log('✅ Token refreshed successfully!', 'success');
+                    log(`📝 New Access Token: ${newAccessToken.substring(0, 50)}...`);
+                    updateStorageDisplay();
+                }, 1000);
+            }
+        }
+
+        function simulateTokenExpiry() {
+            log('⏰ Simulating token expiry (401 error)...');
+            
+            const refreshToken = localStorage.getItem('refreshToken');
+            if (!refreshToken) {
+                log('❌ No refresh token available - would redirect to login', 'error');
+                return;
+            }
+
+            log('🔄 Access token expired, attempting automatic refresh...', 'info');
+            
+            setTimeout(() => {
+                const newAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMTIzIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.AUTO_REFRESHED_TOKEN';
+                localStorage.setItem('token', newAccessToken);
+                log('✅ Automatic token refresh successful! Original API request will be retried.', 'success');
+                log(`📝 New Access Token: ${newAccessToken.substring(0, 50)}...`);
+                updateStorageDisplay();
+            }, 1500);
+        }
+
+        function clearTokens() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('refreshTokenExpiryTime');
+            
+            log('🗑️ All tokens cleared from localStorage', 'info');
+            log('➡️ User would be redirected to login page', 'info');
+            updateStorageDisplay();
+        }
+
+        // Initialize display
+        updateStorageDisplay();
+        log('🚀 Token Refresh Demo initialized');
+        log('👆 Use the buttons above to test different scenarios');
+    </script>
+</body>
+</html>

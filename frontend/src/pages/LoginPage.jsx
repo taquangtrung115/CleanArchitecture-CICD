@@ -24,8 +24,9 @@ const LoginPage = () => {
     const res = await login(form.username, form.password);
     setLoading(false);
     if (res.data && res.data.accessToken) {
-      localStorage.setItem('accessToken', res.data.accessToken);
+      localStorage.setItem('token', res.data.accessToken);
       localStorage.setItem('refreshToken', res.data.refreshToken);
+      localStorage.setItem('refreshTokenExpiryTime', res.data.refreshTokenExpiryTime || '');
       navigate('/');
     } else {
       setError(res.error?.message || 'Login failed');
