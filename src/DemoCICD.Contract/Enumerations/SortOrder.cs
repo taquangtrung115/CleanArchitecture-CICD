@@ -25,4 +25,12 @@ public class SortOrder : SmartEnum<SortOrder>
     public static implicit operator int(SortOrder status)
         => status.Value;
 }
+public class SortOrder2 : SmartEnum<SortOrder>
+{
+    public SortOrder2(string name, int value)
+        : base(name, value)
+    {
+    }
+
+}
 
