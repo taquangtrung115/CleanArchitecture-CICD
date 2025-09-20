@@ -44,6 +44,34 @@ export const getUserDetail = async (userId) => {
   }
 };
 
+// 3.1. Lấy profile của user hiện tại
+export const getCurrentUserProfile = async () => {
+  try {
+    const response = await axiosInstance.get(`${USER_ENDPOINT}/profile/me`);
+    return { data: response.data, status: response.status, error: null };
+  } catch (error) {
+    return {
+      data: null,
+      status: error.response ? error.response.status : 500,
+      error: error.response ? error.response.data : error.message
+    };
+  }
+};
+
+// 3.2. Cập nhật profile của user hiện tại
+export const updateCurrentUserProfile = async (profileData) => {
+  try {
+    const response = await axiosInstance.put(`${USER_ENDPOINT}/profile/me`, profileData);
+    return { data: response.data, status: response.status, error: null };
+  } catch (error) {
+    return {
+      data: null,
+      status: error.response ? error.response.status : 500,
+      error: error.response ? error.response.data : error.message
+    };
+  }
+};
+
 // 4. Cập nhật user
 export const updateUser = async (userId, payload) => {
   try {

@@ -32,7 +32,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
     boxShadow: '0 20px 40px rgba(225, 6, 0, 0.3)',
     border: '1px solid #e10600',
     '& .team-logo': {
-      transform: 'scale(1.1)',
+      transform: 'scale(1.1)'
     },
     '& .team-image': {
       transform: 'scale(1.05)'
@@ -75,10 +75,8 @@ export default function TeamCard({ team }) {
 
   return (
     <StyledCard onClick={handleClick}>
-      <TeamShortName className="team-logo">
-        {team.shortName}
-      </TeamShortName>
-      
+      <TeamShortName className="team-logo">{team.shortName}</TeamShortName>
+
       <CardMedia
         component="img"
         height="200"
@@ -94,14 +92,14 @@ export default function TeamCard({ team }) {
           e.target.src = 'https://via.placeholder.com/300x200/333/fff?text=Team+Logo';
         }}
       />
-      
+
       <CardContent sx={{ p: 3, position: 'relative' }}>
         <Box sx={{ mb: 2 }}>
-          <Typography 
-            variant="h6" 
-            component="h3" 
-            sx={{ 
-              fontWeight: 700, 
+          <Typography
+            variant="h6"
+            component="h3"
+            sx={{
+              fontWeight: 700,
               fontSize: '1.1rem',
               mb: 0.5,
               color: '#fff'
@@ -109,10 +107,10 @@ export default function TeamCard({ team }) {
           >
             {team.name}
           </Typography>
-          <Typography 
-            variant="body2" 
-            sx={{ 
-              color: '#e10600', 
+          <Typography
+            variant="body2"
+            sx={{
+              color: '#e10600',
               fontWeight: 600,
               fontSize: '0.9rem'
             }}
@@ -138,18 +136,14 @@ export default function TeamCard({ team }) {
           <Typography variant="body2" sx={{ color: '#ccc' }}>
             Capacity: {team.capacity || 2} riders
           </Typography>
-          <StatusChip 
-            label={team.isActive ? 'Active' : 'Inactive'} 
-            active={team.isActive}
-            size="small"
-          />
+          <StatusChip label={team.isActive ? 'Active' : 'Inactive'} active={team.isActive} size="small" />
         </Box>
 
         {team.description && (
-          <Typography 
-            variant="body2" 
-            sx={{ 
-              color: '#bbb', 
+          <Typography
+            variant="body2"
+            sx={{
+              color: '#bbb',
               fontSize: '0.875rem',
               overflow: 'hidden',
               textOverflow: 'ellipsis',

@@ -17,6 +17,7 @@ public static class Query
     
     // User Management Queries
     public record GetUserById(Guid UserId) : IQuery<Response.UserDetails>;
+    public record GetCurrentUserProfile() : IQuery<Response.UserDetails>;
     public record GetUsers(int Page = 1, int PageSize = 10, string? SearchTerm = null) : IQuery<Response.UserList>;
     public record GetUserRoles(Guid UserId) : IQuery<Response.UserRoleList>;
     
@@ -29,4 +30,9 @@ public static class Query
     // Permission Management Queries
     public record GetPermissions(int Page = 1, int PageSize = 10) : IQuery<Response.PermissionList>;
     public record GetPermissionById(Guid RoleId, string FunctionId, string ActionId) : IQuery<Response.PermissionDetails>;
+    
+    // Account Settings Queries
+    public record GetNotificationSettings(Guid UserId) : IQuery<Response.NotificationSettings>;
+    public record GetPrivacySettings(Guid UserId) : IQuery<Response.PrivacySettings>;
+    public record GetUserSessions(Guid UserId) : IQuery<Response.UserSessionList>;
 }

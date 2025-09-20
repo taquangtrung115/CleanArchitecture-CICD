@@ -1,17 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Card,
-  CardContent,
-  Grid,
-  Chip,
-  Avatar
-} from '@mui/material';
+import { Box, Typography, FormControl, InputLabel, Select, MenuItem, Card, CardContent, Grid, Chip, Avatar } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -22,57 +10,78 @@ const StyledCard = styled(Card)(({ theme }) => ({
   '&:hover': {
     borderColor: '#e10600',
     boxShadow: '0 8px 32px rgba(225, 6, 0, 0.3)',
-    transform: 'translateY(-2px)',
-  },
+    transform: 'translateY(-2px)'
+  }
 }));
 
 const StyledSelect = styled(Select)(({ theme }) => ({
   backgroundColor: '#2a2a2a',
   borderRadius: '8px',
   '& .MuiOutlinedInput-notchedOutline': {
-    borderColor: '#555',
+    borderColor: '#555'
   },
   '&:hover .MuiOutlinedInput-notchedOutline': {
-    borderColor: '#e10600',
+    borderColor: '#e10600'
   },
   '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-    borderColor: '#e10600',
+    borderColor: '#e10600'
   },
   '& .MuiSelect-select': {
     color: '#fff',
-    fontWeight: 600,
+    fontWeight: 600
   },
   '& .MuiSvgIcon-root': {
-    color: '#e10600',
-  },
+    color: '#e10600'
+  }
 }));
 
 const StatusChip = styled(Chip)(({ status }) => ({
   fontWeight: 700,
   fontSize: '12px',
-  backgroundColor: 
-    status === 'Completed' ? '#4CAF50' :
-    status === 'InProgress' ? '#ff9800' :
-    status === 'Upcoming' ? '#2196F3' :
-    status === 'Cancelled' ? '#f44336' : '#757575',
-  color: '#fff',
+  backgroundColor:
+    status === 'Completed'
+      ? '#4CAF50'
+      : status === 'InProgress'
+        ? '#ff9800'
+        : status === 'Upcoming'
+          ? '#2196F3'
+          : status === 'Cancelled'
+            ? '#f44336'
+            : '#757575',
+  color: '#fff'
 }));
 
 export default function RaceSelector({ races, selectedRaceId, onRaceChange, loading = false }) {
   const getCountryFlag = (countryCode) => {
     const flags = {
-      'IT': '🇮🇹', 'ES': '🇪🇸', 'FR': '🇫🇷', 'GB': '🇬🇧', 'DE': '🇩🇪',
-      'AU': '🇦🇺', 'JP': '🇯🇵', 'US': '🇺🇸', 'BR': '🇧🇷', 'ZA': '🇿🇦',
-      'PT': '🇵🇹', 'NL': '🇳🇱', 'AT': '🇦🇹', 'CH': '🇨🇭', 'MY': '🇲🇾',
-      'TH': '🇹🇭', 'QA': '🇶🇦', 'AE': '🇦🇪', 'IN': '🇮🇳', 'AR': '🇦🇷'
+      IT: '🇮🇹',
+      ES: '🇪🇸',
+      FR: '🇫🇷',
+      GB: '🇬🇧',
+      DE: '🇩🇪',
+      AU: '🇦🇺',
+      JP: '🇯🇵',
+      US: '🇺🇸',
+      BR: '🇧🇷',
+      ZA: '🇿🇦',
+      PT: '🇵🇹',
+      NL: '🇳🇱',
+      AT: '🇦🇹',
+      CH: '🇨🇭',
+      MY: '🇲🇾',
+      TH: '🇹🇭',
+      QA: '🇶🇦',
+      AE: '🇦🇪',
+      IN: '🇮🇳',
+      AR: '🇦🇷'
     };
     return flags[countryCode] || '🏁';
   };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
       day: 'numeric',
       year: 'numeric'
     });
@@ -102,48 +111,42 @@ export default function RaceSelector({ races, selectedRaceId, onRaceChange, load
     );
   }
 
-  const selectedRace = races.find(race => race.id === selectedRaceId);
+  const selectedRace = races.find((race) => race.id === selectedRaceId);
 
   return (
     <Box sx={{ mb: 3 }}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <FormControl fullWidth>
-            <InputLabel 
-              sx={{ 
+            <InputLabel
+              sx={{
                 color: '#ccc',
                 '&.Mui-focused': { color: '#e10600' }
               }}
             >
               Select Race
             </InputLabel>
-            <StyledSelect
-              value={selectedRaceId || ''}
-              label="Select Race"
-              onChange={(e) => onRaceChange(e.target.value)}
-            >
+            <StyledSelect value={selectedRaceId || ''} label="Select Race" onChange={(e) => onRaceChange(e.target.value)}>
               {races.map((race) => (
-                <MenuItem 
-                  key={race.id} 
+                <MenuItem
+                  key={race.id}
                   value={race.id}
                   sx={{
                     backgroundColor: '#2a2a2a',
                     color: '#fff',
                     '&:hover': {
-                      backgroundColor: '#3a3a3a',
+                      backgroundColor: '#3a3a3a'
                     },
                     '&.Mui-selected': {
                       backgroundColor: '#e10600',
                       '&:hover': {
-                        backgroundColor: '#c40500',
-                      },
-                    },
+                        backgroundColor: '#c40500'
+                      }
+                    }
                   }}
                 >
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
-                    <span style={{ fontSize: '18px' }}>
-                      {getCountryFlag(race.countryCode)}
-                    </span>
+                    <span style={{ fontSize: '18px' }}>{getCountryFlag(race.countryCode)}</span>
                     <Box sx={{ flex: 1 }}>
                       <Typography variant="body2" sx={{ fontWeight: 700 }}>
                         Round {race.roundNumber}: {race.name}
@@ -152,32 +155,29 @@ export default function RaceSelector({ races, selectedRaceId, onRaceChange, load
                         {race.circuitName} - {formatDate(race.raceDate)}
                       </Typography>
                     </Box>
-                    <StatusChip 
-                      label={race.status} 
-                      status={race.status} 
-                      size="small" 
-                    />
+                    <StatusChip label={race.status} status={race.status} size="small" />
                   </Box>
                 </MenuItem>
               ))}
             </StyledSelect>
           </FormControl>
         </Grid>
-        
+
         {selectedRace && (
           <Grid item xs={12} md={6}>
             <StyledCard>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-                  <span style={{ fontSize: '24px' }}>
-                    {getCountryFlag(selectedRace.countryCode)}
-                  </span>
+                  <span style={{ fontSize: '24px' }}>{getCountryFlag(selectedRace.countryCode)}</span>
                   <Box>
-                    <Typography variant="h6" sx={{ 
-                      color: '#e10600', 
-                      fontWeight: 900,
-                      fontFamily: 'Oswald, Arial, sans-serif'
-                    }}>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        color: '#e10600',
+                        fontWeight: 900,
+                        fontFamily: 'Oswald, Arial, sans-serif'
+                      }}
+                    >
                       {selectedRace.name}
                     </Typography>
                     <Typography variant="body2" sx={{ color: '#ccc' }}>
@@ -185,7 +185,7 @@ export default function RaceSelector({ races, selectedRaceId, onRaceChange, load
                     </Typography>
                   </Box>
                 </Box>
-                
+
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
                     <Typography variant="caption" sx={{ color: '#999' }}>
@@ -200,11 +200,7 @@ export default function RaceSelector({ races, selectedRaceId, onRaceChange, load
                       Status
                     </Typography>
                     <Box sx={{ mt: 0.5 }}>
-                      <StatusChip 
-                        label={selectedRace.status} 
-                        status={selectedRace.status} 
-                        size="small" 
-                      />
+                      <StatusChip label={selectedRace.status} status={selectedRace.status} size="small" />
                     </Box>
                   </Grid>
                   <Grid item xs={6}>
@@ -224,7 +220,7 @@ export default function RaceSelector({ races, selectedRaceId, onRaceChange, load
                     </Typography>
                   </Grid>
                 </Grid>
-                
+
                 {selectedRace.description && (
                   <Typography variant="body2" sx={{ mt: 2, color: '#ccc', fontStyle: 'italic' }}>
                     {selectedRace.description}

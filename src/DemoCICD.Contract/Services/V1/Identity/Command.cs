@@ -17,7 +17,8 @@ public static class Command
     
     // User Management Commands
     public record CreateUser(string UserName, string Email, string Password, string FirstName, string LastName, DateTime? DayOfBirth, bool? IsDirector, bool? IsHeadOfDepartment, Guid? ManagerId, Guid PositionId) : ICommand<Response.UserCreated>;
-    public record UpdateUser(Guid UserId, string Email, string FirstName, string LastName, DateTime? DayOfBirth, bool? IsDirector, bool? IsHeadOfDepartment, Guid? ManagerId, Guid PositionId) : ICommand<Response.UserUpdated>;
+    public record UpdateUser(Guid UserId, string Email, string FirstName, string LastName, DateTime? DayOfBirth, bool? IsDirector, bool? IsHeadOfDepartment, Guid? ManagerId, Guid PositionId, string? Phone = null, string? Address = null, string? City = null, string? Country = null, string? Bio = null, string? Website = null) : ICommand<Response.UserUpdated>;
+    public record UpdateProfile(Guid UserId, string FirstName, string LastName, string? Phone = null, string? Address = null, string? City = null, string? Country = null, string? Bio = null, string? Website = null) : ICommand<Response.UserUpdated>;
     public record DeleteUser(Guid UserId) : ICommand;
     public record ChangePassword(Guid UserId, string CurrentPassword, string NewPassword) : ICommand;
     public record ResetPassword(Guid UserId, string NewPassword) : ICommand;
@@ -25,6 +26,12 @@ public static class Command
     public record UnlockUser(Guid UserId) : ICommand;
     public record AssignUserToRole(Guid UserId, Guid RoleId) : ICommand;
     public record RemoveUserFromRole(Guid UserId, Guid RoleId) : ICommand;
+    
+    // Account Settings Commands
+    public record UpdateNotificationSettings(Guid UserId, bool EmailNotifications, bool PushNotifications, bool SmsNotifications, bool NewsUpdates, bool SecurityAlerts, bool MarketingEmails) : ICommand;
+    public record UpdatePrivacySettings(Guid UserId, string ProfileVisibility, bool ShowEmail, bool ShowPhone, bool AllowSearchByEmail, bool AllowSearchByPhone) : ICommand;
+    public record RevokeUserSession(Guid UserId, string SessionId) : ICommand;
+    public record RevokeAllUserSessions(Guid UserId) : ICommand;
     
     // Role Management Commands
     public record CreateRole(string Name, string Description, string RoleCode) : ICommand<Response.RoleCreated>;

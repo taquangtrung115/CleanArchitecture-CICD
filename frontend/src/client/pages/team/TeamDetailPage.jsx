@@ -97,11 +97,7 @@ export default function TeamDetailPage() {
         <Alert severity="error" sx={{ mb: 4 }}>
           {error}
         </Alert>
-        <Button
-          variant="contained"
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate('/teams')}
-        >
+        <Button variant="contained" startIcon={<ArrowBackIcon />} onClick={() => navigate('/teams')}>
           Back to Teams
         </Button>
       </Container>
@@ -114,11 +110,7 @@ export default function TeamDetailPage() {
         <Alert severity="warning" sx={{ mb: 4 }}>
           Team not found
         </Alert>
-        <Button
-          variant="contained"
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate('/teams')}
-        >
+        <Button variant="contained" startIcon={<ArrowBackIcon />} onClick={() => navigate('/teams')}>
           Back to Teams
         </Button>
       </Container>
@@ -132,8 +124,8 @@ export default function TeamDetailPage() {
           <Button
             startIcon={<ArrowBackIcon />}
             onClick={() => navigate('/teams')}
-            sx={{ 
-              color: '#fff', 
+            sx={{
+              color: '#fff',
               mb: 3,
               '&:hover': {
                 backgroundColor: 'rgba(255, 255, 255, 0.1)'
@@ -142,9 +134,9 @@ export default function TeamDetailPage() {
           >
             Back to Teams
           </Button>
-          
+
           <TeamShortName>{team.shortName}</TeamShortName>
-          
+
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
             <Typography variant="h2" component="h1" sx={{ fontWeight: 900, mr: 2 }}>
               {team.name}
@@ -156,20 +148,18 @@ export default function TeamDetailPage() {
               sx={{ fontWeight: 600 }}
             />
           </Box>
-          
+
           <Typography variant="h5" sx={{ color: '#e10600', mb: 3 }}>
             {team.shortName}
           </Typography>
-          
+
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
             <Typography variant="h6" sx={{ fontSize: '2rem' }}>
               {team.countryFlag}
             </Typography>
-            <Typography variant="h6">
-              {team.countryName}
-            </Typography>
+            <Typography variant="h6">{team.countryName}</Typography>
           </Box>
-          
+
           {team.foundedYear && (
             <Typography variant="h6" sx={{ color: '#ccc' }}>
               Founded: {new Date(team.foundedYear).getFullYear()}
@@ -182,7 +172,7 @@ export default function TeamDetailPage() {
         <Typography variant="h4" sx={{ mb: 4, fontWeight: 700 }}>
           Team Statistics
         </Typography>
-        
+
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', lg: '1fr 1fr 1fr' }, gap: 3, mb: 6 }}>
           <StatsCard>
             <CardContent sx={{ textAlign: 'center' }}>
@@ -194,7 +184,7 @@ export default function TeamDetailPage() {
               </Typography>
             </CardContent>
           </StatsCard>
-          
+
           <StatsCard>
             <CardContent sx={{ textAlign: 'center' }}>
               <Typography variant="h3" sx={{ color: '#4caf50', fontWeight: 700 }}>
@@ -205,7 +195,7 @@ export default function TeamDetailPage() {
               </Typography>
             </CardContent>
           </StatsCard>
-          
+
           {team.foundedYear && (
             <StatsCard>
               <CardContent sx={{ textAlign: 'center' }}>
@@ -226,9 +216,7 @@ export default function TeamDetailPage() {
               <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>
                 About the Team
               </Typography>
-              <Typography variant="body1">
-                {team.description}
-              </Typography>
+              <Typography variant="body1">{team.description}</Typography>
             </CardContent>
           </Card>
         )}
@@ -247,10 +235,10 @@ export default function TeamDetailPage() {
                         <Typography variant="h6" sx={{ fontWeight: 700 }}>
                           {rider.fullName}
                         </Typography>
-                        <Typography 
-                          variant="h5" 
-                          sx={{ 
-                            color: '#e10600', 
+                        <Typography
+                          variant="h5"
+                          sx={{
+                            color: '#e10600',
                             fontWeight: 900,
                             fontSize: '1.5rem'
                           }}
@@ -258,29 +246,25 @@ export default function TeamDetailPage() {
                           #{rider.racingNumber}
                         </Typography>
                       </Box>
-                      
+
                       {rider.nickname && (
                         <Typography variant="body2" sx={{ color: '#666', fontStyle: 'italic', mb: 1 }}>
                           "{rider.nickname}"
                         </Typography>
                       )}
-                      
+
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
                         <span style={{ fontSize: '1.2rem' }}>{rider.countryFlag}</span>
                         <Typography variant="body2" color="textSecondary">
                           {rider.countryName}
                         </Typography>
                       </Box>
-                      
+
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Typography variant="body2" color="textSecondary">
                           Age: {rider.age}
                         </Typography>
-                        <Chip
-                          label={rider.isActive ? 'Active' : 'Retired'}
-                          color={rider.isActive ? 'success' : 'error'}
-                          size="small"
-                        />
+                        <Chip label={rider.isActive ? 'Active' : 'Retired'} color={rider.isActive ? 'success' : 'error'} size="small" />
                       </Box>
                     </CardContent>
                   </RiderCard>

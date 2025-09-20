@@ -8,7 +8,8 @@ const mockVideos = [
   {
     id: '1',
     title: 'MotoGP 2024 Race Highlights - Best Overtakes',
-    description: 'Experience the most thrilling overtakes from the 2024 MotoGP season with heart-stopping moments from Ducati, Yamaha, and KTM riders.',
+    description:
+      'Experience the most thrilling overtakes from the 2024 MotoGP season with heart-stopping moments from Ducati, Yamaha, and KTM riders.',
     type: 'Highlight',
     status: 'Published',
     videoUrl: 'https://www.youtube.com/embed/1QhQF6l1bJw',
@@ -42,7 +43,7 @@ const mockVideos = [
   {
     id: '3',
     title: 'OnBoard Camera - Pecco Bagnaia Lap Record',
-    description: 'Experience the track from Pecco Bagnaia\'s perspective as he sets a new lap record at Misano.',
+    description: "Experience the track from Pecco Bagnaia's perspective as he sets a new lap record at Misano.",
     type: 'OnBoard',
     status: 'Published',
     videoUrl: 'https://www.youtube.com/embed/ScMzIvxBSi4',
@@ -114,26 +115,25 @@ const getVideosMock = ({ pageIndex = 1, pageSize = 10, type = null, searchTerm =
   let filteredVideos = [...mockVideos];
 
   if (type) {
-    filteredVideos = filteredVideos.filter(video => video.type.toLowerCase() === type.toLowerCase());
+    filteredVideos = filteredVideos.filter((video) => video.type.toLowerCase() === type.toLowerCase());
   }
 
   if (searchTerm) {
     const term = searchTerm.toLowerCase();
-    filteredVideos = filteredVideos.filter(video =>
-      video.title.toLowerCase().includes(term) ||
-      video.description.toLowerCase().includes(term) ||
-      video.tags.some(tag => tag.toLowerCase().includes(term))
+    filteredVideos = filteredVideos.filter(
+      (video) =>
+        video.title.toLowerCase().includes(term) ||
+        video.description.toLowerCase().includes(term) ||
+        video.tags.some((tag) => tag.toLowerCase().includes(term))
     );
   }
 
   if (platform) {
-    filteredVideos = filteredVideos.filter(video =>
-      video.platform && video.platform.toLowerCase() === platform.toLowerCase()
-    );
+    filteredVideos = filteredVideos.filter((video) => video.platform && video.platform.toLowerCase() === platform.toLowerCase());
   }
 
   if (isFeatured !== null) {
-    filteredVideos = filteredVideos.filter(video => video.isFeatured === isFeatured);
+    filteredVideos = filteredVideos.filter((video) => video.isFeatured === isFeatured);
   }
 
   const startIndex = (pageIndex - 1) * pageSize;
@@ -154,7 +154,7 @@ const getVideosMock = ({ pageIndex = 1, pageSize = 10, type = null, searchTerm =
 };
 
 const getFeaturedVideosMock = () => {
-  const featuredVideos = mockVideos.filter(video => video.isFeatured);
+  const featuredVideos = mockVideos.filter((video) => video.isFeatured);
   return {
     isSuccess: true,
     value: featuredVideos
@@ -162,7 +162,7 @@ const getFeaturedVideosMock = () => {
 };
 
 const getVideoByIdMock = (id) => {
-  const video = mockVideos.find(v => v.id === id);
+  const video = mockVideos.find((v) => v.id === id);
   return {
     isSuccess: !!video,
     value: video,
@@ -269,7 +269,9 @@ export const searchVideos = async (searchTerm, pageIndex = 1, pageSize = 10) => 
   }
 
   try {
-    const response = await axios.get(`/api/v1/motogp/videos/search?searchTerm=${encodeURIComponent(searchTerm)}&pageIndex=${pageIndex}&pageSize=${pageSize}`);
+    const response = await axios.get(
+      `/api/v1/motogp/video/search?searchTerm=${encodeURIComponent(searchTerm)}&pageIndex=${pageIndex}&pageSize=${pageSize}`
+    );
     return response.data;
   } catch (error) {
     console.error('Error searching videos:', error);

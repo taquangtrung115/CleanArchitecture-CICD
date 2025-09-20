@@ -29,7 +29,8 @@ const HeroSection = styled(Box)(({ theme }) => ({
     left: 0,
     right: 0,
     bottom: 0,
-    background: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23e10600" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+    background:
+      'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23e10600" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
     zIndex: 1
   }
 }));
@@ -84,19 +85,20 @@ export default function TeamPage() {
 
     // Filter by search term
     if (searchTerm) {
-      filtered = filtered.filter(team =>
-        team.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        team.shortName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        team.countryName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        team.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (team) =>
+          team.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          team.shortName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          team.countryName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          team.description?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     // Filter by status
     if (statusFilter === 'active') {
-      filtered = filtered.filter(team => team.isActive);
+      filtered = filtered.filter((team) => team.isActive);
     } else if (statusFilter === 'inactive') {
-      filtered = filtered.filter(team => !team.isActive);
+      filtered = filtered.filter((team) => !team.isActive);
     }
 
     setFilteredTeams(filtered);
@@ -108,18 +110,18 @@ export default function TeamPage() {
     }
   };
 
-  const activeTeams = teams.filter(team => team.isActive).length;
-  const inactiveTeams = teams.filter(team => !team.isActive).length;
+  const activeTeams = teams.filter((team) => team.isActive).length;
+  const inactiveTeams = teams.filter((team) => !team.isActive).length;
 
   return (
     <>
       <HeroSection>
         <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
-          <Typography 
-            variant="h2" 
-            component="h1" 
-            sx={{ 
-              fontWeight: 900, 
+          <Typography
+            variant="h2"
+            component="h1"
+            sx={{
+              fontWeight: 900,
               mb: 2,
               fontSize: { xs: '2.5rem', md: '3.5rem' },
               background: 'linear-gradient(45deg, #fff, #e10600)',
@@ -130,17 +132,17 @@ export default function TeamPage() {
           >
             MotoGP Teams
           </Typography>
-          <Typography 
-            variant="h5" 
-            sx={{ 
-              color: '#ccc', 
+          <Typography
+            variant="h5"
+            sx={{
+              color: '#ccc',
               mb: 4,
               fontSize: { xs: '1.1rem', md: '1.3rem' }
             }}
           >
             The constructors and teams competing in the world's premier motorcycle championship
           </Typography>
-          
+
           <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
             <Box sx={{ textAlign: 'center' }}>
               <Typography variant="h4" sx={{ color: '#e10600', fontWeight: 700 }}>
@@ -182,22 +184,17 @@ export default function TeamPage() {
                   <InputAdornment position="start">
                     <SearchIcon />
                   </InputAdornment>
-                ),
+                )
               }}
-              sx={{ 
+              sx={{
                 minWidth: 300,
                 '& .MuiOutlinedInput-root': {
                   backgroundColor: '#fff'
                 }
               }}
             />
-            
-            <ToggleButtonGroup
-              value={statusFilter}
-              exclusive
-              onChange={handleStatusFilterChange}
-              aria-label="team status filter"
-            >
+
+            <ToggleButtonGroup value={statusFilter} exclusive onChange={handleStatusFilterChange} aria-label="team status filter">
               <ToggleButton value="all" aria-label="all teams">
                 All
               </ToggleButton>
@@ -209,11 +206,7 @@ export default function TeamPage() {
               </ToggleButton>
             </ToggleButtonGroup>
 
-            <Chip 
-              label={`${filteredTeams.length} teams found`} 
-              color="primary" 
-              variant="outlined"
-            />
+            <Chip label={`${filteredTeams.length} teams found`} color="primary" variant="outlined" />
           </Box>
         </Container>
       </SearchSection>

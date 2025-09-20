@@ -1,11 +1,12 @@
 // assets
-import { UserOutlined, TeamOutlined, SafetyOutlined, RobotOutlined } from '@ant-design/icons';
+import { UserOutlined, TeamOutlined, SafetyOutlined, RobotOutlined, IdcardOutlined } from '@ant-design/icons';
 
 const icons = {
   UserOutlined,
   TeamOutlined,
   SafetyOutlined,
-  RobotOutlined
+  RobotOutlined,
+  IdcardOutlined
 };
 
 const management = {
@@ -13,6 +14,13 @@ const management = {
   title: 'Management',
   type: 'group',
   children: [
+    {
+      id: 'profile',
+      title: 'Profile',
+      type: 'item',
+      url: '/admin/profile',
+      icon: icons.IdcardOutlined
+    },
     {
       id: 'user-management',
       title: 'Users',
