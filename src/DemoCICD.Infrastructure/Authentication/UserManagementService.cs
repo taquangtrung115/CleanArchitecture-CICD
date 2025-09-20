@@ -93,7 +93,7 @@ public class UserManagementService : IUserManagementService
         }
     }
 
-    public async Task<bool> UpdateUserAsync(Guid userId, string email, string firstName, string lastName, DateTime? dayOfBirth, bool? isDirector, bool? isHeadOfDepartment, Guid? managerId, Guid positionId)
+    public async Task<bool> UpdateUserAsync(Guid userId, string email, string firstName, string lastName, DateTime? dayOfBirth, bool? isDirector, bool? isHeadOfDepartment, Guid? managerId, Guid positionId, string? phone = null, string? address = null, string? city = null, string? country = null, string? bio = null, string? website = null)
     {
         try
         {
@@ -112,6 +112,12 @@ public class UserManagementService : IUserManagementService
             user.IsHeadOfDepartment = isHeadOfDepartment;
             user.ManagerId = managerId;
             user.PositionId = positionId;
+            user.Phone = phone;
+            user.Address = address;
+            user.City = city;
+            user.Country = country;
+            user.Bio = bio;
+            user.Website = website;
 
             var result = await _userManager.UpdateAsync(user);
             return result.Succeeded;
@@ -119,6 +125,36 @@ public class UserManagementService : IUserManagementService
         catch (Exception ex)
         {
             Log.Error(ex, "Error updating user: {UserId}", userId);
+            return false;
+        }
+    }
+
+    public async Task<bool> UpdateProfileAsync(Guid userId, string firstName, string lastName, string? phone = null, string? address = null, string? city = null, string? country = null, string? bio = null, string? website = null)
+    {
+        try
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.FirstName = firstName;
+            user.LastName = lastName;
+            user.FullName = $"{firstName} {lastName}";
+            user.Phone = phone;
+            user.Address = address;
+            user.City = city;
+            user.Country = country;
+            user.Bio = bio;
+            user.Website = website;
+
+            var result = await _userManager.UpdateAsync(user);
+            return result.Succeeded;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error updating profile for user: {UserId}", userId);
             return false;
         }
     }

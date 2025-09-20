@@ -19,7 +19,8 @@ public interface IUserManagementService
     Task<AppUser?> GetUserByIdAsync(Guid userId);
     Task<(IEnumerable<AppUser> Users, int TotalCount)> GetUsersAsync(int page, int pageSize, string? searchTerm);
     Task<UserAuthResult> CreateUserAsync(string userName, string email, string password, string firstName, string lastName, DateTime? dayOfBirth, bool? isDirector, bool? isHeadOfDepartment, Guid? managerId, Guid positionId);
-    Task<bool> UpdateUserAsync(Guid userId, string email, string firstName, string lastName, DateTime? dayOfBirth, bool? isDirector, bool? isHeadOfDepartment, Guid? managerId, Guid positionId);
+    Task<bool> UpdateUserAsync(Guid userId, string email, string firstName, string lastName, DateTime? dayOfBirth, bool? isDirector, bool? isHeadOfDepartment, Guid? managerId, Guid positionId, string? phone = null, string? address = null, string? city = null, string? country = null, string? bio = null, string? website = null);
+    Task<bool> UpdateProfileAsync(Guid userId, string firstName, string lastName, string? phone = null, string? address = null, string? city = null, string? country = null, string? bio = null, string? website = null);
     Task<bool> DeleteUserAsync(Guid userId);
     Task<bool> ChangePasswordAsync(Guid userId, string currentPassword, string newPassword);
     Task<bool> ResetPasswordAsync(Guid userId, string newPassword);

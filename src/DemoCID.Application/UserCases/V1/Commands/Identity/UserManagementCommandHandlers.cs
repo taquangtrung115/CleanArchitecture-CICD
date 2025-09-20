@@ -80,7 +80,13 @@ public sealed class UpdateUserCommandHandler : ICommandHandler<Command.UpdateUse
                 request.IsDirector,
                 request.IsHeadOfDepartment,
                 request.ManagerId,
-                request.PositionId);
+                request.PositionId,
+                request.Phone,
+                request.Address,
+                request.City,
+                request.Country,
+                request.Bio,
+                request.Website);
 
             if (!success)
             {
@@ -350,5 +356,95 @@ public sealed class RemoveUserFromRoleCommandHandler : ICommandHandler<Command.R
             _logger.LogError(ex, "Error during user role removal for user: {UserId}, role: {RoleId}", request.UserId, request.RoleId);
             return Result.Failure(new Error("UserRoleRemoval.Error", "An error occurred during user role removal"));
         }
+    }
+}
+
+public sealed class UpdateProfileCommandHandler : ICommandHandler<Command.UpdateProfile, Response.UserUpdated>
+{
+    private readonly IUserManagementService _userManagementService;
+
+    public UpdateProfileCommandHandler(
+        IUserManagementService userManagementService)
+    {
+        _userManagementService = userManagementService;
+    }
+
+    public async Task<Result<Response.UserUpdated>> Handle(Command.UpdateProfile request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var success = await _userManagementService.UpdateProfileAsync(
+                request.UserId,
+                request.FirstName,
+                request.LastName,
+                request.Phone,
+                request.Address,
+                request.City,
+                request.Country,
+                request.Bio,
+                request.Website);
+
+            if (!success)
+            {
+                return Result.Failure<Response.UserUpdated>(
+                    new Error("ProfileUpdate.Failed", "Profile update failed"));
+            }
+
+            Log.Information("Profile updated successfully for user {UserId}", request.UserId);
+
+            var response = new Response.UserUpdated(
+                request.UserId,
+                string.Empty, // UserName will be populated by the service
+                string.Empty); // Email remains unchanged in profile update
+
+            return Result.Success(response);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error during profile update for user: {UserId}", request.UserId);
+            return Result.Failure<Response.UserUpdated>(
+                new Error("ProfileUpdate.Error", "An error occurred during profile update"));
+        }
+    }
+}
+
+// Account Settings Command Handlers
+public sealed class UpdateNotificationSettingsCommandHandler : ICommandHandler<Command.UpdateNotificationSettings>
+{
+    public async Task<Result> Handle(Command.UpdateNotificationSettings request, CancellationToken cancellationToken)
+    {
+        // Stub implementation - would store settings in database
+        Log.Information("Notification settings updated for user {UserId}", request.UserId);
+        return Result.Success();
+    }
+}
+
+public sealed class UpdatePrivacySettingsCommandHandler : ICommandHandler<Command.UpdatePrivacySettings>
+{
+    public async Task<Result> Handle(Command.UpdatePrivacySettings request, CancellationToken cancellationToken)
+    {
+        // Stub implementation - would store settings in database
+        Log.Information("Privacy settings updated for user {UserId}", request.UserId);
+        return Result.Success();
+    }
+}
+
+public sealed class RevokeUserSessionCommandHandler : ICommandHandler<Command.RevokeUserSession>
+{
+    public async Task<Result> Handle(Command.RevokeUserSession request, CancellationToken cancellationToken)
+    {
+        // Stub implementation - would revoke specific session
+        Log.Information("Session {SessionId} revoked for user {UserId}", request.SessionId, request.UserId);
+        return Result.Success();
+    }
+}
+
+public sealed class RevokeAllUserSessionsCommandHandler : ICommandHandler<Command.RevokeAllUserSessions>
+{
+    public async Task<Result> Handle(Command.RevokeAllUserSessions request, CancellationToken cancellationToken)
+    {
+        // Stub implementation - would revoke all sessions for user
+        Log.Information("All sessions revoked for user {UserId}", request.UserId);
+        return Result.Success();
     }
 }

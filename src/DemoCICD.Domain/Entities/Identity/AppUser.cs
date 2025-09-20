@@ -18,6 +18,16 @@ public class AppUser : IdentityUser<Guid>
     public Guid? ManagerId { get; set; }
     public Guid PositionId { get; set; }
     public int IsReceipient { get; set; }
+    
+    // Profile fields
+    public string? Phone { get; set; }
+    public string? Address { get; set; }
+    public string? City { get; set; }
+    public string? Country { get; set; }
+    public string? Bio { get; set; }
+    public string? Website { get; set; }
+    public string? Avatar { get; set; }
+    
     public virtual ICollection<IdentityUserClaim<Guid>> Claims { get; set; }
     public virtual ICollection<IdentityUserLogin<Guid>> Logins { get; set; }
     public virtual ICollection<IdentityUserToken<Guid>> Tokens { get; set; }

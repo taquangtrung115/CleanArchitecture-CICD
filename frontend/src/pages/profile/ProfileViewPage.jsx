@@ -35,7 +35,7 @@ import {
   MenuItem,
   ListItemButton
 } from '@mui/material';
-import { getCurrentUserProfile } from 'api/user';
+import { getCurrentUserProfile, updateCurrentUserProfile } from 'api/user';
 import UserOutlined from '@ant-design/icons/UserOutlined';
 import MailOutlined from '@ant-design/icons/MailOutlined';
 import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
@@ -64,6 +64,18 @@ export default function ProfileViewPage() {
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    firstName: '',
+    lastName: '',
+    phone: '',
+    address: '',
+    city: '',
+    country: '',
+    bio: '',
+    website: ''
+  });
   const [notificationSettings, setNotificationSettings] = useState({
     emailNotifications: true,
     pushNotifications: true,
@@ -88,6 +100,17 @@ export default function ProfileViewPage() {
       const res = await getCurrentUserProfile();
       if (res.data && res.data.value) {
         setProfile(res.data.value);
+        // Populate edit form with current data
+        setEditFormData({
+          firstName: res.data.value.firstName || '',
+          lastName: res.data.value.lastName || '',
+          phone: res.data.value.phone || '',
+          address: res.data.value.address || '',
+          city: res.data.value.city || '',
+          country: res.data.value.country || '',
+          bio: res.data.value.bio || '',
+          website: res.data.value.website || ''
+        });
       } else {
         setError('Không thể tải thông tin profile');
       }
@@ -118,6 +141,53 @@ export default function ProfileViewPage() {
       ...prev,
       [setting]: event.target.checked || event.target.value
     }));
+  };
+
+  const handleEditModeToggle = () => {
+    if (editMode) {
+      // Reset form data if canceling edit
+      setEditFormData({
+        firstName: profile?.firstName || '',
+        lastName: profile?.lastName || '',
+        phone: profile?.phone || '',
+        address: profile?.address || '',
+        city: profile?.city || '',
+        country: profile?.country || '',
+        bio: profile?.bio || '',
+        website: profile?.website || ''
+      });
+    }
+    setEditMode(!editMode);
+  };
+
+  const handleFormDataChange = (field) => (event) => {
+    setEditFormData(prev => ({
+      ...prev,
+      [field]: event.target.value
+    }));
+  };
+
+  const handleSaveProfile = async () => {
+    setSaving(true);
+    try {
+      const payload = {
+        userId: profile.userId, // We need the current user ID
+        ...editFormData
+      };
+      
+      const res = await updateCurrentUserProfile(payload);
+      if (res.error) {
+        setError('Không thể cập nhật profile: ' + (res.error.message || res.error));
+      } else {
+        setEditMode(false);
+        // Refresh profile data
+        await fetchProfile();
+      }
+    } catch (err) {
+      setError('Đã xảy ra lỗi khi cập nhật profile');
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (loading) {
@@ -250,7 +320,9 @@ export default function ProfileViewPage() {
             >
               <Button
                 variant="contained"
-                startIcon={<EditOutlined />}
+                startIcon={editMode ? <></>: <EditOutlined />}
+                onClick={editMode ? handleSaveProfile : handleEditModeToggle}
+                disabled={saving}
                 sx={{
                   backgroundColor: 'rgba(255,255,255,0.2)',
                   backdropFilter: 'blur(10px)',
@@ -258,8 +330,26 @@ export default function ProfileViewPage() {
                   '&:hover': { backgroundColor: 'rgba(255,255,255,0.3)' }
                 }}
               >
-                Chỉnh sửa Profile
+                {saving ? 'Đang lưu...' : editMode ? 'Lưu thay đổi' : 'Chỉnh sửa Profile'}
               </Button>
+              {editMode && (
+                <Button
+                  variant="outlined"
+                  onClick={handleEditModeToggle}
+                  sx={{
+                    ml: 2,
+                    backgroundColor: 'rgba(255,255,255,0.1)',
+                    borderColor: 'rgba(255,255,255,0.3)',
+                    color: 'white',
+                    '&:hover': { 
+                      backgroundColor: 'rgba(255,255,255,0.2)',
+                      borderColor: 'rgba(255,255,255,0.5)'
+                    }
+                  }}
+                >
+                  Hủy
+                </Button>
+              )}
             </Box>
           </Box>
           <Box pt={8} pb={2} px={4}>
@@ -382,25 +472,81 @@ export default function ProfileViewPage() {
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <PhoneOutlined />
                           </ListItemIcon>
-                          <ListItemText primary="Số điện thoại" secondary="Chưa cập nhật" />
+                          {editMode ? (
+                            <TextField
+                              fullWidth
+                              size="small"
+                              label="Số điện thoại"
+                              value={editFormData.phone}
+                              onChange={handleFormDataChange('phone')}
+                              variant="outlined"
+                            />
+                          ) : (
+                            <ListItemText 
+                              primary="Số điện thoại" 
+                              secondary={profile?.phone || "Chưa cập nhật"} 
+                            />
+                          )}
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <EnvironmentOutlined />
                           </ListItemIcon>
-                          <ListItemText primary="Địa chỉ" secondary="Chưa cập nhật" />
+                          {editMode ? (
+                            <TextField
+                              fullWidth
+                              size="small"
+                              label="Địa chỉ"
+                              value={editFormData.address}
+                              onChange={handleFormDataChange('address')}
+                              variant="outlined"
+                            />
+                          ) : (
+                            <ListItemText 
+                              primary="Địa chỉ" 
+                              secondary={profile?.address || "Chưa cập nhật"} 
+                            />
+                          )}
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <EnvironmentOutlined />
                           </ListItemIcon>
-                          <ListItemText primary="Thành phố" secondary="Chưa cập nhật" />
+                          {editMode ? (
+                            <TextField
+                              fullWidth
+                              size="small"
+                              label="Thành phố"
+                              value={editFormData.city}
+                              onChange={handleFormDataChange('city')}
+                              variant="outlined"
+                            />
+                          ) : (
+                            <ListItemText 
+                              primary="Thành phố" 
+                              secondary={profile?.city || "Chưa cập nhật"} 
+                            />
+                          )}
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <EnvironmentOutlined />
                           </ListItemIcon>
-                          <ListItemText primary="Quốc gia" secondary="Việt Nam" />
+                          {editMode ? (
+                            <TextField
+                              fullWidth
+                              size="small"
+                              label="Quốc gia"
+                              value={editFormData.country}
+                              onChange={handleFormDataChange('country')}
+                              variant="outlined"
+                            />
+                          ) : (
+                            <ListItemText 
+                              primary="Quốc gia" 
+                              secondary={profile?.country || "Việt Nam"} 
+                            />
+                          )}
                         </ListItem>
                       </List>
 
