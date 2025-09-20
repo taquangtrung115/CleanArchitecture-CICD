@@ -37,7 +37,7 @@ export default function HomePage() {
   return (
     <Fade in={show} timeout={900}>
       <Box sx={{ bgcolor: '#101014', minHeight: '100vh', pb: 8, fontFamily: 'Oswald, Arial Black, sans-serif' }}>
-        <MotoGPHeader />
+        {/* <MotoGPHeader /> */}
         {/* Banner motogp.com style */}
         <Box
           sx={{

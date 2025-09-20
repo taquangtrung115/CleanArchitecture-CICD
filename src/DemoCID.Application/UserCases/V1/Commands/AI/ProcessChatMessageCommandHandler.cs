@@ -64,19 +64,19 @@ public sealed class ProcessChatMessageCommandHandler : ICommandHandler<Command.P
             
             if (lowerResponse.Contains("create role") || lowerResponse.Contains("tạo role"))
             {
-                return await HandleCreateRoleAction(aiResponse, cancellationToken);
+                return await HandleCreateRoleAction(cancellationToken);
             }
             else if (lowerResponse.Contains("create permission") || lowerResponse.Contains("tạo quyền"))
             {
-                return await HandleCreatePermissionAction(aiResponse, cancellationToken);
+                return await HandleCreatePermissionAction(cancellationToken);
             }
             else if (lowerResponse.Contains("assign permission") || lowerResponse.Contains("gán quyền"))
             {
-                return await HandleAssignPermissionAction(aiResponse, cancellationToken);
+                return await HandleAssignPermissionAction(cancellationToken);
             }
             else if (lowerResponse.Contains("assign user") || lowerResponse.Contains("gán user"))
             {
-                return await HandleAssignUserToRoleAction(aiResponse, cancellationToken);
+                return await HandleAssignUserToRoleAction(cancellationToken);
             }
             else if (lowerResponse.Contains("list roles") || lowerResponse.Contains("danh sách role"))
             {
@@ -95,7 +95,6 @@ public sealed class ProcessChatMessageCommandHandler : ICommandHandler<Command.P
     }
 
     private async Task<(bool Success, string ActionPerformed, object? Result)> HandleCreateRoleAction(
-        string aiResponse, 
         CancellationToken cancellationToken)
     {
         try
@@ -117,7 +116,6 @@ public sealed class ProcessChatMessageCommandHandler : ICommandHandler<Command.P
     }
 
     private async Task<(bool Success, string ActionPerformed, object? Result)> HandleCreatePermissionAction(
-        string aiResponse, 
         CancellationToken cancellationToken)
     {
         try
@@ -139,7 +137,6 @@ public sealed class ProcessChatMessageCommandHandler : ICommandHandler<Command.P
     }
 
     private async Task<(bool Success, string ActionPerformed, object? Result)> HandleAssignPermissionAction(
-        string aiResponse, 
         CancellationToken cancellationToken)
     {
         try
@@ -161,7 +158,6 @@ public sealed class ProcessChatMessageCommandHandler : ICommandHandler<Command.P
     }
 
     private async Task<(bool Success, string ActionPerformed, object? Result)> HandleAssignUserToRoleAction(
-        string aiResponse, 
         CancellationToken cancellationToken)
     {
         try

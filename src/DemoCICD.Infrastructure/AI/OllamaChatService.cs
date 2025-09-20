@@ -1,28 +1,29 @@
-using DemoCICD.Application.Abstractions;
+﻿using DemoCICD.Application.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using OpenAI;
-using OpenAI.Chat;
 using Serilog;
+using System.Text;
+using System.Text.Json;
 
 namespace DemoCICD.Infrastructure.AI;
 
-public class OpenAiChatService : IAiChatService
+public class OllamaChatService : IAiChatService
 {
-    private readonly OpenAIClient _openAiClient;
-    private readonly string _apiKey;
+    private readonly HttpClient _httpClient;
+    private readonly string _ollamaUrl;
+    private readonly string _model;
 
-    public OpenAiChatService(IConfiguration configuration)
+    public OllamaChatService(IConfiguration configuration)
     {
-        _apiKey = configuration["OpenAI:ApiKey"] ?? "demo-key";
-        _openAiClient = new OpenAIClient(_apiKey);
+        _ollamaUrl = configuration["Ollama:Url"] ?? "http://localhost:11434/api/generate";
+        _model = configuration["Ollama:Model"] ?? "llama2";
+        _httpClient = new HttpClient();
     }
 
     public async Task<string> ProcessChatMessageAsync(string message, CancellationToken cancellationToken = default)
     {
         try
         {
-            // Define the system prompt for role and permission management
             var systemPrompt = @"Bạn là một AI assistant chuyên về quản lý quyền và role trong hệ thống.
 Bạn có thể thực hiện các thao tác sau:
 1. Tạo role mới: 'tạo role [tên role]' hoặc 'create role [role name]'
@@ -33,38 +34,38 @@ Bạn có thể thực hiện các thao tác sau:
 
 Hãy trả lời bằng tiếng Việt và xác nhận thao tác bạn sẽ thực hiện.";
 
-            var chatMessages = new List<ChatMessage>
+            var fullPrompt = $"{systemPrompt}\n\nUser: {message}";
+
+            var payload = new
             {
-                ChatMessage.CreateSystemMessage(systemPrompt),
-                ChatMessage.CreateUserMessage(message)
+                model = _model,
+                prompt = fullPrompt,
+                stream = false
             };
 
-            var chatOptions = new ChatCompletionOptions
-            {
-                Temperature = 0.7f
-            };
+            var json = JsonSerializer.Serialize(payload);
+            var response = await _httpClient.PostAsync(_ollamaUrl, new StringContent(json, Encoding.UTF8, "application/json"), cancellationToken);
+            var respContent = await response.Content.ReadAsStringAsync();
 
-            // For demo purposes, return a mock response since we might not have a real OpenAI API key
-            if (_apiKey == "demo-key")
+            if (!response.IsSuccessStatusCode)
             {
+                Log.Error("Ollama error: {Status} - {Content}", response.StatusCode, respContent);
                 return GenerateMockResponse(message);
             }
 
-            var response = await _openAiClient.GetChatClient("gpt-3.5-turbo")
-                .CompleteChatAsync(chatMessages, chatOptions, cancellationToken);
-
-            return response.Value.Content[0].Text ?? "Xin lỗi, tôi không thể xử lý yêu cầu này.";
+            using var doc = JsonDocument.Parse(respContent);
+            var reply = doc.RootElement.GetProperty("response").GetString();
+            return reply ?? GenerateMockResponse(message);
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Error processing chat message with OpenAI: {Message}", message);
+            Log.Error(ex, "Error processing chat message with Ollama: {Message}", message);
             return GenerateMockResponse(message);
         }
     }
 
     public async Task<bool> CanPerformActionAsync(string action, CancellationToken cancellationToken = default)
     {
-        // For demo purposes, assume all actions are allowed
         await Task.CompletedTask;
         return true;
     }

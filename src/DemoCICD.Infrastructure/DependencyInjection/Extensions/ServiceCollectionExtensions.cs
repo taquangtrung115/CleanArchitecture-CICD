@@ -29,7 +29,8 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IPermissionManagementService, PermissionManagementService>();
         
         // Add AI services
-        services.AddTransient<IAiChatService, OpenAiChatService>();
+        services.AddScoped<IAiChatService, OpenAiChatService>();
+        services.AddScoped<IAiChatService, OllamaChatService>();
         services.AddTransient<IIdentityManagementService, IdentityManagementService>();
     }
 
