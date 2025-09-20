@@ -25,6 +25,7 @@ const navigationItems = [
   { label: 'Bikes', path: '/bikes' },
   { label: 'News', path: '/news' },
   { label: 'Media', path: '/media' },
+  { label: 'Videos', path: '/videos' },
   { label: 'Search', path: '/search' }
 ];
 
