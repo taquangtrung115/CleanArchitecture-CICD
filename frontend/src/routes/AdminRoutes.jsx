@@ -16,6 +16,7 @@ const PermissionPage = Loadable(lazy(() => import('pages/permission/PermissionPa
 const ChatPage = Loadable(lazy(() => import('pages/chat/ChatPage')));
 const RidersPage = Loadable(lazy(() => import('pages/RidersPage')));
 const TeamsPage = Loadable(lazy(() => import('pages/TeamsPage')));
+const ProductPage = Loadable(lazy(() => import('pages/product/ProductPage')));
 
 // ==============================|| ADMIN ROUTING ||============================== //
 
@@ -71,6 +72,10 @@ const AdminRoutes = [
       {
         path: 'chat',
         element: <ChatPage />
+      },
+      {
+        path: 'products',
+        element: <ProductPage />
       }
     ]
   }
