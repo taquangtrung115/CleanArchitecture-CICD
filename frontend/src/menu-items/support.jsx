@@ -18,7 +18,7 @@ const support = {
       id: 'sample-page',
       title: 'Sample Page',
       type: 'item',
-      url: '/sample-page',
+      url: '/admin/sample-page',
       icon: icons.ChromeOutlined
     },
     {

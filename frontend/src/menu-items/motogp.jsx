@@ -7,22 +7,22 @@ const icons = {
 };
 
 const motogp = {
-    id: 'motogp',
-    title: 'MotoGP',
+    id: 'motogp-admin',
+    title: 'MotoGP Management',
     type: 'group',
     children: [
         {
-            id: 'motogp-riders',
-            title: 'Riders',
+            id: 'admin-riders',
+            title: 'Manage Riders',
             type: 'item',
-            url: '/riders',
+            url: '/admin/riders',
             icon: icons.TrophyOutlined
         },
         {
-            id: 'motogp-teams',
-            title: 'Teams',
+            id: 'admin-teams',
+            title: 'Manage Teams',
             type: 'item',
-            url: '/teams',
+            url: '/admin/teams',
             icon: icons.TeamOutlined
         }
     ]

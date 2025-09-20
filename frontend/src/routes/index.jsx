@@ -1,26 +1,22 @@
 
-
 import { createBrowserRouter } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
-import MainRoutes from './MainRoutes';
-import LoginRoutes from './LoginRoutes';
+import ClientRoutes from './ClientRoutes';
+import AdminRoutes from './AdminRoutes';
+import AuthRoutes from './AuthRoutes';
 
-// Chuẩn GitHub: gom các route public/private rõ ràng
-
-// Tách riêng /admin mới cần login, client không cần login
-const routes = [
-    // Public routes
-    ...LoginRoutes.children[0].children.map(r => ({ ...r })),
-    // Client routes (không cần login)
-    ...MainRoutes.filter(r => r.path !== '/admin'),
-    // Admin routes (bảo vệ bằng ProtectedRoute)
-    {
-        path: '/admin',
-        element: <ProtectedRoute />,
-        children: MainRoutes.find(r => r.path === '/admin')?.children || []
-    }
-];
-
-const router = createBrowserRouter(routes, { basename: '/' });
+// Clean route separation: client (public) and admin (protected)
+const router = createBrowserRouter([
+  // Auth routes (login, register)
+  ...AuthRoutes,
+  // Client routes (public, no login required)
+  ...ClientRoutes,
+  // Admin routes (protected, login required)
+  {
+    path: '/admin',
+    element: <ProtectedRoute />,
+    children: AdminRoutes
+  }
+], { basename: '/' });
 
 export default router;
