@@ -17,6 +17,7 @@ const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')))
 const UserPage = Loadable(lazy(() => import('pages/user/UserPage')));
 const RolePage = Loadable(lazy(() => import('pages/role/RolePage')));
 const PermissionPage = Loadable(lazy(() => import('pages/permission/PermissionPage')));
+const ChatPage = Loadable(lazy(() => import('pages/chat/ChatPage')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -82,6 +83,10 @@ const MainRoutes = [
       {
         path: 'permissions',
         element: <PermissionPage />
+      },
+      {
+        path: 'chat',
+        element: <ChatPage />
       }
     ]
   }

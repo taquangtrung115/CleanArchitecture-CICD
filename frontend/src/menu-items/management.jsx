@@ -1,10 +1,11 @@
 // assets
-import { UserOutlined, TeamOutlined, SafetyOutlined } from '@ant-design/icons';
+import { UserOutlined, TeamOutlined, SafetyOutlined, RobotOutlined } from '@ant-design/icons';
 
 const icons = {
     UserOutlined,
     TeamOutlined,
-    SafetyOutlined
+    SafetyOutlined,
+    RobotOutlined
 };
 
 const management = {
@@ -16,22 +17,29 @@ const management = {
             id: 'user-management',
             title: 'Users',
             type: 'item',
-            url: '/users',
+            url: '/admin/users',
             icon: icons.UserOutlined
         },
         {
             id: 'role-management',
             title: 'Roles',
             type: 'item',
-            url: '/roles',
+            url: '/admin/roles',
             icon: icons.TeamOutlined
         },
         {
             id: 'permission-management',
             title: 'Permissions',
             type: 'item',
-            url: '/permissions',
+            url: '/admin/permissions',
             icon: icons.SafetyOutlined
+        },
+        {
+            id: 'ai-chat',
+            title: 'AI Assistant',
+            type: 'item',
+            url: '/admin/chat',
+            icon: icons.RobotOutlined
         }
     ]
 };
