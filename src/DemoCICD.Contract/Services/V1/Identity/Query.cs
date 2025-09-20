@@ -20,6 +20,9 @@ public static class Query
     public record GetUsers(int Page = 1, int PageSize = 10, string? SearchTerm = null) : IQuery<Response.UserList>;
     public record GetUserRoles(Guid UserId) : IQuery<Response.UserRoleList>;
     
+    // Current User Profile Queries
+    public record GetCurrentUserProfile() : IQuery<Response.UserDetails>;
+    
     // Role Management Queries
     public record GetRoleById(Guid RoleId) : IQuery<Response.RoleDetails>;
     public record GetRoles(int Page = 1, int PageSize = 10, string? SearchTerm = null) : IQuery<Response.RoleList>;
