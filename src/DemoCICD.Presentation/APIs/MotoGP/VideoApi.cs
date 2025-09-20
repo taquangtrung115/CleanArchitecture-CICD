@@ -16,7 +16,7 @@ public class VideoApi : ApiEndpoint, ICarterModule
     {
         var group = app.MapGroup("/api/v1/motogp/videos")
             .WithTags("MotoGP - Videos")
-            .RequireAuthorization();
+            ;
 
         group.MapGet("", GetVideos)
             .WithName("GetVideos")
@@ -81,7 +81,7 @@ public class VideoApi : ApiEndpoint, ICarterModule
             .WithDescription("Creates a new video entry")
             .Produces<Result>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
-            .ProducesValidationProblem();
+            .ProducesValidationProblem().RequireAuthorization();
 
         group.MapPut("{id:guid}", UpdateVideo)
             .WithName("UpdateVideo")
@@ -90,30 +90,30 @@ public class VideoApi : ApiEndpoint, ICarterModule
             .Produces<Result>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status404NotFound)
-            .ProducesValidationProblem();
+            .ProducesValidationProblem().RequireAuthorization();
 
-        group.MapDelete("{id:guid}", DeleteVideo)
+        group.MapDelete("{id:guid}", DeleteVideo).RequireAuthorization()
             .WithName("DeleteVideo")
             .WithSummary("Delete video")
             .WithDescription("Deletes a video")
             .Produces<Result>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound);
 
-        group.MapPatch("{id:guid}/publish", PublishVideo)
+        group.MapPatch("{id:guid}/publish", PublishVideo).RequireAuthorization()
             .WithName("PublishVideo")
             .WithSummary("Publish video")
             .WithDescription("Publishes a video")
             .Produces<Result>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound);
 
-        group.MapPatch("{id:guid}/feature", SetVideoAsFeatured)
+        group.MapPatch("{id:guid}/feature", SetVideoAsFeatured).RequireAuthorization()
             .WithName("SetVideoAsFeatured")
             .WithSummary("Set video as featured")
             .WithDescription("Sets a video as featured")
             .Produces<Result>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound);
 
-        group.MapPatch("{id:guid}/view", IncrementViewCount)
+        group.MapPatch("{id:guid}/view", IncrementViewCount).RequireAuthorization()
             .WithName("IncrementViewCount")
             .WithSummary("Increment video view count")
             .WithDescription("Increments the view count of a video")

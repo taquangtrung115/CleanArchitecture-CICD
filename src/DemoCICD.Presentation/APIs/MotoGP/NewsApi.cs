@@ -16,7 +16,7 @@ public class NewsApi : ApiEndpoint, ICarterModule
     {
         var group = app.MapGroup("/api/v1/motogp/news")
             .WithTags("MotoGP - News")
-            .RequireAuthorization();
+            ;
 
         group.MapGet("", GetNews)
             .WithName("GetNews")

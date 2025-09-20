@@ -28,7 +28,7 @@ export const getNews = async ({
   if (isBreaking !== null) params.append('isBreaking', isBreaking.toString());
 
   try {
-    const response = await axios.get(`/api/v1/news?${params.toString()}`);
+    const response = await axios.get(`/api/v1/motogp/news?${params.toString()}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching news:', error);
@@ -43,7 +43,7 @@ export const getFeaturedNews = async (limit = 5) => {
   }
 
   try {
-    const response = await axios.get(`/api/v1/news/featured?limit=${limit}`);
+    const response = await axios.get(`/api/v1/motogp/news/featured?limit=${limit}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching featured news:', error);
@@ -58,7 +58,7 @@ export const getBreakingNews = async () => {
   }
 
   try {
-    const response = await axios.get('/api/v1/news/breaking');
+    const response = await axios.get('/api/v1/motogp/news/breaking');
     return response.data;
   } catch (error) {
     console.error('Error fetching breaking news:', error);
@@ -73,7 +73,7 @@ export const getNewsByCategory = async (category, pageIndex = 1, pageSize = 10) 
   }
 
   try {
-    const response = await axios.get(`/api/v1/news/category/${category}?pageIndex=${pageIndex}&pageSize=${pageSize}`);
+    const response = await axios.get(`/api/v1/motogp/news/category/${category}?pageIndex=${pageIndex}&pageSize=${pageSize}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching news by category:', error);
@@ -88,7 +88,7 @@ export const getNewsById = async (id) => {
   }
 
   try {
-    const response = await axios.get(`/api/v1/news/${id}`);
+    const response = await axios.get(`/api/v1/motogp/news/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching news by ID:', error);
@@ -110,7 +110,7 @@ export const getNewsBySlug = async (slug) => {
   }
 
   try {
-    const response = await axios.get(`/api/v1/news/slug/${slug}`);
+    const response = await axios.get(`/api/v1/motogp/news/slug/${slug}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching news by slug:', error);
@@ -149,7 +149,7 @@ export const createNews = async (newsData) => {
   }
 
   try {
-    const response = await axios.post('/api/v1/news', newsData);
+    const response = await axios.post('/api/v1/motogp/news', newsData);
     return response.data;
   } catch (error) {
     console.error('Error creating news:', error);
@@ -167,7 +167,7 @@ export const updateNews = async (id, newsData) => {
   }
 
   try {
-    const response = await axios.put(`/api/v1/news/${id}`, { ...newsData, id });
+    const response = await axios.put(`/api/v1/motogp/news/${id}`, { ...newsData, id });
     return response.data;
   } catch (error) {
     console.error('Error updating news:', error);
@@ -185,7 +185,7 @@ export const deleteNews = async (id) => {
   }
 
   try {
-    const response = await axios.delete(`/api/v1/news/${id}`);
+    const response = await axios.delete(`/api/v1/motogp/news/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error deleting news:', error);
@@ -203,7 +203,7 @@ export const publishNews = async (id) => {
   }
 
   try {
-    const response = await axios.post(`/api/v1/news/${id}/publish`);
+    const response = await axios.post(`/api/v1/motogp/news/${id}/publish`);
     return response.data;
   } catch (error) {
     console.error('Error publishing news:', error);
@@ -221,7 +221,7 @@ export const archiveNews = async (id) => {
   }
 
   try {
-    const response = await axios.post(`/api/v1/news/${id}/archive`);
+    const response = await axios.post(`/api/v1/motogp/news/${id}/archive`);
     return response.data;
   } catch (error) {
     console.error('Error archiving news:', error);
@@ -239,7 +239,7 @@ export const updateNewsSlug = async (id, slug) => {
   }
 
   try {
-    const response = await axios.put(`/api/v1/news/${id}/slug`, { slug });
+    const response = await axios.put(`/api/v1/motogp/news/${id}/slug`, { slug });
     return response.data;
   } catch (error) {
     console.error('Error updating news slug:', error);

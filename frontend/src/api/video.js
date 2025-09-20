@@ -194,7 +194,7 @@ export const getVideos = async ({
   if (isFeatured !== null) params.append('isFeatured', isFeatured.toString());
 
   try {
-    const response = await axios.get(`/api/v1/video?${params.toString()}`);
+    const response = await axios.get(`/api/v1/motogp/videos?${params.toString()}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching videos:', error);
@@ -209,7 +209,7 @@ export const getFeaturedVideos = async () => {
   }
 
   try {
-    const response = await axios.get('/api/v1/video/featured');
+    const response = await axios.get('/api/v1/motogp/videos/featured');
     return response.data;
   } catch (error) {
     console.error('Error fetching featured videos:', error);
@@ -224,7 +224,7 @@ export const getVideosByType = async (type, pageIndex = 1, pageSize = 10) => {
   }
 
   try {
-    const response = await axios.get(`/api/v1/video/type/${type}?pageIndex=${pageIndex}&pageSize=${pageSize}`);
+    const response = await axios.get(`/api/v1/motogp/videos/type/${type}?pageIndex=${pageIndex}&pageSize=${pageSize}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching videos by type:', error);
@@ -239,7 +239,7 @@ export const getVideosByPlatform = async (platform, pageIndex = 1, pageSize = 10
   }
 
   try {
-    const response = await axios.get(`/api/v1/video/platform/${platform}?pageIndex=${pageIndex}&pageSize=${pageSize}`);
+    const response = await axios.get(`/api/v1/motogp/videos/platform/${platform}?pageIndex=${pageIndex}&pageSize=${pageSize}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching videos by platform:', error);
@@ -254,7 +254,7 @@ export const getVideoById = async (id) => {
   }
 
   try {
-    const response = await axios.get(`/api/v1/video/${id}`);
+    const response = await axios.get(`/api/v1/motogp/videos/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching video by ID:', error);
@@ -269,7 +269,7 @@ export const searchVideos = async (searchTerm, pageIndex = 1, pageSize = 10) => 
   }
 
   try {
-    const response = await axios.get(`/api/v1/video/search?searchTerm=${encodeURIComponent(searchTerm)}&pageIndex=${pageIndex}&pageSize=${pageSize}`);
+    const response = await axios.get(`/api/v1/motogp/videos/search?searchTerm=${encodeURIComponent(searchTerm)}&pageIndex=${pageIndex}&pageSize=${pageSize}`);
     return response.data;
   } catch (error) {
     console.error('Error searching videos:', error);
@@ -285,7 +285,7 @@ export const incrementVideoViewCount = async (id) => {
   }
 
   try {
-    const response = await axios.patch(`/api/v1/video/${id}/view`);
+    const response = await axios.patch(`/api/v1/motogp/videos/${id}/view`);
     return response.data;
   } catch (error) {
     console.error('Error incrementing video view count:', error);
@@ -300,7 +300,7 @@ export const createVideo = async (videoData) => {
   }
 
   try {
-    const response = await axios.post('/api/v1/video', videoData);
+    const response = await axios.post('/api/v1/motogp/videos', videoData);
     return response.data;
   } catch (error) {
     console.error('Error creating video:', error);
@@ -314,7 +314,7 @@ export const updateVideo = async (id, videoData) => {
   }
 
   try {
-    const response = await axios.put(`/api/v1/video/${id}`, videoData);
+    const response = await axios.put(`/api/v1/motogp/videos/${id}`, videoData);
     return response.data;
   } catch (error) {
     console.error('Error updating video:', error);
@@ -328,7 +328,7 @@ export const deleteVideo = async (id) => {
   }
 
   try {
-    const response = await axios.delete(`/api/v1/video/${id}`);
+    const response = await axios.delete(`/api/v1/motogp/videos/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error deleting video:', error);
@@ -342,7 +342,7 @@ export const publishVideo = async (id) => {
   }
 
   try {
-    const response = await axios.patch(`/api/v1/video/${id}/publish`);
+    const response = await axios.patch(`/api/v1/motogp/videos/${id}/publish`);
     return response.data;
   } catch (error) {
     console.error('Error publishing video:', error);
@@ -356,7 +356,7 @@ export const setVideoAsFeatured = async (id) => {
   }
 
   try {
-    const response = await axios.patch(`/api/v1/video/${id}/feature`);
+    const response = await axios.patch(`/api/v1/motogp/videos/${id}/feature`);
     return response.data;
   } catch (error) {
     console.error('Error setting video as featured:', error);

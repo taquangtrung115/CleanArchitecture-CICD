@@ -45,42 +45,42 @@ public class RiderApi : ApiEndpoint, ICarterModule
             .Produces<Response.RiderResponse>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound);
 
-        group.MapPut("{id:guid}/personal-info", UpdateRiderPersonalInfo)
+        group.MapPut("{id:guid}/personal-info", UpdateRiderPersonalInfo).RequireAuthorization()
             .WithName("UpdateRiderPersonalInfo")
             .WithSummary("Update rider personal information")
             .WithDescription("Updates a rider's personal information such as name, height, weight, etc.")
             .Produces<Result>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
-            .ProducesValidationProblem().RequireAuthorization();
+            .ProducesValidationProblem();
 
-        group.MapPut("{id:guid}/transfer", TransferRiderToTeam)
+        group.MapPut("{id:guid}/transfer", TransferRiderToTeam).RequireAuthorization()
             .WithName("TransferRiderToTeam")
             .WithSummary("Transfer rider to a team")
             .WithDescription("Transfers a rider to a specific team for a given season")
             .Produces<Result>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
-            .ProducesValidationProblem().RequireAuthorization();
+            .ProducesValidationProblem();
 
-        group.MapPut("{id:guid}/retire", RetireRider)
+        group.MapPut("{id:guid}/retire", RetireRider).RequireAuthorization()
             .WithName("RetireRider")
             .WithSummary("Retire a rider")
             .WithDescription("Retires a rider from active competition")
             .Produces<Result>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status404NotFound).RequireAuthorization();
+            .Produces(StatusCodes.Status404NotFound);
 
-        group.MapPut("{id:guid}/comeback", RiderComeback)
+        group.MapPut("{id:guid}/comeback", RiderComeback).RequireAuthorization()
             .WithName("RiderComeback")
             .WithSummary("Bring rider back from retirement")
             .WithDescription("Brings a retired rider back to active competition")
             .Produces<Result>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status404NotFound).RequireAuthorization();
+            .Produces(StatusCodes.Status404NotFound);
 
-        group.MapDelete("{id:guid}", DeleteRider)
+        group.MapDelete("{id:guid}", DeleteRider).RequireAuthorization()
             .WithName("DeleteRider")
             .WithSummary("Delete a rider")
             .WithDescription("Permanently deletes a rider from the system")
             .Produces<Result>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status404NotFound).RequireAuthorization();
+            .Produces(StatusCodes.Status404NotFound);
     }
 
     public static async Task<IResult> CreateRider(ISender sender, [FromBody] Command.CreateRiderCommand command)
