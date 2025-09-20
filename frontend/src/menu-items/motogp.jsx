@@ -1,10 +1,11 @@
 // assets
-import { TrophyOutlined, TeamOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { TrophyOutlined, TeamOutlined, VideoCameraOutlined, FileTextOutlined } from '@ant-design/icons';
 
 const icons = {
   TrophyOutlined,
   TeamOutlined,
-  VideoCameraOutlined
+  VideoCameraOutlined,
+  FileTextOutlined
 };
 
 const motogp = {
@@ -32,6 +33,13 @@ const motogp = {
       type: 'item',
       url: '/admin/videos',
       icon: icons.VideoCameraOutlined
+    },
+    {
+      id: 'admin-news',
+      title: 'Manage News',
+      type: 'item',
+      url: '/admin/news',
+      icon: icons.FileTextOutlined
     }
   ]
 };

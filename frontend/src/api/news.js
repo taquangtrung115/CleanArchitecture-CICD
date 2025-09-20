@@ -128,3 +128,121 @@ export const NewsCategories = {
   CHAMPIONSHIP: 'Championship',
   BREAKING: 'Breaking'
 };
+
+// Admin Functions - Create news
+export const createNews = async (newsData) => {
+  if (USE_MOCK_DATA) {
+    // For mock implementation, just return success with generated ID
+    const newNews = {
+      id: `news-${Date.now()}`,
+      ...newsData,
+      status: 'Draft',
+      publishedDate: new Date().toISOString(),
+      viewCount: 0,
+      createdDate: new Date().toISOString(),
+      lastModifiedDate: new Date().toISOString()
+    };
+    return {
+      isSuccess: true,
+      value: newNews
+    };
+  }
+
+  try {
+    const response = await axios.post('/api/v1/news', newsData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating news:', error);
+    throw error;
+  }
+};
+
+// Update news
+export const updateNews = async (id, newsData) => {
+  if (USE_MOCK_DATA) {
+    return {
+      isSuccess: true,
+      value: null
+    };
+  }
+
+  try {
+    const response = await axios.put(`/api/v1/news/${id}`, { ...newsData, id });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating news:', error);
+    throw error;
+  }
+};
+
+// Delete news
+export const deleteNews = async (id) => {
+  if (USE_MOCK_DATA) {
+    return {
+      isSuccess: true,
+      value: null
+    };
+  }
+
+  try {
+    const response = await axios.delete(`/api/v1/news/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting news:', error);
+    throw error;
+  }
+};
+
+// Publish news
+export const publishNews = async (id) => {
+  if (USE_MOCK_DATA) {
+    return {
+      isSuccess: true,
+      value: null
+    };
+  }
+
+  try {
+    const response = await axios.post(`/api/v1/news/${id}/publish`);
+    return response.data;
+  } catch (error) {
+    console.error('Error publishing news:', error);
+    throw error;
+  }
+};
+
+// Archive news
+export const archiveNews = async (id) => {
+  if (USE_MOCK_DATA) {
+    return {
+      isSuccess: true,
+      value: null
+    };
+  }
+
+  try {
+    const response = await axios.post(`/api/v1/news/${id}/archive`);
+    return response.data;
+  } catch (error) {
+    console.error('Error archiving news:', error);
+    throw error;
+  }
+};
+
+// Update news slug
+export const updateNewsSlug = async (id, slug) => {
+  if (USE_MOCK_DATA) {
+    return {
+      isSuccess: true,
+      value: null
+    };
+  }
+
+  try {
+    const response = await axios.put(`/api/v1/news/${id}/slug`, { slug });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating news slug:', error);
+    throw error;
+  }
+};

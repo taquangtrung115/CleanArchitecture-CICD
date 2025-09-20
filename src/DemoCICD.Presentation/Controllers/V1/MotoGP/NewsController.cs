@@ -89,4 +89,96 @@ public class NewsController : ApiController
         var result = await Sender.Send(query);
         return Ok(result);
     }
+
+    // Admin endpoints
+    [HttpPost]
+    [ProducesResponseType(typeof(Result<Response.NewsResponse>), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateNews([FromBody] Command.CreateNewsCommand command)
+    {
+        var result = await Sender.Send(command);
+        
+        if (result.IsFailure)
+            return HandlerFailure(result);
+            
+        return CreatedAtAction(nameof(GetNewsById), new { id = result.Value.Id }, result);
+    }
+
+    [HttpPut("{id:guid}")]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateNews(Guid id, [FromBody] Command.UpdateNewsCommand command)
+    {
+        if (id != command.Id)
+            return BadRequest("URL ID does not match command ID");
+            
+        var result = await Sender.Send(command);
+        
+        if (result.IsFailure)
+            return HandlerFailure(result);
+            
+        return Ok(result);
+    }
+
+    [HttpPost("{id:guid}/publish")]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> PublishNews(Guid id)
+    {
+        var command = new Command.PublishNewsCommand(id);
+        var result = await Sender.Send(command);
+        
+        if (result.IsFailure)
+            return HandlerFailure(result);
+            
+        return Ok(result);
+    }
+
+    [HttpPost("{id:guid}/archive")]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ArchiveNews(Guid id)
+    {
+        var command = new Command.ArchiveNewsCommand(id);
+        var result = await Sender.Send(command);
+        
+        if (result.IsFailure)
+            return HandlerFailure(result);
+            
+        return Ok(result);
+    }
+
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteNews(Guid id)
+    {
+        var command = new Command.DeleteNewsCommand(id);
+        var result = await Sender.Send(command);
+        
+        if (result.IsFailure)
+            return HandlerFailure(result);
+            
+        return Ok(result);
+    }
+
+    [HttpPut("{id:guid}/slug")]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateNewsSlug(Guid id, [FromBody] UpdateSlugRequest request)
+    {
+        var command = new Command.UpdateNewsSlugCommand(id, request.Slug);
+        var result = await Sender.Send(command);
+        
+        if (result.IsFailure)
+            return HandlerFailure(result);
+            
+        return Ok(result);
+    }
 }
+
+public record UpdateSlugRequest(string Slug);
