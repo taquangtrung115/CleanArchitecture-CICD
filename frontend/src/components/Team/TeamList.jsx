@@ -10,7 +10,7 @@ const TeamList = ({ token, filters = {}, onSelect }) => {
   useEffect(() => {
     setLoading(true);
     getTeams(filters, token)
-      .then((res) => setTeams(res.data.items))
+      .then((res) => setTeams(res.data.items || []))
       .catch(setError)
       .finally(() => setLoading(false));
   }, [filters, token]);

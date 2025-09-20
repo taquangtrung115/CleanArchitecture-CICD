@@ -10,7 +10,7 @@ const RiderList = ({ token, filters = {}, onSelect }) => {
   useEffect(() => {
     setLoading(true);
     getRiders(filters, token)
-      .then((res) => setRiders(res.data.items))
+      .then((res) => setRiders(res.data.items || []))
       .catch(setError)
       .finally(() => setLoading(false));
   }, [filters, token]);
