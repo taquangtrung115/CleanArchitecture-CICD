@@ -18,6 +18,7 @@ public static class Response
     public record UserList(IEnumerable<UserSummary> Users, int TotalCount, int Page, int PageSize);
     public record UserSummary(Guid UserId, string UserName, string Email, string FullName, bool IsLocked);
     public record UserRoleList(Guid UserId, IEnumerable<RoleSummary> Roles);
+    public record UserProfile(Guid UserId, string UserName, string Email, string FirstName, string LastName, string FullName, DateTime? DayOfBirth, bool? IsDirector, bool? IsHeadOfDepartment, DateTime CreatedAt);
     
     // Role Management Responses
     public record RoleCreated(Guid RoleId, string Name, string RoleCode);

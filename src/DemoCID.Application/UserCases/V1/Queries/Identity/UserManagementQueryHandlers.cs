@@ -135,3 +135,31 @@ public sealed class GetUserRolesQueryHandler : IQueryHandler<Query.GetUserRoles,
         }
     }
 }
+
+public sealed class GetCurrentUserProfileQueryHandler : IQueryHandler<Query.GetCurrentUserProfile, Response.UserProfile>
+{
+    private readonly IUserManagementService _userManagementService;
+
+    public GetCurrentUserProfileQueryHandler(
+        IUserManagementService userManagementService)
+    {
+        _userManagementService = userManagementService;
+    }
+
+    public async Task<Result<Response.UserProfile>> Handle(Query.GetCurrentUserProfile request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            // Note: The actual user ID will be injected by the API endpoint from the JWT claims
+            // For now, this handler expects the user ID to be available through some mechanism
+            // This will be resolved when we add the endpoint
+            throw new NotImplementedException("This handler requires user context to be provided by the endpoint");
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error getting current user profile");
+            return Result.Failure<Response.UserProfile>(
+                new Error("Profile.GetError", "An error occurred while retrieving user profile"));
+        }
+    }
+}
