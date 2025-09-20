@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { 
-  Typography, 
-  Box, 
-  Card, 
-  CardContent, 
-  Avatar, 
-  Grid, 
-  Divider, 
+import {
+  Typography,
+  Box,
+  Card,
+  CardContent,
+  Avatar,
+  Grid,
+  Divider,
   Chip,
   Stack,
   CircularProgress,
@@ -23,7 +23,6 @@ import {
   ListItemText,
   Badge
 } from '@mui/material';
-import MainCard from 'components/MainCard';
 import { getCurrentUserProfile } from 'api/user';
 import UserOutlined from '@ant-design/icons/UserOutlined';
 import MailOutlined from '@ant-design/icons/MailOutlined';
@@ -49,7 +48,7 @@ export default function ProfileViewPage() {
   const fetchProfile = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const res = await getCurrentUserProfile();
       if (res.data && res.data.value) {
@@ -57,7 +56,7 @@ export default function ProfileViewPage() {
       } else {
         setError('Không thể tải thông tin profile');
       }
-    } catch (err) {
+    } catch {
       setError('Đã xảy ra lỗi khi tải profile');
     } finally {
       setLoading(false);
@@ -86,11 +85,14 @@ export default function ProfileViewPage() {
     return (
       <Container maxWidth="lg">
         <Box mt={3}>
-          <Alert severity="error" action={
-            <Button color="inherit" size="small" onClick={fetchProfile}>
-              Thử lại
-            </Button>
-          }>
+          <Alert
+            severity="error"
+            action={
+              <Button color="inherit" size="small" onClick={fetchProfile}>
+                Thử lại
+              </Button>
+            }
+          >
             {error}
           </Alert>
         </Box>
@@ -115,18 +117,8 @@ export default function ProfileViewPage() {
 
   const TabPanel = ({ children, value, index, ...other }) => {
     return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`profile-tabpanel-${index}`}
-        aria-labelledby={`profile-tab-${index}`}
-        {...other}
-      >
-        {value === index && (
-          <Box pt={3}>
-            {children}
-          </Box>
-        )}
+      <div role="tabpanel" hidden={value !== index} id={`profile-tabpanel-${index}`} aria-labelledby={`profile-tab-${index}`} {...other}>
+        {value === index && <Box pt={3}>{children}</Box>}
       </div>
     );
   };
@@ -173,8 +165,8 @@ export default function ProfileViewPage() {
               >
                 <Avatar
                   src={avatar1}
-                  sx={{ 
-                    width: 120, 
+                  sx={{
+                    width: 120,
                     height: 120,
                     border: 4,
                     borderColor: 'white',
@@ -272,21 +264,9 @@ export default function ProfileViewPage() {
                 }
               }}
             >
-              <Tab
-                icon={<UserOutlined />}
-                label="Thông tin cá nhân"
-                iconPosition="start"
-              />
-              <Tab
-                icon={<TeamOutlined />}
-                label="Thông tin công việc"
-                iconPosition="start"
-              />
-              <Tab
-                icon={<SettingOutlined />}
-                label="Cài đặt tài khoản"
-                iconPosition="start"
-              />
+              <Tab icon={<UserOutlined />} label="Thông tin cá nhân" iconPosition="start" />
+              <Tab icon={<TeamOutlined />} label="Thông tin công việc" iconPosition="start" />
+              <Tab icon={<SettingOutlined />} label="Cài đặt tài khoản" iconPosition="start" />
             </Tabs>
           </Box>
 
@@ -302,52 +282,37 @@ export default function ProfileViewPage() {
                         Thông tin cơ bản
                       </Typography>
                       <Divider sx={{ mb: 2 }} />
-                      
+
                       <List disablePadding>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <IdcardOutlined />
                           </ListItemIcon>
-                          <ListItemText
-                            primary="Họ và tên"
-                            secondary={profile.fullName || 'N/A'}
-                          />
+                          <ListItemText primary="Họ và tên" secondary={profile.fullName || 'N/A'} />
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <UserOutlined />
                           </ListItemIcon>
-                          <ListItemText
-                            primary="Họ"
-                            secondary={profile.firstName || 'N/A'}
-                          />
+                          <ListItemText primary="Họ" secondary={profile.firstName || 'N/A'} />
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <UserOutlined />
                           </ListItemIcon>
-                          <ListItemText
-                            primary="Tên"
-                            secondary={profile.lastName || 'N/A'}
-                          />
+                          <ListItemText primary="Tên" secondary={profile.lastName || 'N/A'} />
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <CalendarOutlined />
                           </ListItemIcon>
-                          <ListItemText
-                            primary="Ngày sinh"
-                            secondary={formatDate(profile.dayOfBirth)}
-                          />
+                          <ListItemText primary="Ngày sinh" secondary={formatDate(profile.dayOfBirth)} />
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <MailOutlined />
                           </ListItemIcon>
-                          <ListItemText
-                            primary="Email"
-                            secondary={profile.email}
-                          />
+                          <ListItemText primary="Email" secondary={profile.email} />
                         </ListItem>
                       </List>
                     </CardContent>
@@ -362,43 +327,31 @@ export default function ProfileViewPage() {
                         Thông tin liên hệ
                       </Typography>
                       <Divider sx={{ mb: 2 }} />
-                      
+
                       <List disablePadding>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <PhoneOutlined />
                           </ListItemIcon>
-                          <ListItemText
-                            primary="Số điện thoại"
-                            secondary="Chưa cập nhật"
-                          />
+                          <ListItemText primary="Số điện thoại" secondary="Chưa cập nhật" />
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <EnvironmentOutlined />
                           </ListItemIcon>
-                          <ListItemText
-                            primary="Địa chỉ"
-                            secondary="Chưa cập nhật"
-                          />
+                          <ListItemText primary="Địa chỉ" secondary="Chưa cập nhật" />
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <EnvironmentOutlined />
                           </ListItemIcon>
-                          <ListItemText
-                            primary="Thành phố"
-                            secondary="Chưa cập nhật"
-                          />
+                          <ListItemText primary="Thành phố" secondary="Chưa cập nhật" />
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <EnvironmentOutlined />
                           </ListItemIcon>
-                          <ListItemText
-                            primary="Quốc gia"
-                            secondary="Việt Nam"
-                          />
+                          <ListItemText primary="Quốc gia" secondary="Việt Nam" />
                         </ListItem>
                       </List>
 
@@ -426,43 +379,31 @@ export default function ProfileViewPage() {
                         Thông tin công việc
                       </Typography>
                       <Divider sx={{ mb: 2 }} />
-                      
+
                       <List disablePadding>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <IdcardOutlined />
                           </ListItemIcon>
-                          <ListItemText
-                            primary="Mã vị trí"
-                            secondary={profile.positionId || 'N/A'}
-                          />
+                          <ListItemText primary="Mã vị trí" secondary={profile.positionId || 'N/A'} />
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <UserOutlined />
                           </ListItemIcon>
-                          <ListItemText
-                            primary="Mã quản lý"
-                            secondary={profile.managerId || 'N/A'}
-                          />
+                          <ListItemText primary="Mã quản lý" secondary={profile.managerId || 'N/A'} />
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <TeamOutlined />
                           </ListItemIcon>
-                          <ListItemText
-                            primary="Phòng ban"
-                            secondary="Chưa cập nhật"
-                          />
+                          <ListItemText primary="Phòng ban" secondary="Chưa cập nhật" />
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <CalendarOutlined />
                           </ListItemIcon>
-                          <ListItemText
-                            primary="Ngày bắt đầu làm việc"
-                            secondary="Chưa cập nhật"
-                          />
+                          <ListItemText primary="Ngày bắt đầu làm việc" secondary="Chưa cập nhật" />
                         </ListItem>
                       </List>
                     </CardContent>
@@ -477,21 +418,15 @@ export default function ProfileViewPage() {
                         Vai trò và quyền
                       </Typography>
                       <Divider sx={{ mb: 2 }} />
-                      
+
                       <Box sx={{ mb: 2 }}>
                         <Typography variant="body2" color="text.secondary" gutterBottom>
                           Vai trò đặc biệt
                         </Typography>
                         <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                          {profile.isDirector && (
-                            <Chip label="Giám đốc" color="primary" size="small" />
-                          )}
-                          {profile.isHeadOfDepartment && (
-                            <Chip label="Trưởng phòng" color="secondary" size="small" />
-                          )}
-                          {!profile.isDirector && !profile.isHeadOfDepartment && (
-                            <Chip label="Nhân viên" color="default" size="small" />
-                          )}
+                          {profile.isDirector && <Chip label="Giám đốc" color="primary" size="small" />}
+                          {profile.isHeadOfDepartment && <Chip label="Trưởng phòng" color="secondary" size="small" />}
+                          {!profile.isDirector && !profile.isHeadOfDepartment && <Chip label="Nhân viên" color="default" size="small" />}
                         </Stack>
                       </Box>
 
@@ -526,7 +461,7 @@ export default function ProfileViewPage() {
                         Thông tin tài khoản
                       </Typography>
                       <Divider sx={{ mb: 2 }} />
-                      
+
                       <List disablePadding>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
@@ -545,19 +480,13 @@ export default function ProfileViewPage() {
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <UserOutlined />
                           </ListItemIcon>
-                          <ListItemText
-                            primary="Tên đăng nhập"
-                            secondary={profile.userName}
-                          />
+                          <ListItemText primary="Tên đăng nhập" secondary={profile.userName} />
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <ClockCircleOutlined />
                           </ListItemIcon>
-                          <ListItemText
-                            primary="Ngày tạo tài khoản"
-                            secondary={formatDate(profile.createdAt)}
-                          />
+                          <ListItemText primary="Ngày tạo tài khoản" secondary={formatDate(profile.createdAt)} />
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
@@ -570,9 +499,9 @@ export default function ProfileViewPage() {
                           <ListItemText
                             primary="Trạng thái tài khoản"
                             secondary={
-                              <Chip 
-                                label={profile.isLocked ? "Bị khóa" : "Hoạt động"} 
-                                color={profile.isLocked ? "error" : "success"} 
+                              <Chip
+                                label={profile.isLocked ? 'Bị khóa' : 'Hoạt động'}
+                                color={profile.isLocked ? 'error' : 'success'}
                                 size="small"
                               />
                             }
@@ -591,7 +520,7 @@ export default function ProfileViewPage() {
                         Bảo mật
                       </Typography>
                       <Divider sx={{ mb: 2 }} />
-                      
+
                       <Stack spacing={2}>
                         <Box>
                           <Typography variant="body2" fontWeight="medium" gutterBottom>
