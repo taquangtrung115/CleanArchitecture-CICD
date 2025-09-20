@@ -17,6 +17,7 @@ public static class Query
     
     // User Management Queries
     public record GetUserById(Guid UserId) : IQuery<Response.UserDetails>;
+    public record GetCurrentUserProfile() : IQuery<Response.UserDetails>;
     public record GetUsers(int Page = 1, int PageSize = 10, string? SearchTerm = null) : IQuery<Response.UserList>;
     public record GetUserRoles(Guid UserId) : IQuery<Response.UserRoleList>;
     

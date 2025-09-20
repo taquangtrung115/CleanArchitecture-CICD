@@ -4,6 +4,8 @@ using DemoCICD.Contract.Abstractions.Shared;
 using DemoCICD.Contract.Services.V1.Identity;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace DemoCICD.Application.UserCases.V1.Queries.Identity;
 
@@ -132,6 +134,71 @@ public sealed class GetUserRolesQueryHandler : IQueryHandler<Query.GetUserRoles,
             Log.Error(ex, "Error getting user roles for user: {UserId}", request.UserId);
             return Result.Failure<Response.UserRoleList>(
                 new Error("UserRoles.GetError", "An error occurred while retrieving user roles"));
+        }
+    }
+}
+
+public sealed class GetCurrentUserProfileQueryHandler : IQueryHandler<Query.GetCurrentUserProfile, Response.UserDetails>
+{
+    private readonly IUserManagementService _userManagementService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public GetCurrentUserProfileQueryHandler(
+        IUserManagementService userManagementService,
+        IHttpContextAccessor httpContextAccessor)
+    {
+        _userManagementService = userManagementService;
+        _httpContextAccessor = httpContextAccessor;
+    }
+
+    public async Task<Result<Response.UserDetails>> Handle(Query.GetCurrentUserProfile request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var httpContext = _httpContextAccessor.HttpContext;
+            if (httpContext?.User?.Identity?.IsAuthenticated != true)
+            {
+                return Result.Failure<Response.UserDetails>(
+                    new Error("Authentication.NotAuthenticated", "User is not authenticated"));
+            }
+
+            var userIdClaim = httpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
+            {
+                return Result.Failure<Response.UserDetails>(
+                    new Error("Authentication.InvalidUserId", "Unable to retrieve user ID from token"));
+            }
+
+            var user = await _userManagementService.GetUserByIdAsync(userId);
+
+            if (user == null)
+            {
+                return Result.Failure<Response.UserDetails>(
+                    new Error("User.NotFound", "User not found"));
+            }
+
+            var response = new Response.UserDetails(
+                user.Id,
+                user.UserName!,
+                user.Email!,
+                user.FirstName,
+                user.LastName,
+                user.FullName,
+                user.DayOfBirth,
+                user.IsDirector,
+                user.IsHeadOfDepartment,
+                user.ManagerId,
+                user.PositionId,
+                user.LockoutEnd.HasValue && user.LockoutEnd > DateTimeOffset.UtcNow,
+                DateTime.UtcNow); // This would come from a created timestamp in real implementation
+
+            return Result.Success(response);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error getting current user profile");
+            return Result.Failure<Response.UserDetails>(
+                new Error("User.GetError", "An error occurred while retrieving current user profile"));
         }
     }
 }
