@@ -5,9 +5,9 @@ import ClientFooter from '../components/ClientFooter';
 
 export default function ClientLayout() {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', overflow: 'hidden' }}>
       <ClientHeader />
-      <Box sx={{ flex: 1, p: 0 }}>
+      <Box sx={{ flex: 1, overflow: 'hidden' }}>
         <Outlet />
       </Box>
       <ClientFooter />

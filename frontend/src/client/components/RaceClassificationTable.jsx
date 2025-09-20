@@ -30,10 +30,10 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   border: '2px solid #e10600',
   boxShadow: '0 8px 32px rgba(225, 6, 0, 0.3)',
   '& .MuiTable-root': {
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent'
   },
   '& .MuiTableHead-root': {
-    backgroundColor: '#e10600',
+    backgroundColor: '#e10600'
   },
   '& .MuiTableHead-root .MuiTableCell-root': {
     backgroundColor: '#e10600',
@@ -43,18 +43,18 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
     fontFamily: 'Oswald, Arial, sans-serif',
     letterSpacing: '1px',
     textTransform: 'uppercase',
-    borderBottom: 'none',
+    borderBottom: 'none'
   },
   '& .MuiTableBody-root .MuiTableCell-root': {
     backgroundColor: '#1a1a1a',
     color: '#fff',
     borderBottom: '1px solid #333',
     fontSize: '14px',
-    fontWeight: 600,
+    fontWeight: 600
   },
   '& .MuiTableRow-root:hover': {
-    backgroundColor: '#2a2a2a',
-  },
+    backgroundColor: '#2a2a2a'
+  }
 }));
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -65,8 +65,8 @@ const StyledCard = styled(Card)(({ theme }) => ({
   '&:hover': {
     borderColor: '#e10600',
     boxShadow: '0 8px 32px rgba(225, 6, 0, 0.3)',
-    transform: 'translateY(-4px)',
-  },
+    transform: 'translateY(-4px)'
+  }
 }));
 
 const PositionChip = styled(Chip)(({ position }) => ({
@@ -75,18 +75,23 @@ const PositionChip = styled(Chip)(({ position }) => ({
   minWidth: '40px',
   backgroundColor: position === 1 ? '#FFD700' : position === 2 ? '#C0C0C0' : position === 3 ? '#CD7F32' : '#e10600',
   color: position <= 3 ? '#000' : '#fff',
-  border: position <= 3 ? '2px solid #000' : 'none',
+  border: position <= 3 ? '2px solid #000' : 'none'
 }));
 
 const StatusChip = styled(Chip)(({ status }) => ({
   fontWeight: 700,
   fontSize: '12px',
-  backgroundColor: 
-    status === 'Finished' ? '#4CAF50' :
-    status === 'DNF' ? '#f44336' :
-    status === 'DNS' ? '#ff9800' :
-    status === 'DSQ' ? '#9c27b0' : '#757575',
-  color: '#fff',
+  backgroundColor:
+    status === 'Finished'
+      ? '#4CAF50'
+      : status === 'DNF'
+        ? '#f44336'
+        : status === 'DNS'
+          ? '#ff9800'
+          : status === 'DSQ'
+            ? '#9c27b0'
+            : '#757575',
+  color: '#fff'
 }));
 
 export default function RaceClassificationTable({ raceResults, loading = false }) {
@@ -130,9 +135,20 @@ export default function RaceClassificationTable({ raceResults, loading = false }
 
   const getRiderFlag = (countryCode) => {
     const flags = {
-      'IT': '🇮🇹', 'ES': '🇪🇸', 'FR': '🇫🇷', 'GB': '🇬🇧', 'DE': '🇩🇪',
-      'AU': '🇦🇺', 'JP': '🇯🇵', 'US': '🇺🇸', 'BR': '🇧🇷', 'ZA': '🇿🇦',
-      'PT': '🇵🇹', 'NL': '🇳🇱', 'AT': '🇦🇹', 'CH': '🇨🇭'
+      IT: '🇮🇹',
+      ES: '🇪🇸',
+      FR: '🇫🇷',
+      GB: '🇬🇧',
+      DE: '🇩🇪',
+      AU: '🇦🇺',
+      JP: '🇯🇵',
+      US: '🇺🇸',
+      BR: '🇧🇷',
+      ZA: '🇿🇦',
+      PT: '🇵🇹',
+      NL: '🇳🇱',
+      AT: '🇦🇹',
+      CH: '🇨🇭'
     };
     return flags[countryCode] || '🏁';
   };
@@ -156,31 +172,34 @@ export default function RaceClassificationTable({ raceResults, loading = false }
         <TableBody>
           {raceResults.map((result, index) => {
             const position = result.finishPosition || index + 1;
-            const status = result.isFinisher ? 'Finished' : 
-                          result.notes?.includes('DNF') ? 'DNF' :
-                          result.notes?.includes('DNS') ? 'DNS' :
-                          result.notes?.includes('DSQ') ? 'DSQ' : 'Finished';
-            
+            const status = result.isFinisher
+              ? 'Finished'
+              : result.notes?.includes('DNF')
+                ? 'DNF'
+                : result.notes?.includes('DNS')
+                  ? 'DNS'
+                  : result.notes?.includes('DSQ')
+                    ? 'DSQ'
+                    : 'Finished';
+
             return (
               <TableRow key={result.id}>
                 <TableCell align="center">
-                  <PositionChip
-                    label={position}
-                    position={position}
-                    size="small"
-                  />
+                  <PositionChip label={position} position={position} size="small" />
                 </TableCell>
                 <TableCell align="center">
-                  <Box sx={{ 
-                    backgroundColor: '#e10600', 
-                    color: '#fff', 
-                    borderRadius: '4px', 
-                    px: 1, 
-                    py: 0.5,
-                    fontWeight: 900,
-                    minWidth: '30px',
-                    display: 'inline-block'
-                  }}>
+                  <Box
+                    sx={{
+                      backgroundColor: '#e10600',
+                      color: '#fff',
+                      borderRadius: '4px',
+                      px: 1,
+                      py: 0.5,
+                      fontWeight: 900,
+                      minWidth: '30px',
+                      display: 'inline-block'
+                    }}
+                  >
                     {result.riderNumber}
                   </Box>
                 </TableCell>
@@ -222,16 +241,18 @@ export default function RaceClassificationTable({ raceResults, loading = false }
                   </Typography>
                 </TableCell>
                 <TableCell align="center">
-                  <Box sx={{ 
-                    backgroundColor: result.pointsEarned > 0 ? '#4CAF50' : '#757575', 
-                    color: '#fff', 
-                    borderRadius: '4px', 
-                    px: 1, 
-                    py: 0.5,
-                    fontWeight: 900,
-                    minWidth: '30px',
-                    display: 'inline-block'
-                  }}>
+                  <Box
+                    sx={{
+                      backgroundColor: result.pointsEarned > 0 ? '#4CAF50' : '#757575',
+                      color: '#fff',
+                      borderRadius: '4px',
+                      px: 1,
+                      py: 0.5,
+                      fontWeight: 900,
+                      minWidth: '30px',
+                      display: 'inline-block'
+                    }}
+                  >
                     {result.pointsEarned || 0}
                   </Box>
                 </TableCell>

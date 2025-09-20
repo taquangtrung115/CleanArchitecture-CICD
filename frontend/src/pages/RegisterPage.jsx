@@ -31,7 +31,7 @@ const RegisterPage = () => {
     setError(null);
     setValidationErrors([]);
     setLoading(true);
-    
+
     const res = await register({
       userName: form.userName,
       email: form.email,
@@ -41,7 +41,7 @@ const RegisterPage = () => {
       dayOfBirth: ''
     });
     setLoading(false);
-    
+
     if (res.status === 200 || res.status === 201) {
       navigate('/login');
     } else {
@@ -86,31 +86,35 @@ const RegisterPage = () => {
         <button type="submit" style={{ width: '100%' }} disabled={loading}>
           {loading ? 'Registering...' : 'Register'}
         </button>
-        
+
         {/* Error Messages */}
         {error && (
-          <div style={{ 
-            color: 'red', 
-            marginTop: 8, 
-            padding: 8,
-            backgroundColor: '#ffebee',
-            border: '1px solid #f44336',
-            borderRadius: 4
-          }}>
+          <div
+            style={{
+              color: 'red',
+              marginTop: 8,
+              padding: 8,
+              backgroundColor: '#ffebee',
+              border: '1px solid #f44336',
+              borderRadius: 4
+            }}
+          >
             {error}
           </div>
         )}
-        
+
         {/* Validation Errors */}
         {validationErrors.length > 0 && (
-          <div style={{ 
-            color: '#e65100', 
-            marginTop: 8, 
-            padding: 8,
-            backgroundColor: '#fff3e0',
-            border: '1px solid #ff9800',
-            borderRadius: 4
-          }}>
+          <div
+            style={{
+              color: '#e65100',
+              marginTop: 8,
+              padding: 8,
+              backgroundColor: '#fff3e0',
+              border: '1px solid #ff9800',
+              borderRadius: 4
+            }}
+          >
             <strong>Validation Errors:</strong>
             <ul style={{ margin: '4px 0', paddingLeft: 20 }}>
               {validationErrors.map((errorMsg, index) => (

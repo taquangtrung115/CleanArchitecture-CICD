@@ -41,22 +41,16 @@ export default function RolePage() {
   };
 
   return (
-    <MainCard 
+    <MainCard
       title="Role Management"
       secondary={
-        <Button
-          variant="contained"
-          startIcon={<SecurityIcon />}
-          onClick={() => setModalOpen(true)}
-          color="primary"
-          size="medium"
-        >
+        <Button variant="contained" startIcon={<SecurityIcon />} onClick={() => setModalOpen(true)} color="primary" size="medium">
           Thêm Role Mới
         </Button>
       }
     >
       {loading && <LinearProgress sx={{ mb: 2 }} />}
-      
+
       <Box sx={{ mb: 3 }}>
         <Typography variant="h6" sx={{ mb: 1 }}>
           Danh sách Role
@@ -99,11 +93,11 @@ export default function RolePage() {
                 <TableRow key={r.roleId || r.id} hover>
                   <TableCell sx={{ fontWeight: 500 }}>{r.name}</TableCell>
                   <TableCell>
-                    <Typography 
-                      variant="caption" 
-                      sx={{ 
-                        px: 1.5, 
-                        py: 0.5, 
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        px: 1.5,
+                        py: 0.5,
                         borderRadius: 1,
                         bgcolor: 'primary.light',
                         color: 'primary.dark',
@@ -121,11 +115,7 @@ export default function RolePage() {
         </Table>
       </TableContainer>
 
-      <RoleFormModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onSuccess={handleModalSuccess}
-      />
+      <RoleFormModal open={modalOpen} onClose={() => setModalOpen(false)} onSuccess={handleModalSuccess} />
     </MainCard>
   );
 }

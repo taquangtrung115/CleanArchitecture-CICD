@@ -43,14 +43,7 @@ import {
   Tag as TagIcon,
   Fullscreen as FullscreenIcon
 } from '@mui/icons-material';
-import { 
-  getVideos, 
-  getFeaturedVideos, 
-  VideoTypes, 
-  getVideosByType, 
-  getVideoById,
-  incrementVideoViewCount 
-} from '../../../api/video';
+import { getVideos, getFeaturedVideos, VideoTypes, getVideosByType, getVideoById, incrementVideoViewCount } from '../../../api/video';
 import Pagination from '../../../components/Shared/Pagination';
 
 export default function VideoPage() {
@@ -131,7 +124,7 @@ export default function VideoPage() {
   const handleVideoClick = async (video) => {
     setSelectedVideo(video);
     setIsVideoDialogOpen(true);
-    
+
     // Increment view count
     try {
       await incrementVideoViewCount(video.id);
@@ -143,7 +136,7 @@ export default function VideoPage() {
     try {
       const response = await getVideosByType(video.type, 1, 6);
       if (response.isSuccess) {
-        const related = response.value.items.filter(v => v.id !== video.id);
+        const related = response.value.items.filter((v) => v.id !== video.id);
         setRelatedVideos(related.slice(0, 4));
       }
     } catch (err) {
@@ -176,20 +169,20 @@ export default function VideoPage() {
 
   const getVideoTypeColor = (type) => {
     const colors = {
-      'Highlight': '#e10600',
-      'Interview': '#ff9800',
-      'Analysis': '#2196f3',
-      'OnBoard': '#4caf50',
-      'PressConference': '#9c27b0',
-      'Documentary': '#607d8b',
-      'LiveStream': '#f44336'
+      Highlight: '#e10600',
+      Interview: '#ff9800',
+      Analysis: '#2196f3',
+      OnBoard: '#4caf50',
+      PressConference: '#9c27b0',
+      Documentary: '#607d8b',
+      LiveStream: '#f44336'
     };
     return colors[type] || '#757575';
   };
 
   const VideoCard = ({ video, size = 'normal' }) => (
-    <Card 
-      sx={{ 
+    <Card
+      sx={{
         height: '100%',
         borderRadius: 2,
         boxShadow: video.isFeatured ? 4 : 2,
@@ -198,7 +191,7 @@ export default function VideoPage() {
         cursor: 'pointer',
         '&:hover': {
           transform: 'translateY(-4px)',
-          boxShadow: 6,
+          boxShadow: 6
         }
       }}
       onClick={() => handleVideoClick(video)}
@@ -217,14 +210,14 @@ export default function VideoPage() {
               justifyContent: 'center'
             }}
           >
-            <PlayIcon 
-              sx={{ 
-                fontSize: size === 'large' ? 80 : size === 'small' ? 40 : 60, 
+            <PlayIcon
+              sx={{
+                fontSize: size === 'large' ? 80 : size === 'small' ? 40 : 60,
                 color: 'rgba(255,255,255,0.9)',
                 backgroundColor: 'rgba(0,0,0,0.5)',
                 borderRadius: '50%',
                 p: 1
-              }} 
+              }}
             />
           </CardMedia>
           <Box
@@ -279,19 +272,14 @@ export default function VideoPage() {
               }}
             />
             {video.platform && (
-              <Chip
-                label={video.platform}
-                size="small"
-                variant="outlined"
-                sx={{ fontSize: size === 'small' ? '0.7rem' : '0.75rem' }}
-              />
+              <Chip label={video.platform} size="small" variant="outlined" sx={{ fontSize: size === 'small' ? '0.7rem' : '0.75rem' }} />
             )}
           </Box>
-          
-          <Typography 
-            variant={size === 'large' ? 'h6' : size === 'small' ? 'body2' : 'subtitle1'} 
-            sx={{ 
-              fontWeight: 700, 
+
+          <Typography
+            variant={size === 'large' ? 'h6' : size === 'small' ? 'body2' : 'subtitle1'}
+            sx={{
+              fontWeight: 700,
               mb: 1,
               display: '-webkit-box',
               WebkitLineClamp: 2,
@@ -302,12 +290,12 @@ export default function VideoPage() {
           >
             {video.title}
           </Typography>
-          
+
           {size !== 'small' && (
-            <Typography 
-              variant="body2" 
-              color="text.secondary" 
-              sx={{ 
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{
                 mb: 2,
                 display: '-webkit-box',
                 WebkitLineClamp: 2,
@@ -318,7 +306,7 @@ export default function VideoPage() {
               {video.description}
             </Typography>
           )}
-          
+
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 'auto' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <ViewIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
@@ -374,9 +362,9 @@ export default function VideoPage() {
             <Box sx={{ mb: 6 }}>
               <Typography
                 variant="h4"
-                sx={{ 
-                  fontWeight: 700, 
-                  mb: 3, 
+                sx={{
+                  fontWeight: 700,
+                  mb: 3,
                   color: '#e10600',
                   display: 'flex',
                   alignItems: 'center',
@@ -411,7 +399,7 @@ export default function VideoPage() {
                       <InputAdornment position="start">
                         <SearchIcon />
                       </InputAdornment>
-                    ),
+                    )
                   }}
                   sx={{
                     '& .MuiOutlinedInput-root': {
@@ -453,9 +441,9 @@ export default function VideoPage() {
           <Box sx={{ mb: 4 }}>
             <Typography
               variant="h4"
-              sx={{ 
-                fontWeight: 700, 
-                mb: 3, 
+              sx={{
+                fontWeight: 700,
+                mb: 3,
                 color: 'white',
                 display: 'flex',
                 alignItems: 'center',
@@ -497,11 +485,7 @@ export default function VideoPage() {
                 {/* Pagination */}
                 {totalCount > pageSize && (
                   <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-                    <Pagination
-                      currentPage={currentPage}
-                      totalPages={Math.ceil(totalCount / pageSize)}
-                      onPageChange={handlePageChange}
-                    />
+                    <Pagination currentPage={currentPage} totalPages={Math.ceil(totalCount / pageSize)} onPageChange={handlePageChange} />
                   </Box>
                 )}
               </>
@@ -562,15 +546,9 @@ export default function VideoPage() {
                         fontWeight: 600
                       }}
                     />
-                    {selectedVideo.platform && (
-                      <Chip label={selectedVideo.platform} variant="outlined" />
-                    )}
+                    {selectedVideo.platform && <Chip label={selectedVideo.platform} variant="outlined" />}
                     {selectedVideo.isFeatured && (
-                      <Chip
-                        icon={<StarIcon />}
-                        label="Featured"
-                        sx={{ backgroundColor: '#e10600', color: 'white' }}
-                      />
+                      <Chip icon={<StarIcon />} label="Featured" sx={{ backgroundColor: '#e10600', color: 'white' }} />
                     )}
                   </Box>
 
@@ -581,21 +559,15 @@ export default function VideoPage() {
                   <Box sx={{ display: 'flex', gap: 3, mb: 2, color: 'text.secondary' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                       <ViewIcon sx={{ fontSize: 18 }} />
-                      <Typography variant="body2">
-                        {formatViewCount(selectedVideo.viewCount)} views
-                      </Typography>
+                      <Typography variant="body2">{formatViewCount(selectedVideo.viewCount)} views</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                       <CalendarIcon sx={{ fontSize: 18 }} />
-                      <Typography variant="body2">
-                        {formatDate(selectedVideo.publishedDate)}
-                      </Typography>
+                      <Typography variant="body2">{formatDate(selectedVideo.publishedDate)}</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                       <TimeIcon sx={{ fontSize: 18 }} />
-                      <Typography variant="body2">
-                        {selectedVideo.formattedDuration}
-                      </Typography>
+                      <Typography variant="body2">{selectedVideo.formattedDuration}</Typography>
                     </Box>
                   </Box>
 
@@ -607,13 +579,7 @@ export default function VideoPage() {
                       </Typography>
                       <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                         {selectedVideo.tags.map((tag) => (
-                          <Chip
-                            key={tag}
-                            label={tag}
-                            size="small"
-                            variant="outlined"
-                            sx={{ borderColor: 'rgba(255,255,255,0.3)' }}
-                          />
+                          <Chip key={tag} label={tag} size="small" variant="outlined" sx={{ borderColor: 'rgba(255,255,255,0.3)' }} />
                         ))}
                       </Box>
                     </Box>

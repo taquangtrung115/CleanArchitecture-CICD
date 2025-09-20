@@ -27,10 +27,10 @@ const LoginPage = () => {
     setError(null);
     setValidationErrors([]);
     setLoading(true);
-    
+
     const res = await login(form.username, form.password);
     setLoading(false);
-    
+
     if (res.data && res.data.accessToken) {
       localStorage.setItem('token', res.data.accessToken);
       localStorage.setItem('refreshToken', res.data.refreshToken);
@@ -69,31 +69,35 @@ const LoginPage = () => {
         <button type="submit" style={{ width: '100%' }} disabled={loading}>
           {loading ? 'Logging in...' : 'Login'}
         </button>
-        
+
         {/* Error Messages */}
         {error && (
-          <div style={{ 
-            color: 'red', 
-            marginTop: 8, 
-            padding: 8,
-            backgroundColor: '#ffebee',
-            border: '1px solid #f44336',
-            borderRadius: 4
-          }}>
+          <div
+            style={{
+              color: 'red',
+              marginTop: 8,
+              padding: 8,
+              backgroundColor: '#ffebee',
+              border: '1px solid #f44336',
+              borderRadius: 4
+            }}
+          >
             {error}
           </div>
         )}
-        
+
         {/* Validation Errors */}
         {validationErrors.length > 0 && (
-          <div style={{ 
-            color: '#e65100', 
-            marginTop: 8, 
-            padding: 8,
-            backgroundColor: '#fff3e0',
-            border: '1px solid #ff9800',
-            borderRadius: 4
-          }}>
+          <div
+            style={{
+              color: '#e65100',
+              marginTop: 8,
+              padding: 8,
+              backgroundColor: '#fff3e0',
+              border: '1px solid #ff9800',
+              borderRadius: 4
+            }}
+          >
             <strong>Validation Errors:</strong>
             <ul style={{ margin: '4px 0', paddingLeft: 20 }}>
               {validationErrors.map((errorMsg, index) => (

@@ -53,10 +53,10 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
-    
+
     setError('');
     setLoading(true);
-    
+
     try {
       const res = await createUser(form);
       if (res.data) {
@@ -94,8 +94,8 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
   };
 
   return (
-    <Dialog 
-      open={open} 
+    <Dialog
+      open={open}
       onClose={handleClose}
       maxWidth="md"
       fullWidth
@@ -119,16 +119,16 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
             onClick={handleClose}
             disabled={loading}
             sx={{
-              color: (theme) => theme.palette.grey[500],
+              color: (theme) => theme.palette.grey[500]
             }}
           >
             <CloseIcon />
           </IconButton>
         </Stack>
       </DialogTitle>
-      
+
       <Divider />
-      
+
       <form onSubmit={handleSubmit}>
         <DialogContent sx={{ py: 3 }}>
           <Grid container spacing={3}>
@@ -145,7 +145,7 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
                 size="medium"
               />
             </Grid>
-            
+
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Email"
@@ -160,7 +160,7 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
                 size="medium"
               />
             </Grid>
-            
+
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Password"
@@ -175,7 +175,7 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
                 size="medium"
               />
             </Grid>
-            
+
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Day of Birth"
@@ -191,7 +191,7 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
                 size="medium"
               />
             </Grid>
-            
+
             <Grid item xs={12} sm={6}>
               <TextField
                 label="First Name"
@@ -205,7 +205,7 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
                 size="medium"
               />
             </Grid>
-            
+
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Last Name"
@@ -219,7 +219,7 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
                 size="medium"
               />
             </Grid>
-            
+
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Manager ID"
@@ -232,7 +232,7 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
                 size="medium"
               />
             </Grid>
-            
+
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Position ID"
@@ -245,7 +245,7 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
                 size="medium"
               />
             </Grid>
-            
+
             <Grid item xs={12}>
               <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 600 }}>
                 Quyền hạn
@@ -253,13 +253,7 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
               <Stack direction="row" spacing={3}>
                 <FormControlLabel
                   control={
-                    <Checkbox
-                      checked={form.isDirector}
-                      onChange={handleChange}
-                      name="isDirector"
-                      disabled={loading}
-                      color="primary"
-                    />
+                    <Checkbox checked={form.isDirector} onChange={handleChange} name="isDirector" disabled={loading} color="primary" />
                   }
                   label="Is Director"
                 />
@@ -277,7 +271,7 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
                 />
               </Stack>
             </Grid>
-            
+
             {error && (
               <Grid item xs={12}>
                 <Typography color="error" variant="body2" sx={{ mt: 1 }}>
@@ -287,16 +281,11 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
             )}
           </Grid>
         </DialogContent>
-        
+
         <Divider />
-        
+
         <DialogActions sx={{ p: 3 }}>
-          <Button 
-            onClick={handleClose} 
-            disabled={loading}
-            color="inherit"
-            variant="outlined"
-          >
+          <Button onClick={handleClose} disabled={loading} color="inherit" variant="outlined">
             Hủy
           </Button>
           <Button

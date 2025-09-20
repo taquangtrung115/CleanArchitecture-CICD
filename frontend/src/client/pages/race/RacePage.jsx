@@ -28,7 +28,7 @@ const PageContainer = styled(Box)(({ theme }) => ({
   backgroundColor: '#101014',
   minHeight: '100vh',
   padding: theme.spacing(3, 0),
-  fontFamily: 'Oswald, Arial Black, sans-serif',
+  fontFamily: 'Oswald, Arial Black, sans-serif'
 }));
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -38,8 +38,8 @@ const StyledCard = styled(Card)(({ theme }) => ({
   transition: 'all 0.3s ease',
   '&:hover': {
     borderColor: '#e10600',
-    boxShadow: '0 8px 32px rgba(225, 6, 0, 0.3)',
-  },
+    boxShadow: '0 8px 32px rgba(225, 6, 0, 0.3)'
+  }
 }));
 
 const HeaderCard = styled(Card)(({ theme }) => ({
@@ -55,9 +55,10 @@ const HeaderCard = styled(Card)(({ theme }) => ({
     left: 0,
     right: 0,
     bottom: 0,
-    background: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Cpath d=\'M0 0h100v100H0z\' fill=\'%23000\' fill-opacity=\'0.05\'/%3E%3C/svg%3E")',
-    backgroundSize: '20px 20px',
-  },
+    background:
+      "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0 0h100v100H0z' fill='%23000' fill-opacity='0.05'/%3E%3C/svg%3E\")",
+    backgroundSize: '20px 20px'
+  }
 }));
 
 const StatsCard = styled(Card)(({ theme }) => ({
@@ -68,8 +69,8 @@ const StatsCard = styled(Card)(({ theme }) => ({
   transition: 'all 0.3s ease',
   '&:hover': {
     transform: 'translateY(-4px)',
-    boxShadow: '0 12px 40px rgba(225, 6, 0, 0.4)',
-  },
+    boxShadow: '0 12px 40px rgba(225, 6, 0, 0.4)'
+  }
 }));
 
 const pulse = keyframes`
@@ -88,7 +89,7 @@ const LiveIndicator = styled(Box)(({ theme }) => ({
   borderRadius: '20px',
   fontSize: '12px',
   fontWeight: 700,
-  animation: `${pulse} 2s infinite`,
+  animation: `${pulse} 2s infinite`
 }));
 
 export default function RacePage() {
@@ -116,7 +117,7 @@ export default function RacePage() {
     try {
       setLoading(true);
       setError(null);
-      
+
       // For demo purposes, create mock data since we don't have real API yet
       const mockRaces = [
         {
@@ -154,17 +155,17 @@ export default function RacePage() {
           raceDate: '2025-09-28T09:00:00Z',
           status: 'Upcoming',
           roundNumber: 15,
-          circuitLength: 4.310,
+          circuitLength: 4.31,
           numberOfLaps: 27,
           description: 'The spectacular Mandalika circuit'
         }
       ];
-      
+
       setRaces(mockRaces);
       if (mockRaces.length > 0) {
         setSelectedRaceId(mockRaces[0].id);
       }
-      
+
       // Uncomment when real API is available:
       // const response = await raceService.getCompletedRaces({ pageSize: 20 });
       // setRaces(response.items || []);
@@ -183,7 +184,7 @@ export default function RacePage() {
     try {
       setResultsLoading(true);
       setError(null);
-      
+
       // Mock race results data
       const mockResults = [
         {
@@ -295,9 +296,9 @@ export default function RacePage() {
           notes: 'DNF - Technical'
         }
       ];
-      
+
       setRaceResults(mockResults);
-      
+
       // Uncomment when real API is available:
       // const response = await raceService.getRaceWithResults(raceId);
       // setRaceResults(response.results || []);
@@ -317,12 +318,14 @@ export default function RacePage() {
     setTabValue(newValue);
   };
 
-  const selectedRace = races.find(race => race.id === selectedRaceId);
-  const raceStats = raceResults ? {
-    totalRiders: raceResults.length,
-    finishers: raceResults.filter(r => r.isFinisher).length,
-    dnf: raceResults.filter(r => !r.isFinisher && r.notes?.includes('DNF')).length,
-  } : null;
+  const selectedRace = races.find((race) => race.id === selectedRaceId);
+  const raceStats = raceResults
+    ? {
+        totalRiders: raceResults.length,
+        finishers: raceResults.filter((r) => r.isFinisher).length,
+        dnf: raceResults.filter((r) => !r.isFinisher && r.notes?.includes('DNF')).length
+      }
+    : null;
 
   return (
     <Fade in={show} timeout={900}>
@@ -341,7 +344,7 @@ export default function RacePage() {
                       color: '#fff',
                       fontFamily: 'Oswald, Arial Black, sans-serif',
                       letterSpacing: 1,
-                      textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
                     }}
                   >
                     MotoGP Race Classification
@@ -351,7 +354,7 @@ export default function RacePage() {
                   </Typography>
                 </Box>
               </Box>
-              
+
               {selectedRace?.status === 'InProgress' && (
                 <LiveIndicator>
                   <SpeedIcon sx={{ fontSize: 16 }} />
@@ -368,12 +371,7 @@ export default function RacePage() {
           )}
 
           {/* Race Selector */}
-          <RaceSelector
-            races={races}
-            selectedRaceId={selectedRaceId}
-            onRaceChange={handleRaceChange}
-            loading={loading}
-          />
+          <RaceSelector races={races} selectedRaceId={selectedRaceId} onRaceChange={handleRaceChange} loading={loading} />
 
           {/* Race Statistics */}
           {selectedRace && raceStats && (
@@ -441,13 +439,13 @@ export default function RacePage() {
                       color: '#e10600',
                       fontFamily: 'Oswald, Arial, sans-serif',
                       letterSpacing: 1,
-                      mb: 2,
+                      mb: 2
                     }}
                   >
                     <FlagIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
                     Race Classification
                   </Typography>
-                  
+
                   <Tabs
                     value={tabValue}
                     onChange={handleTabChange}
@@ -455,14 +453,14 @@ export default function RacePage() {
                       mb: 2,
                       '& .MuiTab-root': {
                         color: '#ccc',
-                        fontWeight: 600,
+                        fontWeight: 600
                       },
                       '& .Mui-selected': {
-                        color: '#e10600 !important',
+                        color: '#e10600 !important'
                       },
                       '& .MuiTabs-indicator': {
-                        backgroundColor: '#e10600',
-                      },
+                        backgroundColor: '#e10600'
+                      }
                     }}
                   >
                     <Tab label="Race Results" />
@@ -470,17 +468,10 @@ export default function RacePage() {
                     <Tab label="Sector Times" disabled />
                   </Tabs>
                 </Box>
-                
+
                 <Divider sx={{ borderColor: '#333' }} />
-                
-                <Box sx={{ p: 3 }}>
-                  {tabValue === 0 && (
-                    <RaceClassificationTable
-                      raceResults={raceResults}
-                      loading={resultsLoading}
-                    />
-                  )}
-                </Box>
+
+                <Box sx={{ p: 3 }}>{tabValue === 0 && <RaceClassificationTable raceResults={raceResults} loading={resultsLoading} />}</Box>
               </CardContent>
             </StyledCard>
           )}
