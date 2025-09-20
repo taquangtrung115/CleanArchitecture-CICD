@@ -24,7 +24,13 @@ export const register = async ({ userName, email, password, firstName, lastName,
 // Refresh token
 export const refreshToken = async (refreshToken) => {
   try {
-    const response = await axiosInstance.post(`${AUTH_ENDPOINT}/refresh-token`, { refreshToken });
+    // Include both tokens as required by the backend API
+    const accessToken = localStorage.getItem('token');
+    const payload = {
+      accessToken: accessToken || '',
+      refreshToken
+    };
+    const response = await axiosInstance.post(`${AUTH_ENDPOINT}/refresh-token`, payload);
     return {
       data: response.data,
       status: response.status,
