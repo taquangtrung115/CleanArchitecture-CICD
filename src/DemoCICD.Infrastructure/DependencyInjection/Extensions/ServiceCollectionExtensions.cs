@@ -7,6 +7,7 @@ using DemoCICD.Application.Abstractions;
 using DemoCICD.Domain.Entities.Identity;
 using DemoCICD.Infrastructure.Authentication;
 using DemoCICD.Infrastructure.Caching;
+using DemoCICD.Infrastructure.AI;
 using DemoCICD.Infrastructure.DependencyInjection.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +27,10 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IUserManagementService, UserManagementService>();
         services.AddTransient<IRoleManagementService, RoleManagementService>();
         services.AddTransient<IPermissionManagementService, PermissionManagementService>();
+        
+        // Add AI services
+        services.AddTransient<IAiChatService, OpenAiChatService>();
+        services.AddTransient<IIdentityManagementService, IdentityManagementService>();
     }
 
     public static void AddRedisCache(this IServiceCollection services, IConfiguration configuration)
