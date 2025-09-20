@@ -30,4 +30,9 @@ public static class Query
     // Permission Management Queries
     public record GetPermissions(int Page = 1, int PageSize = 10) : IQuery<Response.PermissionList>;
     public record GetPermissionById(Guid RoleId, string FunctionId, string ActionId) : IQuery<Response.PermissionDetails>;
+    
+    // Account Settings Queries
+    public record GetNotificationSettings(Guid UserId) : IQuery<Response.NotificationSettings>;
+    public record GetPrivacySettings(Guid UserId) : IQuery<Response.PrivacySettings>;
+    public record GetUserSessions(Guid UserId) : IQuery<Response.UserSessionList>;
 }

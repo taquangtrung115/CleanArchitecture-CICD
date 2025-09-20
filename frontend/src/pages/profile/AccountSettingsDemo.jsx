@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Typography,
   Box,
@@ -9,8 +9,6 @@ import {
   Divider,
   Chip,
   Stack,
-  CircularProgress,
-  Alert,
   Button,
   IconButton,
   Tabs,
@@ -25,6 +23,7 @@ import {
   Switch,
   FormControlLabel,
   TextField,
+  Alert,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -35,7 +34,8 @@ import {
   MenuItem,
   ListItemButton
 } from '@mui/material';
-import { getCurrentUserProfile } from 'api/user';
+
+// Icons
 import UserOutlined from '@ant-design/icons/UserOutlined';
 import MailOutlined from '@ant-design/icons/MailOutlined';
 import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
@@ -56,13 +56,29 @@ import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import MobileOutlined from '@ant-design/icons/MobileOutlined';
 import DesktopOutlined from '@ant-design/icons/DesktopOutlined';
 import GlobalOutlined from '@ant-design/icons/GlobalOutlined';
+
 import avatar1 from 'assets/images/users/avatar-1.png';
 
-export default function ProfileViewPage() {
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState(0);
+// Mock profile data
+const mockProfile = {
+  userId: '123e4567-e89b-12d3-a456-426614174000',
+  userName: 'john.doe',
+  email: 'john.doe@example.com',
+  firstName: 'John',
+  lastName: 'Doe',
+  fullName: 'John Doe',
+  dayOfBirth: '1990-05-15',
+  isDirector: false,
+  isHeadOfDepartment: true,
+  managerId: null,
+  positionId: 'pos-123',
+  isLocked: false,
+  createdAt: '2023-01-15'
+};
+
+export default function AccountSettingsDemo() {
+  const [profile] = useState(mockProfile);
+  const [activeTab, setActiveTab] = useState(2); // Start with Account Settings tab
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [notificationSettings, setNotificationSettings] = useState({
     emailNotifications: true,
@@ -79,28 +95,6 @@ export default function ProfileViewPage() {
     allowSearchByEmail: true,
     allowSearchByPhone: false
   });
-
-  const fetchProfile = async () => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const res = await getCurrentUserProfile();
-      if (res.data && res.data.value) {
-        setProfile(res.data.value);
-      } else {
-        setError('Không thể tải thông tin profile');
-      }
-    } catch {
-      setError('Đã xảy ra lỗi khi tải profile');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProfile();
-  }, []);
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -120,45 +114,6 @@ export default function ProfileViewPage() {
     }));
   };
 
-  if (loading) {
-    return (
-      <Container maxWidth="lg">
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-          <CircularProgress size={60} />
-        </Box>
-      </Container>
-    );
-  }
-
-  if (error) {
-    return (
-      <Container maxWidth="lg">
-        <Box mt={3}>
-          <Alert
-            severity="error"
-            action={
-              <Button color="inherit" size="small" onClick={fetchProfile}>
-                Thử lại
-              </Button>
-            }
-          >
-            {error}
-          </Alert>
-        </Box>
-      </Container>
-    );
-  }
-
-  if (!profile) {
-    return (
-      <Container maxWidth="lg">
-        <Box mt={3}>
-          <Alert severity="warning">Không tìm thấy thông tin profile</Alert>
-        </Box>
-      </Container>
-    );
-  }
-
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     return new Date(dateString).toLocaleDateString('vi-VN');
@@ -171,6 +126,37 @@ export default function ProfileViewPage() {
       </div>
     );
   };
+
+  // Mock active sessions data
+  const activeSessions = [
+    {
+      id: 1,
+      device: 'Windows PC',
+      browser: 'Chrome 120',
+      location: 'Ho Chi Minh City, Vietnam',
+      lastActive: '2 minutes ago',
+      current: true,
+      icon: <DesktopOutlined />
+    },
+    {
+      id: 2,
+      device: 'iPhone 15',
+      browser: 'Safari Mobile',
+      location: 'Ho Chi Minh City, Vietnam', 
+      lastActive: '1 hour ago',
+      current: false,
+      icon: <MobileOutlined />
+    },
+    {
+      id: 3,
+      device: 'MacBook Pro',
+      browser: 'Safari 17',
+      location: 'Hanoi, Vietnam',
+      lastActive: '3 days ago',
+      current: false,
+      icon: <DesktopOutlined />
+    }
+  ];
 
   return (
     <Container maxWidth="lg">
@@ -318,185 +304,6 @@ export default function ProfileViewPage() {
               <Tab icon={<SettingOutlined />} label="Cài đặt tài khoản" iconPosition="start" />
             </Tabs>
           </Box>
-
-          {/* Personal Information Tab */}
-          <TabPanel value={activeTab} index={0}>
-            <Box px={3} pb={3}>
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
-                  <Card variant="outlined" sx={{ borderRadius: 2 }}>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <UserOutlined />
-                        Thông tin cơ bản
-                      </Typography>
-                      <Divider sx={{ mb: 2 }} />
-
-                      <List disablePadding>
-                        <ListItem disablePadding sx={{ mb: 1 }}>
-                          <ListItemIcon sx={{ minWidth: 40 }}>
-                            <IdcardOutlined />
-                          </ListItemIcon>
-                          <ListItemText primary="Họ và tên" secondary={profile.fullName || 'N/A'} />
-                        </ListItem>
-                        <ListItem disablePadding sx={{ mb: 1 }}>
-                          <ListItemIcon sx={{ minWidth: 40 }}>
-                            <UserOutlined />
-                          </ListItemIcon>
-                          <ListItemText primary="Họ" secondary={profile.firstName || 'N/A'} />
-                        </ListItem>
-                        <ListItem disablePadding sx={{ mb: 1 }}>
-                          <ListItemIcon sx={{ minWidth: 40 }}>
-                            <UserOutlined />
-                          </ListItemIcon>
-                          <ListItemText primary="Tên" secondary={profile.lastName || 'N/A'} />
-                        </ListItem>
-                        <ListItem disablePadding sx={{ mb: 1 }}>
-                          <ListItemIcon sx={{ minWidth: 40 }}>
-                            <CalendarOutlined />
-                          </ListItemIcon>
-                          <ListItemText primary="Ngày sinh" secondary={formatDate(profile.dayOfBirth)} />
-                        </ListItem>
-                        <ListItem disablePadding sx={{ mb: 1 }}>
-                          <ListItemIcon sx={{ minWidth: 40 }}>
-                            <MailOutlined />
-                          </ListItemIcon>
-                          <ListItemText primary="Email" secondary={profile.email} />
-                        </ListItem>
-                      </List>
-                    </CardContent>
-                  </Card>
-                </Grid>
-
-                <Grid item xs={12} md={6}>
-                  <Card variant="outlined" sx={{ borderRadius: 2 }}>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <EnvironmentOutlined />
-                        Thông tin liên hệ
-                      </Typography>
-                      <Divider sx={{ mb: 2 }} />
-
-                      <List disablePadding>
-                        <ListItem disablePadding sx={{ mb: 1 }}>
-                          <ListItemIcon sx={{ minWidth: 40 }}>
-                            <PhoneOutlined />
-                          </ListItemIcon>
-                          <ListItemText primary="Số điện thoại" secondary="Chưa cập nhật" />
-                        </ListItem>
-                        <ListItem disablePadding sx={{ mb: 1 }}>
-                          <ListItemIcon sx={{ minWidth: 40 }}>
-                            <EnvironmentOutlined />
-                          </ListItemIcon>
-                          <ListItemText primary="Địa chỉ" secondary="Chưa cập nhật" />
-                        </ListItem>
-                        <ListItem disablePadding sx={{ mb: 1 }}>
-                          <ListItemIcon sx={{ minWidth: 40 }}>
-                            <EnvironmentOutlined />
-                          </ListItemIcon>
-                          <ListItemText primary="Thành phố" secondary="Chưa cập nhật" />
-                        </ListItem>
-                        <ListItem disablePadding sx={{ mb: 1 }}>
-                          <ListItemIcon sx={{ minWidth: 40 }}>
-                            <EnvironmentOutlined />
-                          </ListItemIcon>
-                          <ListItemText primary="Quốc gia" secondary="Việt Nam" />
-                        </ListItem>
-                      </List>
-
-                      <Box mt={2}>
-                        <Button variant="outlined" size="small" startIcon={<EditOutlined />}>
-                          Cập nhật thông tin liên hệ
-                        </Button>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              </Grid>
-            </Box>
-          </TabPanel>
-
-          {/* Professional Information Tab */}
-          <TabPanel value={activeTab} index={1}>
-            <Box px={3} pb={3}>
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
-                  <Card variant="outlined" sx={{ borderRadius: 2 }}>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <TeamOutlined />
-                        Thông tin công việc
-                      </Typography>
-                      <Divider sx={{ mb: 2 }} />
-
-                      <List disablePadding>
-                        <ListItem disablePadding sx={{ mb: 1 }}>
-                          <ListItemIcon sx={{ minWidth: 40 }}>
-                            <IdcardOutlined />
-                          </ListItemIcon>
-                          <ListItemText primary="Mã vị trí" secondary={profile.positionId || 'N/A'} />
-                        </ListItem>
-                        <ListItem disablePadding sx={{ mb: 1 }}>
-                          <ListItemIcon sx={{ minWidth: 40 }}>
-                            <UserOutlined />
-                          </ListItemIcon>
-                          <ListItemText primary="Mã quản lý" secondary={profile.managerId || 'N/A'} />
-                        </ListItem>
-                        <ListItem disablePadding sx={{ mb: 1 }}>
-                          <ListItemIcon sx={{ minWidth: 40 }}>
-                            <TeamOutlined />
-                          </ListItemIcon>
-                          <ListItemText primary="Phòng ban" secondary="Chưa cập nhật" />
-                        </ListItem>
-                        <ListItem disablePadding sx={{ mb: 1 }}>
-                          <ListItemIcon sx={{ minWidth: 40 }}>
-                            <CalendarOutlined />
-                          </ListItemIcon>
-                          <ListItemText primary="Ngày bắt đầu làm việc" secondary="Chưa cập nhật" />
-                        </ListItem>
-                      </List>
-                    </CardContent>
-                  </Card>
-                </Grid>
-
-                <Grid item xs={12} md={6}>
-                  <Card variant="outlined" sx={{ borderRadius: 2 }}>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <SecurityScanOutlined />
-                        Vai trò và quyền
-                      </Typography>
-                      <Divider sx={{ mb: 2 }} />
-
-                      <Box sx={{ mb: 2 }}>
-                        <Typography variant="body2" color="text.secondary" gutterBottom>
-                          Vai trò đặc biệt
-                        </Typography>
-                        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                          {profile.isDirector && <Chip label="Giám đốc" color="primary" size="small" />}
-                          {profile.isHeadOfDepartment && <Chip label="Trưởng phòng" color="secondary" size="small" />}
-                          {!profile.isDirector && !profile.isHeadOfDepartment && <Chip label="Nhân viên" color="default" size="small" />}
-                        </Stack>
-                      </Box>
-
-                      <Box sx={{ mb: 2 }}>
-                        <Typography variant="body2" color="text.secondary" gutterBottom>
-                          Quyền hạn
-                        </Typography>
-                        <Stack spacing={1}>
-                          <Chip label="Xem thông tin cá nhân" color="success" size="small" variant="outlined" />
-                          <Chip label="Chỉnh sửa profile" color="success" size="small" variant="outlined" />
-                          {(profile.isDirector || profile.isHeadOfDepartment) && (
-                            <Chip label="Quản lý nhân viên" color="primary" size="small" variant="outlined" />
-                          )}
-                        </Stack>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              </Grid>
-            </Box>
-          </TabPanel>
 
           {/* Account Settings Tab - Enhanced */}
           <TabPanel value={activeTab} index={2}>
@@ -807,63 +614,42 @@ export default function ProfileViewPage() {
                       <Divider sx={{ mb: 2 }} />
 
                       <List disablePadding>
-                        {/* Current Session */}
-                        <ListItem disablePadding sx={{ mb: 2 }}>
-                          <ListItemButton sx={{ borderRadius: 1, border: '2px solid', borderColor: 'primary.main' }}>
-                            <ListItemIcon sx={{ minWidth: 40 }}>
-                              <DesktopOutlined />
-                            </ListItemIcon>
-                            <ListItemText
-                              primary={
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                  <Typography variant="body1" fontWeight="medium">
-                                    Windows PC
-                                  </Typography>
-                                  <Chip label="Hiện tại" color="primary" size="small" />
-                                </Box>
-                              }
-                              secondary={
-                                <Box>
-                                  <Typography variant="body2" color="text.secondary">
-                                    Chrome 120 • Ho Chi Minh City, Vietnam
-                                  </Typography>
-                                  <Typography variant="caption" color="text.secondary">
-                                    Hoạt động lần cuối: 2 minutes ago
-                                  </Typography>
-                                </Box>
-                              }
-                            />
-                          </ListItemButton>
-                        </ListItem>
-                        
-                        {/* Other Sessions */}
-                        <ListItem disablePadding sx={{ mb: 2 }}>
-                          <ListItemButton sx={{ borderRadius: 1, border: '1px solid', borderColor: 'divider' }}>
-                            <ListItemIcon sx={{ minWidth: 40 }}>
-                              <MobileOutlined />
-                            </ListItemIcon>
-                            <ListItemText
-                              primary={
-                                <Typography variant="body1" fontWeight="medium">
-                                  iPhone 15
-                                </Typography>
-                              }
-                              secondary={
-                                <Box>
-                                  <Typography variant="body2" color="text.secondary">
-                                    Safari Mobile • Ho Chi Minh City, Vietnam
-                                  </Typography>
-                                  <Typography variant="caption" color="text.secondary">
-                                    Hoạt động lần cuối: 1 hour ago
-                                  </Typography>
-                                </Box>
-                              }
-                            />
-                            <IconButton color="error" size="small">
-                              <DeleteOutlined />
-                            </IconButton>
-                          </ListItemButton>
-                        </ListItem>
+                        {activeSessions.map((session, index) => (
+                          <ListItem key={session.id} disablePadding sx={{ mb: 2 }}>
+                            <ListItemButton sx={{ borderRadius: 1, border: session.current ? '2px solid' : '1px solid', borderColor: session.current ? 'primary.main' : 'divider' }}>
+                              <ListItemIcon sx={{ minWidth: 40 }}>
+                                {session.icon}
+                              </ListItemIcon>
+                              <ListItemText
+                                primary={
+                                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <Typography variant="body1" fontWeight="medium">
+                                      {session.device}
+                                    </Typography>
+                                    {session.current && (
+                                      <Chip label="Hiện tại" color="primary" size="small" />
+                                    )}
+                                  </Box>
+                                }
+                                secondary={
+                                  <Box>
+                                    <Typography variant="body2" color="text.secondary">
+                                      {session.browser} • {session.location}
+                                    </Typography>
+                                    <Typography variant="caption" color="text.secondary">
+                                      Hoạt động lần cuối: {session.lastActive}
+                                    </Typography>
+                                  </Box>
+                                }
+                              />
+                              {!session.current && (
+                                <IconButton color="error" size="small">
+                                  <DeleteOutlined />
+                                </IconButton>
+                              )}
+                            </ListItemButton>
+                          </ListItem>
+                        ))}
                       </List>
 
                       <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
