@@ -49,7 +49,7 @@ builder.Services.AddCarter();
 
 // Cấu hình Dapper
 builder.Services.AddInfrastructureDapper();
-//test webhook CICD
+//test webhook CICD 2
 builder.Services
         .AddSwaggerGenNewtonsoftSupport()
         .AddFluentValidationRulesToSwagger()
