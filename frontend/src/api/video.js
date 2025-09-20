@@ -1,7 +1,7 @@
 import axios from './axios';
 
 // Use mock data for demonstration (set to false when backend is available)
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 
 // Mock video data
 const mockVideos = [
@@ -119,15 +119,15 @@ const getVideosMock = ({ pageIndex = 1, pageSize = 10, type = null, searchTerm =
 
   if (searchTerm) {
     const term = searchTerm.toLowerCase();
-    filteredVideos = filteredVideos.filter(video => 
-      video.title.toLowerCase().includes(term) || 
+    filteredVideos = filteredVideos.filter(video =>
+      video.title.toLowerCase().includes(term) ||
       video.description.toLowerCase().includes(term) ||
       video.tags.some(tag => tag.toLowerCase().includes(term))
     );
   }
 
   if (platform) {
-    filteredVideos = filteredVideos.filter(video => 
+    filteredVideos = filteredVideos.filter(video =>
       video.platform && video.platform.toLowerCase() === platform.toLowerCase()
     );
   }
@@ -171,23 +171,23 @@ const getVideoByIdMock = (id) => {
 };
 
 // API functions
-export const getVideos = async ({ 
-  pageIndex = 1, 
-  pageSize = 10, 
-  type = null, 
-  searchTerm = null, 
-  platform = null, 
-  isFeatured = null 
+export const getVideos = async ({
+  pageIndex = 1,
+  pageSize = 10,
+  type = null,
+  searchTerm = null,
+  platform = null,
+  isFeatured = null
 } = {}) => {
   if (USE_MOCK_DATA) {
     return getVideosMock({ pageIndex, pageSize, type, searchTerm, platform, isFeatured });
   }
 
   const params = new URLSearchParams();
-  
+
   params.append('pageIndex', pageIndex.toString());
   params.append('pageSize', pageSize.toString());
-  
+
   if (type) params.append('type', type);
   if (searchTerm) params.append('searchTerm', searchTerm);
   if (platform) params.append('platform', platform);

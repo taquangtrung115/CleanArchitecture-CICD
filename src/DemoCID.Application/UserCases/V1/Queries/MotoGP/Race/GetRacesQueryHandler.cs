@@ -63,32 +63,22 @@ public sealed class GetRacesQueryHandler : IQueryHandler<Query.GetRacesQuery, Pa
         // Apply sorting
         if (!string.IsNullOrWhiteSpace(request.SortColumn))
         {
-            switch (request.SortColumn.ToLower())
+            query = request.SortColumn.ToLower() switch
             {
-                case "name":
-                    query = request.SortOrder == SortOrder.Descending 
-                        ? query.OrderByDescending(r => r.Name) 
-                        : query.OrderBy(r => r.Name);
-                    break;
-                case "racedate":
-                    query = request.SortOrder == SortOrder.Descending 
-                        ? query.OrderByDescending(r => r.RaceDate) 
-                        : query.OrderBy(r => r.RaceDate);
-                    break;
-                case "roundnumber":
-                    query = request.SortOrder == SortOrder.Descending 
-                        ? query.OrderByDescending(r => r.RoundNumber) 
-                        : query.OrderBy(r => r.RoundNumber);
-                    break;
-                case "countryname":
-                    query = request.SortOrder == SortOrder.Descending 
-                        ? query.OrderByDescending(r => r.Country.Name) 
-                        : query.OrderBy(r => r.Country.Name);
-                    break;
-                default:
-                    query = query.OrderBy(r => r.RoundNumber);
-                    break;
-            }
+                "name" => request.SortOrder == SortOrder.Descending
+                                        ? query.OrderByDescending(r => r.Name)
+                                        : query.OrderBy(r => r.Name),
+                "racedate" => request.SortOrder == SortOrder.Descending
+                                        ? query.OrderByDescending(r => r.RaceDate)
+                                        : query.OrderBy(r => r.RaceDate),
+                "roundnumber" => request.SortOrder == SortOrder.Descending
+                                        ? query.OrderByDescending(r => r.RoundNumber)
+                                        : query.OrderBy(r => r.RoundNumber),
+                "countryname" => request.SortOrder == SortOrder.Descending
+                                        ? query.OrderByDescending(r => r.Country.Name)
+                                        : query.OrderBy(r => r.Country.Name),
+                _ => query.OrderBy(r => r.RoundNumber),
+            };
         }
         else
         {

@@ -2,26 +2,26 @@ import axios from './axios';
 import { getNewsMock, getFeaturedNewsMock, getBreakingNewsMock, getNewsByIdMock } from './mockNews';
 
 // Use mock data for demonstration (set to false when backend is available)
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 
 // Get all news with pagination and filters
-export const getNews = async ({ 
-  pageIndex = 1, 
-  pageSize = 10, 
-  category = null, 
-  searchTerm = null, 
-  isFeatured = null, 
-  isBreaking = null 
+export const getNews = async ({
+  pageIndex = 1,
+  pageSize = 10,
+  category = null,
+  searchTerm = null,
+  isFeatured = null,
+  isBreaking = null
 } = {}) => {
   if (USE_MOCK_DATA) {
     return getNewsMock({ pageIndex, pageSize, category, searchTerm, isFeatured, isBreaking });
   }
 
   const params = new URLSearchParams();
-  
+
   params.append('pageIndex', pageIndex.toString());
   params.append('pageSize', pageSize.toString());
-  
+
   if (category) params.append('category', category);
   if (searchTerm) params.append('searchTerm', searchTerm);
   if (isFeatured !== null) params.append('isFeatured', isFeatured.toString());

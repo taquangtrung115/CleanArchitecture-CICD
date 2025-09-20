@@ -15,7 +15,7 @@ public class RaceApi : ICarterModule
     {
         var group = app.MapGroup("/api/v1/motogp/races")
             .WithTags("MotoGP - Races")
-            .RequireAuthorization();
+            ;
 
         group.MapGet("", GetRaces)
             .WithName("GetRaces")
@@ -40,7 +40,7 @@ public class RaceApi : ICarterModule
 
     public static async Task<IResult> GetRaces(
         ISender sender,
-        [AsParameters] Query.GetRacesQuery query)
+        [FromBody] Query.GetRacesQuery query)
     {
         var result = await sender.Send(query);
 

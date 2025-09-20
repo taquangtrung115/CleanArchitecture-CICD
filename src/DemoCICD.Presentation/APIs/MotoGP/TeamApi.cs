@@ -16,14 +16,14 @@ public class TeamApi : ApiEndpoint, ICarterModule
     {
         var group = app.MapGroup("/api/v1/motogp/teams")
             .WithTags("MotoGP - Teams")
-            .RequireAuthorization();
+            ;
 
         group.MapPost("", CreateTeam)
             .WithName("CreateTeam")
             .WithSummary("Create a new MotoGP team")
             .WithDescription("Creates a new MotoGP team with the specified details")
             .Produces<Result>(StatusCodes.Status201Created)
-            .ProducesValidationProblem();
+            .ProducesValidationProblem().RequireAuthorization();
 
         group.MapGet("", GetTeams)
             .WithName("GetTeams")
