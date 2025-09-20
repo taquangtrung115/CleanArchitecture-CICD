@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import MainCard from 'components/MainCard';
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -11,18 +9,17 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { createRole, getRoles } from 'api/role';
+import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
+import SecurityIcon from '@mui/icons-material/Security';
+import { getRoles } from 'api/role';
+import RoleFormModal from 'components/forms/RoleFormModal';
 
 export default function RolePage() {
-  const [form, setForm] = useState({
-    name: '',
-    description: '',
-    roleCode: ''
-  });
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
 
   const fetchRoles = async () => {
     setLoading(true);
@@ -39,102 +36,96 @@ export default function RolePage() {
     fetchRoles();
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    const res = await createRole(form);
-    if (res.data) {
-      setForm({ name: '', description: '', roleCode: '' });
-      await fetchRoles();
-    } else {
-      setError(res.error?.message || 'Tạo role thất bại');
-      setLoading(false);
-    }
+  const handleModalSuccess = () => {
+    fetchRoles();
   };
 
   return (
-    <MainCard title="Role Management">
+    <MainCard 
+      title="Role Management"
+      secondary={
+        <Button
+          variant="contained"
+          startIcon={<SecurityIcon />}
+          onClick={() => setModalOpen(true)}
+          color="primary"
+          size="medium"
+        >
+          Thêm Role Mới
+        </Button>
+      }
+    >
       {loading && <LinearProgress sx={{ mb: 2 }} />}
-      <Typography variant="h6" sx={{ mb: 2 }}>
-        Thêm Role mới
-      </Typography>
-      <form onSubmit={handleSubmit} style={{ marginBottom: 24 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={4}>
-            <TextField label="Role Name" name="name" value={form.name} onChange={handleChange} fullWidth required disabled={loading} />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <TextField
-              label="Description"
-              name="description"
-              value={form.description}
-              onChange={handleChange}
-              fullWidth
-              disabled={loading}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <TextField
-              label="Role Code"
-              name="roleCode"
-              value={form.roleCode}
-              onChange={handleChange}
-              fullWidth
-              required
-              disabled={loading}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Button type="submit" variant="contained" disabled={loading}>
-              Tạo Role
-            </Button>
-          </Grid>
-        </Grid>
-        {error && (
-          <Typography color="error" sx={{ mt: 1 }}>
-            {error}
-          </Typography>
-        )}
-      </form>
-      <Typography variant="h6" sx={{ mb: 1 }}>
-        Danh sách Role
-      </Typography>
-      <TableContainer component={Paper}>
+      
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h6" sx={{ mb: 1 }}>
+          Danh sách Role
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Quản lý các vai trò và quyền hạn trong hệ thống
+        </Typography>
+      </Box>
+
+      <TableContainer component={Paper} sx={{ boxShadow: 1 }}>
         <Table size="small">
           <TableHead>
-            <TableRow>
-              <TableCell>Role Name</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Role Code</TableCell>
+            <TableRow sx={{ bgcolor: 'grey.50' }}>
+              <TableCell sx={{ fontWeight: 600 }}>Role Name</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Role Code</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Description</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={3}>Đang tải...</TableCell>
+                <TableCell colSpan={3} align="center" sx={{ py: 3 }}>
+                  <Stack alignItems="center" spacing={1}>
+                    <Typography variant="body2">Đang tải...</Typography>
+                  </Stack>
+                </TableCell>
               </TableRow>
             ) : roles.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={3}>Không có role nào</TableCell>
+                <TableCell colSpan={3} align="center" sx={{ py: 3 }}>
+                  <Stack alignItems="center" spacing={1}>
+                    <Typography variant="body2" color="text.secondary">
+                      Không có role nào
+                    </Typography>
+                  </Stack>
+                </TableCell>
               </TableRow>
             ) : (
               roles.map((r) => (
-                <TableRow key={r.roleId || r.id}>
-                  <TableCell>{r.name}</TableCell>
-                  <TableCell>{r.description}</TableCell>
-                  <TableCell>{r.roleCode}</TableCell>
+                <TableRow key={r.roleId || r.id} hover>
+                  <TableCell sx={{ fontWeight: 500 }}>{r.name}</TableCell>
+                  <TableCell>
+                    <Typography 
+                      variant="caption" 
+                      sx={{ 
+                        px: 1.5, 
+                        py: 0.5, 
+                        borderRadius: 1,
+                        bgcolor: 'primary.light',
+                        color: 'primary.dark',
+                        fontFamily: 'monospace'
+                      }}
+                    >
+                      {r.roleCode}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>{r.description || '-'}</TableCell>
                 </TableRow>
               ))
             )}
           </TableBody>
         </Table>
       </TableContainer>
+
+      <RoleFormModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSuccess={handleModalSuccess}
+      />
     </MainCard>
   );
 }

@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import MainCard from 'components/MainCard';
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -11,18 +9,17 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { createPermission, getPermissions } from 'api/permission';
+import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import { getPermissions } from 'api/permission';
+import PermissionFormModal from 'components/forms/PermissionFormModal';
 
 export default function PermissionPage() {
-  const [form, setForm] = useState({
-    roleId: '',
-    functionId: '',
-    actionId: ''
-  });
   const [permissions, setPermissions] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
 
   const fetchPermissions = async () => {
     setLoading(true);
@@ -39,103 +36,124 @@ export default function PermissionPage() {
     fetchPermissions();
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    const res = await createPermission(form);
-    if (res.data) {
-      setForm({ roleId: '', functionId: '', actionId: '' });
-      await fetchPermissions();
-    } else {
-      setError(res.error?.message || 'Tạo permission thất bại');
-      setLoading(false);
-    }
+  const handleModalSuccess = () => {
+    fetchPermissions();
   };
 
   return (
-    <MainCard title="Permission Management">
+    <MainCard 
+      title="Permission Management"
+      secondary={
+        <Button
+          variant="contained"
+          startIcon={<VpnKeyIcon />}
+          onClick={() => setModalOpen(true)}
+          color="primary"
+          size="medium"
+        >
+          Thêm Permission Mới
+        </Button>
+      }
+    >
       {loading && <LinearProgress sx={{ mb: 2 }} />}
-      <Typography variant="h6" sx={{ mb: 2 }}>
-        Thêm Permission mới
-      </Typography>
-      <form onSubmit={handleSubmit} style={{ marginBottom: 24 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={4}>
-            <TextField label="Role ID" name="roleId" value={form.roleId} onChange={handleChange} fullWidth required disabled={loading} />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <TextField
-              label="Function ID"
-              name="functionId"
-              value={form.functionId}
-              onChange={handleChange}
-              fullWidth
-              required
-              disabled={loading}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <TextField
-              label="Action ID"
-              name="actionId"
-              value={form.actionId}
-              onChange={handleChange}
-              fullWidth
-              required
-              disabled={loading}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Button type="submit" variant="contained" disabled={loading}>
-              Tạo Permission
-            </Button>
-          </Grid>
-        </Grid>
-        {error && (
-          <Typography color="error" sx={{ mt: 1 }}>
-            {error}
-          </Typography>
-        )}
-      </form>
-      <Typography variant="h6" sx={{ mb: 1 }}>
-        Danh sách Permission
-      </Typography>
-      <TableContainer component={Paper}>
+      
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h6" sx={{ mb: 1 }}>
+          Danh sách Permission
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Quản lý các quyền truy cập chức năng trong hệ thống
+        </Typography>
+      </Box>
+
+      <TableContainer component={Paper} sx={{ boxShadow: 1 }}>
         <Table size="small">
           <TableHead>
-            <TableRow>
-              <TableCell>Role ID</TableCell>
-              <TableCell>Function ID</TableCell>
-              <TableCell>Action ID</TableCell>
+            <TableRow sx={{ bgcolor: 'grey.50' }}>
+              <TableCell sx={{ fontWeight: 600 }}>Role ID</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Function ID</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Action ID</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={3}>Đang tải...</TableCell>
+                <TableCell colSpan={3} align="center" sx={{ py: 3 }}>
+                  <Stack alignItems="center" spacing={1}>
+                    <Typography variant="body2">Đang tải...</Typography>
+                  </Stack>
+                </TableCell>
               </TableRow>
             ) : permissions.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={3}>Không có permission nào</TableCell>
+                <TableCell colSpan={3} align="center" sx={{ py: 3 }}>
+                  <Stack alignItems="center" spacing={1}>
+                    <Typography variant="body2" color="text.secondary">
+                      Không có permission nào
+                    </Typography>
+                  </Stack>
+                </TableCell>
               </TableRow>
             ) : (
               permissions.map((p, idx) => (
-                <TableRow key={p.permissionId || idx}>
-                  <TableCell>{p.roleId}</TableCell>
-                  <TableCell>{p.functionId}</TableCell>
-                  <TableCell>{p.actionId}</TableCell>
+                <TableRow key={p.permissionId || idx} hover>
+                  <TableCell>
+                    <Typography 
+                      variant="caption" 
+                      sx={{ 
+                        px: 1.5, 
+                        py: 0.5, 
+                        borderRadius: 1,
+                        bgcolor: 'info.light',
+                        color: 'info.dark',
+                        fontFamily: 'monospace'
+                      }}
+                    >
+                      {p.roleId}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography 
+                      variant="caption" 
+                      sx={{ 
+                        px: 1.5, 
+                        py: 0.5, 
+                        borderRadius: 1,
+                        bgcolor: 'secondary.light',
+                        color: 'secondary.dark',
+                        fontFamily: 'monospace'
+                      }}
+                    >
+                      {p.functionId}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography 
+                      variant="caption" 
+                      sx={{ 
+                        px: 1.5, 
+                        py: 0.5, 
+                        borderRadius: 1,
+                        bgcolor: 'warning.light',
+                        color: 'warning.dark',
+                        fontFamily: 'monospace'
+                      }}
+                    >
+                      {p.actionId}
+                    </Typography>
+                  </TableCell>
                 </TableRow>
               ))
             )}
           </TableBody>
         </Table>
       </TableContainer>
+
+      <PermissionFormModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSuccess={handleModalSuccess}
+      />
     </MainCard>
   );
 }
