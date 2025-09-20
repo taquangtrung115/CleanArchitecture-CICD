@@ -1,4 +1,8 @@
 import axios from './axios';
+import { getNewsMock, getFeaturedNewsMock, getBreakingNewsMock, getNewsByIdMock } from './mockNews';
+
+// Use mock data for demonstration (set to false when backend is available)
+const USE_MOCK_DATA = true;
 
 // Get all news with pagination and filters
 export const getNews = async ({ 
@@ -9,6 +13,10 @@ export const getNews = async ({
   isFeatured = null, 
   isBreaking = null 
 } = {}) => {
+  if (USE_MOCK_DATA) {
+    return getNewsMock({ pageIndex, pageSize, category, searchTerm, isFeatured, isBreaking });
+  }
+
   const params = new URLSearchParams();
   
   params.append('pageIndex', pageIndex.toString());
@@ -30,6 +38,10 @@ export const getNews = async ({
 
 // Get featured news
 export const getFeaturedNews = async (limit = 5) => {
+  if (USE_MOCK_DATA) {
+    return getFeaturedNewsMock(limit);
+  }
+
   try {
     const response = await axios.get(`/api/v1/news/featured?limit=${limit}`);
     return response.data;
@@ -41,6 +53,10 @@ export const getFeaturedNews = async (limit = 5) => {
 
 // Get breaking news
 export const getBreakingNews = async () => {
+  if (USE_MOCK_DATA) {
+    return getBreakingNewsMock();
+  }
+
   try {
     const response = await axios.get('/api/v1/news/breaking');
     return response.data;
@@ -52,6 +68,10 @@ export const getBreakingNews = async () => {
 
 // Get news by category
 export const getNewsByCategory = async (category, pageIndex = 1, pageSize = 10) => {
+  if (USE_MOCK_DATA) {
+    return getNewsMock({ pageIndex, pageSize, category });
+  }
+
   try {
     const response = await axios.get(`/api/v1/news/category/${category}?pageIndex=${pageIndex}&pageSize=${pageSize}`);
     return response.data;
@@ -63,6 +83,10 @@ export const getNewsByCategory = async (category, pageIndex = 1, pageSize = 10) 
 
 // Get news by ID
 export const getNewsById = async (id) => {
+  if (USE_MOCK_DATA) {
+    return getNewsByIdMock(id);
+  }
+
   try {
     const response = await axios.get(`/api/v1/news/${id}`);
     return response.data;
@@ -74,6 +98,17 @@ export const getNewsById = async (id) => {
 
 // Get news by slug
 export const getNewsBySlug = async (slug) => {
+  if (USE_MOCK_DATA) {
+    // For mock, find by slug
+    const mockNews = await getNewsMock({});
+    const news = mockNews.value.items.find(n => n.slug === slug);
+    return {
+      isSuccess: !!news,
+      value: news,
+      error: news ? null : 'News not found'
+    };
+  }
+
   try {
     const response = await axios.get(`/api/v1/news/slug/${slug}`);
     return response.data;
