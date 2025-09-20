@@ -41,22 +41,16 @@ export default function PermissionPage() {
   };
 
   return (
-    <MainCard 
+    <MainCard
       title="Permission Management"
       secondary={
-        <Button
-          variant="contained"
-          startIcon={<VpnKeyIcon />}
-          onClick={() => setModalOpen(true)}
-          color="primary"
-          size="medium"
-        >
+        <Button variant="contained" startIcon={<VpnKeyIcon />} onClick={() => setModalOpen(true)} color="primary" size="medium">
           Thêm Permission Mới
         </Button>
       }
     >
       {loading && <LinearProgress sx={{ mb: 2 }} />}
-      
+
       <Box sx={{ mb: 3 }}>
         <Typography variant="h6" sx={{ mb: 1 }}>
           Danh sách Permission
@@ -98,11 +92,11 @@ export default function PermissionPage() {
               permissions.map((p, idx) => (
                 <TableRow key={p.permissionId || idx} hover>
                   <TableCell>
-                    <Typography 
-                      variant="caption" 
-                      sx={{ 
-                        px: 1.5, 
-                        py: 0.5, 
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        px: 1.5,
+                        py: 0.5,
                         borderRadius: 1,
                         bgcolor: 'info.light',
                         color: 'info.dark',
@@ -113,11 +107,11 @@ export default function PermissionPage() {
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography 
-                      variant="caption" 
-                      sx={{ 
-                        px: 1.5, 
-                        py: 0.5, 
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        px: 1.5,
+                        py: 0.5,
                         borderRadius: 1,
                         bgcolor: 'secondary.light',
                         color: 'secondary.dark',
@@ -128,11 +122,11 @@ export default function PermissionPage() {
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography 
-                      variant="caption" 
-                      sx={{ 
-                        px: 1.5, 
-                        py: 0.5, 
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        px: 1.5,
+                        py: 0.5,
                         borderRadius: 1,
                         bgcolor: 'warning.light',
                         color: 'warning.dark',
@@ -149,11 +143,7 @@ export default function PermissionPage() {
         </Table>
       </TableContainer>
 
-      <PermissionFormModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onSuccess={handleModalSuccess}
-      />
+      <PermissionFormModal open={modalOpen} onClose={() => setModalOpen(false)} onSuccess={handleModalSuccess} />
     </MainCard>
   );
 }

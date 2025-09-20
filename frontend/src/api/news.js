@@ -101,7 +101,7 @@ export const getNewsBySlug = async (slug) => {
   if (USE_MOCK_DATA) {
     // For mock, find by slug
     const mockNews = await getNewsMock({});
-    const news = mockNews.value.items.find(n => n.slug === slug);
+    const news = mockNews.value.items.find((n) => n.slug === slug);
     return {
       isSuccess: !!news,
       value: news,

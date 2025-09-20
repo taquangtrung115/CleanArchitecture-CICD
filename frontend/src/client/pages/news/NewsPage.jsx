@@ -83,10 +83,7 @@ export default function NewsPage() {
   // Fetch featured and breaking news
   const fetchSpecialNews = async () => {
     try {
-      const [featuredResponse, breakingResponse] = await Promise.all([
-        getFeaturedNews(3),
-        getBreakingNews()
-      ]);
+      const [featuredResponse, breakingResponse] = await Promise.all([getFeaturedNews(3), getBreakingNews()]);
 
       if (featuredResponse.isSuccess) {
         setFeaturedNews(featuredResponse.value || []);
@@ -460,7 +457,7 @@ export default function NewsPage() {
             <Typography variant="h4" sx={{ fontWeight: 700, mb: 3, color: 'white' }}>
               {selectedCategory ? `${selectedCategory} News` : searchTerm ? `Search Results for "${searchTerm}"` : 'Latest News'}
             </Typography>
-            
+
             {loading ? (
               <LoadingSkeleton />
             ) : news.length > 0 ? (
@@ -485,12 +482,7 @@ export default function NewsPage() {
         {!loading && news.length > 0 && (
           <Fade in timeout={1800}>
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-              <Pagination
-                page={currentPage}
-                pageSize={pageSize}
-                total={totalCount}
-                onChange={handlePageChange}
-              />
+              <Pagination page={currentPage} pageSize={pageSize} total={totalCount} onChange={handlePageChange} />
             </Box>
           </Fade>
         )}

@@ -47,15 +47,7 @@ import {
   Article as ArticleIcon,
   Note as DraftIcon
 } from '@mui/icons-material';
-import {
-  getNews,
-  createNews,
-  updateNews,
-  deleteNews,
-  publishNews,
-  archiveNews,
-  NewsCategories
-} from '../../api/news';
+import { getNews, createNews, updateNews, deleteNews, publishNews, archiveNews, NewsCategories } from '../../api/news';
 import Pagination from '../../components/Shared/Pagination';
 
 const NewsManagementPage = () => {
@@ -101,7 +93,7 @@ const NewsManagementPage = () => {
         pageSize,
         category: selectedFilter || null
       };
-      
+
       const response = await getNews(params);
       if (response.isSuccess) {
         setNews(response.value.items || []);
@@ -153,10 +145,15 @@ const NewsManagementPage = () => {
     try {
       setLoading(true);
       setError('');
-      
+
       const newsData = {
         ...formData,
-        tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag) : []
+        tags: formData.tags
+          ? formData.tags
+              .split(',')
+              .map((tag) => tag.trim())
+              .filter((tag) => tag)
+          : []
       };
 
       let response;
@@ -184,7 +181,7 @@ const NewsManagementPage = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this news?')) return;
-    
+
     try {
       setLoading(true);
       const response = await deleteNews(id);
@@ -281,13 +278,7 @@ const NewsManagementPage = () => {
       <DialogContent>
         <Grid container spacing={2} sx={{ mt: 1 }}>
           <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Title"
-              value={formData.title}
-              onChange={(e) => handleTitleChange(e.target.value)}
-              required
-            />
+            <TextField fullWidth label="Title" value={formData.title} onChange={(e) => handleTitleChange(e.target.value)} required />
           </Grid>
           <Grid item xs={12}>
             <TextField
@@ -314,13 +305,11 @@ const NewsManagementPage = () => {
           <Grid item xs={6}>
             <FormControl fullWidth>
               <InputLabel>Category</InputLabel>
-              <Select
-                value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                label="Category"
-              >
+              <Select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} label="Category">
                 {Object.entries(NewsCategories).map(([key, value]) => (
-                  <MenuItem key={key} value={value}>{value}</MenuItem>
+                  <MenuItem key={key} value={value}>
+                    {value}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -363,10 +352,7 @@ const NewsManagementPage = () => {
           <Grid item xs={6}>
             <FormControlLabel
               control={
-                <Switch
-                  checked={formData.isFeatured}
-                  onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
-                />
+                <Switch checked={formData.isFeatured} onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })} />
               }
               label="Featured"
             />
@@ -374,10 +360,7 @@ const NewsManagementPage = () => {
           <Grid item xs={6}>
             <FormControlLabel
               control={
-                <Switch
-                  checked={formData.isBreaking}
-                  onChange={(e) => setFormData({ ...formData, isBreaking: e.target.checked })}
-                />
+                <Switch checked={formData.isBreaking} onChange={(e) => setFormData({ ...formData, isBreaking: e.target.checked })} />
               }
               label="Breaking News"
             />
@@ -388,13 +371,8 @@ const NewsManagementPage = () => {
         <Button onClick={onClose} startIcon={<CancelIcon />}>
           Cancel
         </Button>
-        <Button 
-          onClick={handleSubmit} 
-          variant="contained" 
-          startIcon={<SaveIcon />}
-          disabled={loading}
-        >
-          {loading ? <CircularProgress size={20} /> : (selectedNews ? 'Update' : 'Create')}
+        <Button onClick={handleSubmit} variant="contained" startIcon={<SaveIcon />} disabled={loading}>
+          {loading ? <CircularProgress size={20} /> : selectedNews ? 'Update' : 'Create'}
         </Button>
       </DialogActions>
     </Dialog>
@@ -409,12 +387,7 @@ const NewsManagementPage = () => {
             <ArticleIcon sx={{ fontSize: 40, color: 'primary.main' }} />
             News Management
           </Typography>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={handleCreate}
-            sx={{ ml: 'auto' }}
-          >
+          <Button variant="contained" startIcon={<AddIcon />} onClick={handleCreate} sx={{ ml: 'auto' }}>
             Create News
           </Button>
         </Box>
@@ -438,14 +411,12 @@ const NewsManagementPage = () => {
               <Grid item xs={12} sm={6} md={4}>
                 <FormControl fullWidth>
                   <InputLabel>Filter by Category</InputLabel>
-                  <Select
-                    value={selectedFilter}
-                    onChange={(e) => setSelectedFilter(e.target.value)}
-                    label="Filter by Category"
-                  >
+                  <Select value={selectedFilter} onChange={(e) => setSelectedFilter(e.target.value)} label="Filter by Category">
                     <MenuItem value="">All Categories</MenuItem>
                     {Object.entries(NewsCategories).map(([key, value]) => (
-                      <MenuItem key={key} value={value}>{value}</MenuItem>
+                      <MenuItem key={key} value={value}>
+                        {value}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -487,80 +458,48 @@ const NewsManagementPage = () => {
                       <TableRow key={newsItem.id}>
                         <TableCell>
                           <Box>
-                            <Typography variant="subtitle2">
-                              {newsItem.title}
-                            </Typography>
+                            <Typography variant="subtitle2">{newsItem.title}</Typography>
                             <Typography variant="caption" color="text.secondary">
                               {newsItem.slug}
                             </Typography>
-                            {newsItem.isFeatured && (
-                              <Chip size="small" label="Featured" color="primary" sx={{ ml: 1 }} />
-                            )}
-                            {newsItem.isBreaking && (
-                              <Chip size="small" label="Breaking" color="error" sx={{ ml: 1 }} />
-                            )}
+                            {newsItem.isFeatured && <Chip size="small" label="Featured" color="primary" sx={{ ml: 1 }} />}
+                            {newsItem.isBreaking && <Chip size="small" label="Breaking" color="error" sx={{ ml: 1 }} />}
                           </Box>
                         </TableCell>
                         <TableCell>
-                          <Chip 
-                            label={newsItem.category} 
-                            variant="outlined" 
-                            size="small" 
-                          />
+                          <Chip label={newsItem.category} variant="outlined" size="small" />
                         </TableCell>
                         <TableCell>
-                          <Chip 
-                            label={newsItem.status} 
-                            color={getStatusColor(newsItem.status)}
-                            size="small"
-                          />
+                          <Chip label={newsItem.status} color={getStatusColor(newsItem.status)} size="small" />
                         </TableCell>
-                        <TableCell>
-                          {formatDate(newsItem.publishedDate || newsItem.createdDate)}
-                        </TableCell>
+                        <TableCell>{formatDate(newsItem.publishedDate || newsItem.createdDate)}</TableCell>
                         <TableCell>{newsItem.viewCount || 0}</TableCell>
                         <TableCell>
                           <Stack direction="row" spacing={1}>
                             <Tooltip title="Edit">
-                              <IconButton
-                                size="small"
-                                onClick={() => handleEdit(newsItem)}
-                                color="primary"
-                              >
+                              <IconButton size="small" onClick={() => handleEdit(newsItem)} color="primary">
                                 <EditIcon />
                               </IconButton>
                             </Tooltip>
-                            
+
                             {newsItem.status === 'Draft' && (
                               <Tooltip title="Publish">
-                                <IconButton
-                                  size="small"
-                                  onClick={() => handlePublish(newsItem.id)}
-                                  color="success"
-                                >
+                                <IconButton size="small" onClick={() => handlePublish(newsItem.id)} color="success">
                                   <PublishIcon />
                                 </IconButton>
                               </Tooltip>
                             )}
-                            
+
                             {newsItem.status === 'Published' && (
                               <Tooltip title="Archive">
-                                <IconButton
-                                  size="small"
-                                  onClick={() => handleArchive(newsItem.id)}
-                                  color="warning"
-                                >
+                                <IconButton size="small" onClick={() => handleArchive(newsItem.id)} color="warning">
                                   <ArchiveIcon />
                                 </IconButton>
                               </Tooltip>
                             )}
-                            
+
                             <Tooltip title="Delete">
-                              <IconButton
-                                size="small"
-                                onClick={() => handleDelete(newsItem.id)}
-                                color="error"
-                              >
+                              <IconButton size="small" onClick={() => handleDelete(newsItem.id)} color="error">
                                 <DeleteIcon />
                               </IconButton>
                             </Tooltip>
@@ -576,28 +515,15 @@ const NewsManagementPage = () => {
             {/* Pagination */}
             {totalCount > pageSize && (
               <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
-                <Pagination
-                  currentPage={currentPage}
-                  totalCount={totalCount}
-                  pageSize={pageSize}
-                  onPageChange={setCurrentPage}
-                />
+                <Pagination currentPage={currentPage} totalCount={totalCount} pageSize={pageSize} onPageChange={setCurrentPage} />
               </Box>
             )}
           </CardContent>
         </Card>
 
         {/* Dialogs */}
-        <NewsDialog
-          open={isCreateDialogOpen}
-          onClose={() => setIsCreateDialogOpen(false)}
-          title="Create News"
-        />
-        <NewsDialog
-          open={isEditDialogOpen}
-          onClose={() => setIsEditDialogOpen(false)}
-          title="Edit News"
-        />
+        <NewsDialog open={isCreateDialogOpen} onClose={() => setIsCreateDialogOpen(false)} title="Create News" />
+        <NewsDialog open={isEditDialogOpen} onClose={() => setIsEditDialogOpen(false)} title="Edit News" />
       </Box>
     </Container>
   );

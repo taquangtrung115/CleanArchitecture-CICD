@@ -41,22 +41,16 @@ export default function UserPage() {
   };
 
   return (
-    <MainCard 
+    <MainCard
       title="User Management"
       secondary={
-        <Button
-          variant="contained"
-          startIcon={<PersonAddIcon />}
-          onClick={() => setModalOpen(true)}
-          color="primary"
-          size="medium"
-        >
+        <Button variant="contained" startIcon={<PersonAddIcon />} onClick={() => setModalOpen(true)} color="primary" size="medium">
           Thêm User Mới
         </Button>
       }
     >
       {loading && <LinearProgress sx={{ mb: 2 }} />}
-      
+
       <Box sx={{ mb: 3 }}>
         <Typography variant="h6" sx={{ mb: 1 }}>
           Danh sách User
@@ -102,11 +96,11 @@ export default function UserPage() {
                   <TableCell>{u.email}</TableCell>
                   <TableCell>{u.fullName}</TableCell>
                   <TableCell>
-                    <Typography 
-                      variant="caption" 
-                      sx={{ 
-                        px: 1.5, 
-                        py: 0.5, 
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        px: 1.5,
+                        py: 0.5,
                         borderRadius: 1,
                         bgcolor: u.isLocked ? 'error.light' : 'success.light',
                         color: u.isLocked ? 'error.dark' : 'success.dark'
@@ -122,11 +116,7 @@ export default function UserPage() {
         </Table>
       </TableContainer>
 
-      <UserFormModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onSuccess={handleModalSuccess}
-      />
+      <UserFormModal open={modalOpen} onClose={() => setModalOpen(false)} onSuccess={handleModalSuccess} />
     </MainCard>
   );
 }

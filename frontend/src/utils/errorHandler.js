@@ -10,17 +10,17 @@ export const handleApiError = (error) => {
   // Check if this is an axios error with response
   if (error.response) {
     const { status, data } = error.response;
-    
+
     // Extract error information from the response
     const errorInfo = extractErrorInfo(data);
-    
+
     return {
       data: null,
       status: status,
       error: errorInfo
     };
   }
-  
+
   // Network error or request setup error
   return {
     data: null,
@@ -50,7 +50,7 @@ const extractErrorInfo = (data) => {
         errors: data.errors || null
       };
     }
-    
+
     // Legacy format or different error structure
     if (data.error) {
       if (typeof data.error === 'string') {
@@ -61,7 +61,7 @@ const extractErrorInfo = (data) => {
           errors: null
         };
       }
-      
+
       if (typeof data.error === 'object') {
         return {
           title: data.error.title || 'Error',
@@ -71,7 +71,7 @@ const extractErrorInfo = (data) => {
         };
       }
     }
-    
+
     // If data is the error message itself
     if (typeof data === 'string') {
       return {
@@ -82,7 +82,7 @@ const extractErrorInfo = (data) => {
       };
     }
   }
-  
+
   // Fallback
   return {
     title: 'Error',
@@ -101,16 +101,16 @@ export const formatValidationErrors = (errors) => {
   if (!errors || !Array.isArray(errors)) {
     return [];
   }
-  
-  return errors.map(error => {
+
+  return errors.map((error) => {
     if (typeof error === 'object' && error.code && error.message) {
       return `${error.code}: ${error.message}`;
     }
-    
+
     if (typeof error === 'string') {
       return error;
     }
-    
+
     return 'Invalid input';
   });
 };
@@ -124,15 +124,15 @@ export const getErrorMessage = (errorResponse) => {
   if (!errorResponse || !errorResponse.error) {
     return 'An unexpected error occurred';
   }
-  
+
   const { error } = errorResponse;
-  
+
   // If there are validation errors, format them
   if (error.errors && Array.isArray(error.errors) && error.errors.length > 0) {
     const validationMessages = formatValidationErrors(error.errors);
     return `${error.detail}\n${validationMessages.join('\n')}`;
   }
-  
+
   // Return the main error detail
   return error.detail || error.title || 'An unexpected error occurred';
 };
@@ -143,11 +143,13 @@ export const getErrorMessage = (errorResponse) => {
  * @returns {boolean} - True if it's a validation error
  */
 export const isValidationError = (errorResponse) => {
-  return errorResponse && 
-         errorResponse.error && 
-         (errorResponse.error.type === 'ValidationError' || 
-          errorResponse.error.title === 'Validation Error' ||
-          (errorResponse.error.errors && Array.isArray(errorResponse.error.errors)));
+  return (
+    errorResponse &&
+    errorResponse.error &&
+    (errorResponse.error.type === 'ValidationError' ||
+      errorResponse.error.title === 'Validation Error' ||
+      (errorResponse.error.errors && Array.isArray(errorResponse.error.errors)))
+  );
 };
 
 /**
@@ -158,7 +160,7 @@ export const isValidationError = (errorResponse) => {
 export const showErrorNotification = (errorResponse, notificationFunction) => {
   const message = getErrorMessage(errorResponse);
   const isValidation = isValidationError(errorResponse);
-  
+
   if (notificationFunction) {
     notificationFunction({
       type: isValidation ? 'warning' : 'error',

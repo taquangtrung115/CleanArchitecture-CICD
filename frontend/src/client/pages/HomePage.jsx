@@ -36,7 +36,7 @@ export default function HomePage() {
 
   return (
     <Fade in={show} timeout={900}>
-      <Box sx={{ bgcolor: '#101014', minHeight: '100vh', pb: 8, fontFamily: 'Oswald, Arial Black, sans-serif' }}>
+      <Box sx={{ bgcolor: '#101014', minHeight: '100vh', pb: 8, fontFamily: 'Oswald, Arial Black, sans-serif', overflow: 'hidden' }}>
         {/* <MotoGPHeader /> */}
         {/* Banner motogp.com style */}
         <Box
@@ -46,18 +46,14 @@ export default function HomePage() {
             borderRadius: 0,
             overflow: 'hidden',
             minHeight: 420,
-            width: '100vw',
-            left: '50%',
-            right: '50%',
-            ml: '-50vw',
-            mr: '-50vw',
-            maxWidth: '100vw'
+            width: '100%',
+            mx: 0
           }}
         >
           <img
             src={bannerImg}
             alt="MotoGP Banner"
-            style={{ width: '100vw', minHeight: 420, objectFit: 'cover', filter: 'brightness(0.7) saturate(1.2)' }}
+            style={{ width: '100%', minHeight: 420, objectFit: 'cover', filter: 'brightness(0.7) saturate(1.2)' }}
           />
           {/* Overlay đỏ sự kiện */}
           <Box
@@ -116,212 +112,214 @@ export default function HomePage() {
         </Box>
 
         {/* Featured Sections */}
-        <Grid container spacing={5} sx={{ px: { xs: 1, md: 6 } }}>
-          <Grid item xs={12} md={4}>
-            <Fade in={show} timeout={1200}>
-              <Card
-                sx={{
-                  borderRadius: 8,
-                  boxShadow: 12,
-                  bgcolor: '#181A1B',
-                  color: '#fff',
-                  p: 2,
-                  minHeight: 370,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  transition: 'transform 0.3s, box-shadow 0.3s',
-                  '&:hover': { transform: 'scale(1.06)', boxShadow: '0 0 0 4px #e10600, 0 12px 48px #000', border: '2px solid #e10600' }
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  height="180"
-                  image={race1Img}
-                  alt="Race"
-                  sx={{ filter: 'saturate(1.2) contrast(1.1)', borderRadius: 4, mb: 1 }}
-                />
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    variant="h5"
-                    component="div"
-                    sx={{
-                      fontWeight: 900,
-                      color: '#e10600',
-                      fontFamily: 'Oswald, Arial Black, sans-serif',
-                      fontSize: 28,
-                      letterSpacing: 1
-                    }}
-                  >
-                    Latest Races
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: '#eee', fontWeight: 600, fontSize: 18, mb: 2 }}>
-                    Catch up with the latest Grand Prix, results, and race highlights from the MotoGP™ calendar.
-                  </Typography>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    sx={{
-                      mt: 2,
-                      fontWeight: 800,
-                      borderRadius: 8,
-                      borderWidth: 2,
-                      textTransform: 'uppercase',
-                      letterSpacing: 1.5,
-                      fontSize: 16,
-                      px: 3,
-                      py: 1.5,
-                      borderColor: '#e10600',
-                      color: '#e10600',
-                      '&:hover': { bgcolor: '#e10600', color: '#fff', borderColor: '#e10600' }
-                    }}
-                    href="/races"
-                  >
-                    View Races
-                  </Button>
-                </CardContent>
-              </Card>
-            </Fade>
+        <Box sx={{ px: { xs: 2, sm: 3, md: 6 }, maxWidth: '100%' }}>
+          <Grid container spacing={5}>
+            <Grid item xs={12} md={4}>
+              <Fade in={show} timeout={1200}>
+                <Card
+                  sx={{
+                    borderRadius: 8,
+                    boxShadow: 12,
+                    bgcolor: '#181A1B',
+                    color: '#fff',
+                    p: 2,
+                    minHeight: 370,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    transition: 'transform 0.3s, box-shadow 0.3s',
+                    '&:hover': { transform: 'scale(1.06)', boxShadow: '0 0 0 4px #e10600, 0 12px 48px #000', border: '2px solid #e10600' }
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    height="180"
+                    image={race1Img}
+                    alt="Race"
+                    sx={{ filter: 'saturate(1.2) contrast(1.1)', borderRadius: 4, mb: 1 }}
+                  />
+                  <CardContent>
+                    <Typography
+                      gutterBottom
+                      variant="h5"
+                      component="div"
+                      sx={{
+                        fontWeight: 900,
+                        color: '#e10600',
+                        fontFamily: 'Oswald, Arial Black, sans-serif',
+                        fontSize: 28,
+                        letterSpacing: 1
+                      }}
+                    >
+                      Latest Races
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#eee', fontWeight: 600, fontSize: 18, mb: 2 }}>
+                      Catch up with the latest Grand Prix, results, and race highlights from the MotoGP™ calendar.
+                    </Typography>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      sx={{
+                        mt: 2,
+                        fontWeight: 800,
+                        borderRadius: 8,
+                        borderWidth: 2,
+                        textTransform: 'uppercase',
+                        letterSpacing: 1.5,
+                        fontSize: 16,
+                        px: 3,
+                        py: 1.5,
+                        borderColor: '#e10600',
+                        color: '#e10600',
+                        '&:hover': { bgcolor: '#e10600', color: '#fff', borderColor: '#e10600' }
+                      }}
+                      href="/races"
+                    >
+                      View Races
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Fade>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Fade in={show} timeout={1400}>
+                <Card
+                  sx={{
+                    borderRadius: 8,
+                    boxShadow: 12,
+                    bgcolor: '#181A1B',
+                    color: '#fff',
+                    p: 2,
+                    minHeight: 370,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    transition: 'transform 0.3s, box-shadow 0.3s',
+                    '&:hover': { transform: 'scale(1.06)', boxShadow: '0 0 0 4px #e10600, 0 12px 48px #000', border: '2px solid #e10600' }
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    height="180"
+                    image={rider1Img}
+                    alt="Rider"
+                    sx={{ filter: 'saturate(1.2) contrast(1.1)', borderRadius: 4, mb: 1 }}
+                  />
+                  <CardContent>
+                    <Typography
+                      gutterBottom
+                      variant="h5"
+                      component="div"
+                      sx={{
+                        fontWeight: 900,
+                        color: '#e10600',
+                        fontFamily: 'Oswald, Arial Black, sans-serif',
+                        fontSize: 28,
+                        letterSpacing: 1
+                      }}
+                    >
+                      Star Riders
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#eee', fontWeight: 600, fontSize: 18, mb: 2 }}>
+                      Meet the world’s fastest riders, their stats, and career highlights in MotoGP™ history.
+                    </Typography>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      sx={{
+                        mt: 2,
+                        fontWeight: 800,
+                        borderRadius: 8,
+                        borderWidth: 2,
+                        textTransform: 'uppercase',
+                        letterSpacing: 1.5,
+                        fontSize: 16,
+                        px: 3,
+                        py: 1.5,
+                        borderColor: '#e10600',
+                        color: '#e10600',
+                        '&:hover': { bgcolor: '#e10600', color: '#fff', borderColor: '#e10600' }
+                      }}
+                      href="/riders"
+                    >
+                      View Riders
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Fade>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Fade in={show} timeout={1600}>
+                <Card
+                  sx={{
+                    borderRadius: 8,
+                    boxShadow: 12,
+                    bgcolor: '#181A1B',
+                    color: '#fff',
+                    p: 2,
+                    minHeight: 370,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    transition: 'transform 0.3s, box-shadow 0.3s',
+                    '&:hover': { transform: 'scale(1.06)', boxShadow: '0 0 0 4px #e10600, 0 12px 48px #000', border: '2px solid #e10600' }
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    height="180"
+                    image={team1Img}
+                    alt="Team"
+                    sx={{ filter: 'saturate(1.2) contrast(1.1)', borderRadius: 4, mb: 1 }}
+                  />
+                  <CardContent>
+                    <Typography
+                      gutterBottom
+                      variant="h5"
+                      component="div"
+                      sx={{
+                        fontWeight: 900,
+                        color: '#e10600',
+                        fontFamily: 'Oswald, Arial Black, sans-serif',
+                        fontSize: 28,
+                        letterSpacing: 1
+                      }}
+                    >
+                      Top Teams
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#eee', fontWeight: 600, fontSize: 18, mb: 2 }}>
+                      Discover legendary MotoGP™ teams, their history, and their quest for championship glory.
+                    </Typography>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      sx={{
+                        mt: 2,
+                        fontWeight: 800,
+                        borderRadius: 8,
+                        borderWidth: 2,
+                        textTransform: 'uppercase',
+                        letterSpacing: 1.5,
+                        fontSize: 16,
+                        px: 3,
+                        py: 1.5,
+                        borderColor: '#e10600',
+                        color: '#e10600',
+                        '&:hover': { bgcolor: '#e10600', color: '#fff', borderColor: '#e10600' }
+                      }}
+                      href="/teams"
+                    >
+                      View Teams
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Fade>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={4}>
-            <Fade in={show} timeout={1400}>
-              <Card
-                sx={{
-                  borderRadius: 8,
-                  boxShadow: 12,
-                  bgcolor: '#181A1B',
-                  color: '#fff',
-                  p: 2,
-                  minHeight: 370,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  transition: 'transform 0.3s, box-shadow 0.3s',
-                  '&:hover': { transform: 'scale(1.06)', boxShadow: '0 0 0 4px #e10600, 0 12px 48px #000', border: '2px solid #e10600' }
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  height="180"
-                  image={rider1Img}
-                  alt="Rider"
-                  sx={{ filter: 'saturate(1.2) contrast(1.1)', borderRadius: 4, mb: 1 }}
-                />
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    variant="h5"
-                    component="div"
-                    sx={{
-                      fontWeight: 900,
-                      color: '#e10600',
-                      fontFamily: 'Oswald, Arial Black, sans-serif',
-                      fontSize: 28,
-                      letterSpacing: 1
-                    }}
-                  >
-                    Star Riders
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: '#eee', fontWeight: 600, fontSize: 18, mb: 2 }}>
-                    Meet the world’s fastest riders, their stats, and career highlights in MotoGP™ history.
-                  </Typography>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    sx={{
-                      mt: 2,
-                      fontWeight: 800,
-                      borderRadius: 8,
-                      borderWidth: 2,
-                      textTransform: 'uppercase',
-                      letterSpacing: 1.5,
-                      fontSize: 16,
-                      px: 3,
-                      py: 1.5,
-                      borderColor: '#e10600',
-                      color: '#e10600',
-                      '&:hover': { bgcolor: '#e10600', color: '#fff', borderColor: '#e10600' }
-                    }}
-                    href="/riders"
-                  >
-                    View Riders
-                  </Button>
-                </CardContent>
-              </Card>
-            </Fade>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Fade in={show} timeout={1600}>
-              <Card
-                sx={{
-                  borderRadius: 8,
-                  boxShadow: 12,
-                  bgcolor: '#181A1B',
-                  color: '#fff',
-                  p: 2,
-                  minHeight: 370,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  transition: 'transform 0.3s, box-shadow 0.3s',
-                  '&:hover': { transform: 'scale(1.06)', boxShadow: '0 0 0 4px #e10600, 0 12px 48px #000', border: '2px solid #e10600' }
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  height="180"
-                  image={team1Img}
-                  alt="Team"
-                  sx={{ filter: 'saturate(1.2) contrast(1.1)', borderRadius: 4, mb: 1 }}
-                />
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    variant="h5"
-                    component="div"
-                    sx={{
-                      fontWeight: 900,
-                      color: '#e10600',
-                      fontFamily: 'Oswald, Arial Black, sans-serif',
-                      fontSize: 28,
-                      letterSpacing: 1
-                    }}
-                  >
-                    Top Teams
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: '#eee', fontWeight: 600, fontSize: 18, mb: 2 }}>
-                    Discover legendary MotoGP™ teams, their history, and their quest for championship glory.
-                  </Typography>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    sx={{
-                      mt: 2,
-                      fontWeight: 800,
-                      borderRadius: 8,
-                      borderWidth: 2,
-                      textTransform: 'uppercase',
-                      letterSpacing: 1.5,
-                      fontSize: 16,
-                      px: 3,
-                      py: 1.5,
-                      borderColor: '#e10600',
-                      color: '#e10600',
-                      '&:hover': { bgcolor: '#e10600', color: '#fff', borderColor: '#e10600' }
-                    }}
-                    href="/teams"
-                  >
-                    View Teams
-                  </Button>
-                </CardContent>
-              </Card>
-            </Fade>
-          </Grid>
-        </Grid>
+        </Box>
 
         {/* Latest News Section */}
-        <Box sx={{ mt: 6, mb: 4 }}>
+        <Box sx={{ mt: 6, mb: 4, px: { xs: 2, sm: 3, md: 6 }, maxWidth: '100%' }}>
           <Typography variant="h4" sx={{ fontWeight: 800, mb: 2, color: '#e10600' }}>
             Latest News
           </Typography>
@@ -376,7 +374,7 @@ export default function HomePage() {
 
         {/* Upcoming Races Section */}
         <Fade in={show} timeout={1200}>
-          <Box sx={{ mt: 6, mb: 4 }}>
+          <Box sx={{ mt: 6, mb: 4, px: { xs: 2, sm: 3, md: 6 }, maxWidth: '100%' }}>
             <Typography
               variant="h4"
               sx={{ fontWeight: 900, mb: 2, color: '#e10600', fontFamily: 'Oswald, Arial Black, sans-serif', letterSpacing: 1 }}
@@ -454,7 +452,7 @@ export default function HomePage() {
 
         {/* Featured Video Section */}
         <Fade in={show} timeout={1500}>
-          <Box sx={{ mt: 6, mb: 4 }}>
+          <Box sx={{ mt: 6, mb: 4, px: { xs: 2, sm: 3, md: 6 }, maxWidth: '100%' }}>
             <Typography
               variant="h4"
               sx={{ fontWeight: 900, mb: 2, color: '#e10600', fontFamily: 'Oswald, Arial Black, sans-serif', letterSpacing: 1 }}
