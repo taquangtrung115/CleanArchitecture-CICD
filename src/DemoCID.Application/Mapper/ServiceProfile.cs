@@ -74,6 +74,40 @@ public class ServiceProfile : Profile
 
         CreateMap<PagedResult<Race>, PagedResult<Contract.Services.V1.MotoGP.Race.Response.RaceResponse>>();
 
+        CreateMap<Race, Contract.Services.V1.MotoGP.Race.Response.RaceWithResultsResponse>()
+            .ForMember(dest => dest.SeasonYear, opt => opt.Ignore()) // Will be handled in query handler
+            .ForMember(dest => dest.CountryCode, opt => opt.MapFrom(src => src.Country.Code))
+            .ForMember(dest => dest.CountryName, opt => opt.MapFrom(src => src.Country.Name))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.CreatedAt))
+            .ForMember(dest => dest.ModifiedDate, opt => opt.MapFrom(src => src.UpdatedAt))
+            .ForMember(dest => dest.Results, opt => opt.MapFrom(src => src.RaceEntries.Where(e => e.Result != null).OrderBy(e => e.Result!.Position)));
+
+        CreateMap<RaceEntry, Contract.Services.V1.MotoGP.Race.Response.RaceResultResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.RaceId, opt => opt.MapFrom(src => src.RaceId))
+            .ForMember(dest => dest.RiderId, opt => opt.MapFrom(src => src.RiderId))
+            .ForMember(dest => dest.RiderName, opt => opt.Ignore()) // Will be handled in query handler
+            .ForMember(dest => dest.RiderNumber, opt => opt.Ignore()) // Will be handled in query handler
+            .ForMember(dest => dest.TeamId, opt => opt.MapFrom(src => src.TeamId))
+            .ForMember(dest => dest.TeamName, opt => opt.Ignore()) // Will be handled in query handler
+            .ForMember(dest => dest.BikeId, opt => opt.MapFrom(src => src.BikeId))
+            .ForMember(dest => dest.BikeModel, opt => opt.Ignore()) // Will be handled in query handler
+            .ForMember(dest => dest.StartingPosition, opt => opt.MapFrom(src => src.StartingGrid))
+            .ForMember(dest => dest.FinishPosition, opt => opt.MapFrom(src => src.Result != null ? src.Result.Position : (int?)null))
+            .ForMember(dest => dest.FinishTime, opt => opt.MapFrom(src => src.Result != null ? src.Result.RaceTime : (TimeSpan?)null))
+            .ForMember(dest => dest.BestLapTime, opt => opt.MapFrom(src => src.FastestLapTime))
+            .ForMember(dest => dest.PointsEarned, opt => opt.MapFrom(src => src.Result != null ? src.Result.Points : (int?)null))
+            .ForMember(dest => dest.IsFinisher, opt => opt.MapFrom(src => src.Result != null && src.Result.IsFinisher))
+            .ForMember(dest => dest.Notes, opt => opt.MapFrom(src => src.Result != null ? src.Result.Reason : src.Notes));
+
+        CreateMap<RaceEntry, Contract.Services.V1.MotoGP.Race.Response.RaceEntryResponse>()
+            .ForMember(dest => dest.RiderName, opt => opt.Ignore()) // Will be handled in query handler
+            .ForMember(dest => dest.RiderNumber, opt => opt.Ignore()) // Will be handled in query handler
+            .ForMember(dest => dest.TeamName, opt => opt.Ignore()) // Will be handled in query handler
+            .ForMember(dest => dest.BikeModel, opt => opt.Ignore()) // Will be handled in query handler
+            .ForMember(dest => dest.StartingPosition, opt => opt.MapFrom(src => src.StartingGrid));
+
         // Season mappings
         CreateMap<Season, Contract.Services.V1.MotoGP.Season.Response.SeasonResponse>()
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.StartDate <= DateTime.Now && src.EndDate >= DateTime.Now))
