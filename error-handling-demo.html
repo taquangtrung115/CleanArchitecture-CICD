@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Handling Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .error-demo {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        .error-display {
+            color: red;
+            margin-top: 8px;
+            padding: 8px;
+            background-color: #ffebee;
+            border: 1px solid #f44336;
+            border-radius: 4px;
+        }
+        .validation-errors {
+            color: #e65100;
+            margin-top: 8px;
+            padding: 8px;
+            background-color: #fff3e0;
+            border: 1px solid #ff9800;
+            border-radius: 4px;
+        }
+        .success {
+            color: green;
+            background-color: #e8f5e8;
+            border-color: #4caf50;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .json-display {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Error Handling Demo</h1>
+    <p>This demo shows how the error handling utility processes different types of API responses:</p>
+
+    <div class="error-demo">
+        <h3>1. Validation Error Response (Password too short)</h3>
+        <button onclick="simulateValidationError()">Simulate Validation Error</button>
+        <div id="validation-result"></div>
+    </div>
+
+    <div class="error-demo">
+        <h3>2. General Error Response</h3>
+        <button onclick="simulateGeneralError()">Simulate General Error</button>
+        <div id="general-result"></div>
+    </div>
+
+    <div class="error-demo">
+        <h3>3. Network Error</h3>
+        <button onclick="simulateNetworkError()">Simulate Network Error</button>
+        <div id="network-result"></div>
+    </div>
+
+    <div class="error-demo">
+        <h3>4. Success Response</h3>
+        <button onclick="simulateSuccess()">Simulate Success</button>
+        <div id="success-result"></div>
+    </div>
+
+    <script>
+        // Simulated error handler functions (based on the frontend utility)
+        const handleApiError = (error) => {
+            if (error.response) {
+                const { status, data } = error.response;
+                const errorInfo = extractErrorInfo(data);
+                return {
+                    data: null,
+                    status: status,
+                    error: errorInfo
+                };
+            }
+            
+            return {
+                data: null,
+                status: 500,
+                error: {
+                    title: 'Network Error',
+                    detail: error.message || 'Unable to connect to server',
+                    errors: null
+                }
+            };
+        };
+
+        const extractErrorInfo = (data) => {
+            if (data && typeof data === 'object') {
+                if (data.title && data.detail) {
+                    return {
+                        title: data.title,
+                        type: data.type || 'Error',
+                        detail: data.detail,
+                        errors: data.errors || null
+                    };
+                }
+            }
+            
+            return {
+                title: 'Error',
+                type: 'Error',
+                detail: 'An unexpected error occurred',
+                errors: null
+            };
+        };
+
+        const formatValidationErrors = (errors) => {
+            if (!errors || !Array.isArray(errors)) {
+                return [];
+            }
+            
+            return errors.map(error => {
+                if (typeof error === 'object' && error.code && error.message) {
+                    return `${error.code}: ${error.message}`;
+                }
+                return error;
+            });
+        };
+
+        const isValidationError = (errorResponse) => {
+            return errorResponse && 
+                   errorResponse.error && 
+                   (errorResponse.error.type === 'ValidationError' || 
+                    errorResponse.error.title === 'Validation Error' ||
+                    (errorResponse.error.errors && Array.isArray(errorResponse.error.errors)));
+        };
+
+        const displayResult = (containerId, result) => {
+            const container = document.getElementById(containerId);
+            
+            // Show the raw response
+            const jsonDisplay = document.createElement('div');
+            jsonDisplay.className = 'json-display';
+            jsonDisplay.textContent = 'API Response:\n' + JSON.stringify(result, null, 2);
+            
+            // Show formatted error display
+            const errorDisplay = document.createElement('div');
+            if (result.error) {
+                if (isValidationError(result)) {
+                    errorDisplay.className = 'validation-errors';
+                    errorDisplay.innerHTML = `
+                        <strong>Validation Errors:</strong><br>
+                        ${result.error.detail}<br>
+                        <ul style="margin: 4px 0; padding-left: 20px;">
+                            ${formatValidationErrors(result.error.errors).map(err => `<li>${err}</li>`).join('')}
+                        </ul>
+                    `;
+                } else {
+                    errorDisplay.className = 'error-display';
+                    errorDisplay.textContent = result.error.detail || result.error.title;
+                }
+            } else {
+                errorDisplay.className = 'success';
+                errorDisplay.textContent = 'Success!';
+            }
+            
+            container.innerHTML = '';
+            container.appendChild(jsonDisplay);
+            container.appendChild(errorDisplay);
+        };
+
+        // Simulation functions
+        function simulateValidationError() {
+            const mockError = {
+                response: {
+                    status: 400,
+                    data: {
+                        type: "ValidationError",
+                        title: "Validation Error",
+                        status: 400,
+                        detail: "A validation problem occurred.",
+                        errors: [
+                            {
+                                code: "Password",
+                                message: "Password must be at least 6 characters"
+                            },
+                            {
+                                code: "Email",
+                                message: "Email format is invalid"
+                            }
+                        ]
+                    }
+                }
+            };
+            
+            const result = handleApiError(mockError);
+            displayResult('validation-result', result);
+        }
+
+        function simulateGeneralError() {
+            const mockError = {
+                response: {
+                    status: 404,
+                    data: {
+                        title: "Not Found",
+                        detail: "The requested resource was not found",
+                        status: 404
+                    }
+                }
+            };
+            
+            const result = handleApiError(mockError);
+            displayResult('general-result', result);
+        }
+
+        function simulateNetworkError() {
+            const mockError = {
+                message: "Network Error: Connection timeout"
+            };
+            
+            const result = handleApiError(mockError);
+            displayResult('network-result', result);
+        }
+
+        function simulateSuccess() {
+            const successResult = {
+                data: { message: "Operation completed successfully" },
+                status: 200,
+                error: null
+            };
+            
+            displayResult('success-result', successResult);
+        }
+    </script>
+</body>
+</html>
