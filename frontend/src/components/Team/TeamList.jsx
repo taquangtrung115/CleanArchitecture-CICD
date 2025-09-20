@@ -10,7 +10,18 @@ const TeamList = ({ token, filters = {}, onSelect }) => {
   useEffect(() => {
     setLoading(true);
     getTeams(filters, token)
-      .then((res) => setTeams(res.data.items || []))
+ .then((res) => {
+        if (res.data && res.data.value) {
+          // Handle both paginated and direct array responses
+          const teamData = res.data.value.items || res.data.value || [];
+          setTeams(Array.isArray(teamData) ? teamData : []);
+        } else if (res.data && res.data.items) {
+          // Fallback for direct items response
+          setTeams(Array.isArray(res.data.items) ? res.data.items : []);
+        } else {
+          setTeams([]);
+        }
+      })
       .catch(setError)
       .finally(() => setLoading(false));
   }, [filters, token]);
