@@ -8,9 +8,14 @@ export const logout = async () => {
   isLoggingOut = true;
   try {
     await logoutApi();
-  } catch (e) {}
+  } catch (error) {
+    // Ignore logout API errors
+    console.error('Logout API error:', error);
+  }
+  // Clear all authentication-related tokens
   localStorage.removeItem('token');
-  // Có thể xóa thêm các thông tin khác nếu cần
+  localStorage.removeItem('refreshToken');
+  localStorage.removeItem('refreshTokenExpiryTime');
   window.location.href = '/login';
   setTimeout(() => {
     isLoggingOut = false;
@@ -20,14 +25,37 @@ export const logout = async () => {
 export const handleRefreshToken = async () => {
   const refreshToken = localStorage.getItem('refreshToken');
   if (!refreshToken) return null;
-  const res = await refreshTokenApi(refreshToken);
-  if (res.data && res.data.token) {
-    localStorage.setItem('token', res.data.token);
-    if (res.data.refreshToken) {
-      localStorage.setItem('refreshToken', res.data.refreshToken);
+
+  try {
+    const res = await refreshTokenApi(refreshToken);
+    // Check if the response follows the API format with isSuccess and value
+    if (res.data && res.data.isSuccess && res.data.value) {
+      const { accessToken, refreshToken: newRefreshToken, refreshTokenExpiryTime } = res.data.value;
+      localStorage.setItem('token', accessToken);
+      if (newRefreshToken) {
+        localStorage.setItem('refreshToken', newRefreshToken);
+      }
+      if (refreshTokenExpiryTime) {
+        localStorage.setItem('refreshTokenExpiryTime', refreshTokenExpiryTime);
+      }
+      return accessToken;
     }
-    return res.data.token;
-  } else {
+    // Fallback for direct token response (if API format is different)
+    else if (res.data && res.data.accessToken) {
+      localStorage.setItem('token', res.data.accessToken);
+      if (res.data.refreshToken) {
+        localStorage.setItem('refreshToken', res.data.refreshToken);
+      }
+      if (res.data.refreshTokenExpiryTime) {
+        localStorage.setItem('refreshTokenExpiryTime', res.data.refreshTokenExpiryTime);
+      }
+      return res.data.accessToken;
+    } else {
+      logout();
+      return null;
+    }
+  } catch (error) {
+    console.error('Token refresh failed:', error);
     logout();
     return null;
   }
