@@ -1,6 +1,7 @@
 using Carter;
 using DemoCICD.Contract.Abstractions.Shared;
 using DemoCICD.Contract.Services.V1.MotoGP.Rider;
+using DemoCICD.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Routing;
 
 namespace DemoCICD.Presentation.APIs.MotoGP;
 
-public class RiderApi : ICarterModule
+public class RiderApi : ApiEndpoint, ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
@@ -87,7 +88,7 @@ public class RiderApi : ICarterModule
         var result = await sender.Send(command);
 
         if (result.IsFailure)
-            return HandleFailure(result);
+            return HandlerFailure(result);
 
         return Results.Created($"/api/v1/motogp/riders", result);
     }
@@ -123,7 +124,7 @@ public class RiderApi : ICarterModule
         var result = await sender.Send(new Query.GetRiderByIdQuery(id));
 
         if (result.IsFailure)
-            return HandleFailure(result);
+            return HandlerFailure(result);
 
         return Results.Ok(result.Value);
     }
@@ -133,7 +134,7 @@ public class RiderApi : ICarterModule
         var result = await sender.Send(new Query.GetRiderByRacingNumberQuery(racingNumber));
 
         if (result.IsFailure)
-            return HandleFailure(result);
+            return HandlerFailure(result);
 
         return Results.Ok(result.Value);
     }
@@ -154,7 +155,7 @@ public class RiderApi : ICarterModule
         var result = await sender.Send(command);
 
         if (result.IsFailure)
-            return HandleFailure(result);
+            return HandlerFailure(result);
 
         return Results.Ok(result);
     }
@@ -173,7 +174,7 @@ public class RiderApi : ICarterModule
         var result = await sender.Send(command);
 
         if (result.IsFailure)
-            return HandleFailure(result);
+            return HandlerFailure(result);
 
         return Results.Ok(result);
     }
@@ -187,7 +188,7 @@ public class RiderApi : ICarterModule
         var result = await sender.Send(command);
 
         if (result.IsFailure)
-            return HandleFailure(result);
+            return HandlerFailure(result);
 
         return Results.Ok(result);
     }
@@ -198,7 +199,7 @@ public class RiderApi : ICarterModule
         var result = await sender.Send(command);
 
         if (result.IsFailure)
-            return HandleFailure(result);
+            return HandlerFailure(result);
 
         return Results.Ok(result);
     }
@@ -209,41 +210,10 @@ public class RiderApi : ICarterModule
         var result = await sender.Send(command);
 
         if (result.IsFailure)
-            return HandleFailure(result);
+            return HandlerFailure(result);
 
         return Results.Ok(result);
     }
-
-    private static IResult HandleFailure(Result result) =>
-        result switch
-        {
-            { IsSuccess: true } => throw new InvalidOperationException(),
-            IValidationResult validationResult =>
-                Results.BadRequest(
-                    CreateProblemDetails(
-                        "Validation Error", StatusCodes.Status400BadRequest,
-                        result.Error,
-                        validationResult.Errors)),
-            _ =>
-                Results.BadRequest(
-                    CreateProblemDetails(
-                        "Bad Request", StatusCodes.Status400BadRequest,
-                        result.Error))
-        };
-
-    private static ProblemDetails CreateProblemDetails(
-        string title,
-        int status,
-        Error error,
-        Error[]? errors = null) =>
-        new()
-        {
-            Title = title,
-            Type = error.Code,
-            Detail = error.Message,
-            Status = status,
-            Extensions = { ["errors"] = errors }
-        };
 
     private static Contract.Enumerations.SortOrder? ParseSortOrder(string? sortOrder) =>
         sortOrder?.ToLower() switch
