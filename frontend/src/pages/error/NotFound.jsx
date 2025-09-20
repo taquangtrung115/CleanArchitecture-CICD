@@ -77,12 +77,7 @@ export default function NotFound() {
             </NotFoundDescription>
           </Box>
 
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={2}
-            justifyContent="center"
-            alignItems="center"
-          >
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center" alignItems="center">
             <Button
               variant="contained"
               size="large"
