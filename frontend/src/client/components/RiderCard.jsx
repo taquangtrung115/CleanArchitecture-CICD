@@ -77,10 +77,8 @@ export default function RiderCard({ rider }) {
 
   return (
     <StyledCard onClick={handleClick}>
-      <RiderNumber className="rider-number">
-        {rider.racingNumber}
-      </RiderNumber>
-      
+      <RiderNumber className="rider-number">{rider.racingNumber}</RiderNumber>
+
       <CardMedia
         component="img"
         height="200"
@@ -96,14 +94,14 @@ export default function RiderCard({ rider }) {
           e.target.src = 'https://via.placeholder.com/300x200/333/fff?text=No+Image';
         }}
       />
-      
+
       <CardContent sx={{ p: 3, position: 'relative' }}>
         <Box sx={{ mb: 2 }}>
-          <Typography 
-            variant="h6" 
-            component="h3" 
-            sx={{ 
-              fontWeight: 700, 
+          <Typography
+            variant="h6"
+            component="h3"
+            sx={{
+              fontWeight: 700,
               fontSize: '1.1rem',
               mb: 0.5,
               color: '#fff'
@@ -112,10 +110,10 @@ export default function RiderCard({ rider }) {
             {rider.fullName}
           </Typography>
           {rider.nickname && (
-            <Typography 
-              variant="body2" 
-              sx={{ 
-                color: '#e10600', 
+            <Typography
+              variant="body2"
+              sx={{
+                color: '#e10600',
                 fontStyle: 'italic',
                 fontWeight: 500
               }}
@@ -142,11 +140,7 @@ export default function RiderCard({ rider }) {
           <Typography variant="body2" sx={{ color: '#ccc' }}>
             Age: {rider.age}
           </Typography>
-          <StatusChip 
-            label={rider.isActive ? 'Active' : 'Retired'} 
-            active={rider.isActive}
-            size="small"
-          />
+          <StatusChip label={rider.isActive ? 'Active' : 'Retired'} active={rider.isActive} size="small" />
         </Box>
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', color: '#ccc', fontSize: '0.875rem' }}>

@@ -7,8 +7,8 @@ const apiClient = axios.create({
   baseURL: `${API_BASE_URL}/api/v1/motogp`,
   timeout: 30000,
   headers: {
-    'Content-Type': 'application/json',
-  },
+    'Content-Type': 'application/json'
+  }
 });
 
 // Add request interceptor to include auth token
@@ -59,27 +59,27 @@ export const raceService = {
 
   // Get races by season
   getRacesBySeason: async (seasonId, params = {}) => {
-    const response = await apiClient.get('/races', { 
-      params: { seasonId, ...params } 
+    const response = await apiClient.get('/races', {
+      params: { seasonId, ...params }
     });
     return response.data;
   },
 
   // Get completed races
   getCompletedRaces: async (params = {}) => {
-    const response = await apiClient.get('/races', { 
-      params: { status: 'Completed', ...params } 
+    const response = await apiClient.get('/races', {
+      params: { status: 'Completed', ...params }
     });
     return response.data;
   },
 
   // Get upcoming races
   getUpcomingRaces: async (params = {}) => {
-    const response = await apiClient.get('/races', { 
-      params: { status: 'Upcoming', ...params } 
+    const response = await apiClient.get('/races', {
+      params: { status: 'Upcoming', ...params }
     });
     return response.data;
-  },
+  }
 };
 
 export const riderService = {
@@ -93,7 +93,7 @@ export const riderService = {
   getRiderById: async (id) => {
     const response = await apiClient.get(`/riders/${id}`);
     return response.data;
-  },
+  }
 };
 
 export const teamService = {
@@ -113,7 +113,7 @@ export const teamService = {
   getTeamWithRiders: async (id) => {
     const response = await apiClient.get(`/teams/${id}/with-riders`);
     return response.data;
-  },
+  }
 };
 
 export default apiClient;

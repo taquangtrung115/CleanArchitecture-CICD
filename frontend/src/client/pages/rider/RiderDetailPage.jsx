@@ -81,11 +81,7 @@ export default function RiderDetailPage() {
         <Alert severity="error" sx={{ mb: 4 }}>
           {error}
         </Alert>
-        <Button
-          variant="contained"
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate('/riders')}
-        >
+        <Button variant="contained" startIcon={<ArrowBackIcon />} onClick={() => navigate('/riders')}>
           Back to Riders
         </Button>
       </Container>
@@ -98,11 +94,7 @@ export default function RiderDetailPage() {
         <Alert severity="warning" sx={{ mb: 4 }}>
           Rider not found
         </Alert>
-        <Button
-          variant="contained"
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate('/riders')}
-        >
+        <Button variant="contained" startIcon={<ArrowBackIcon />} onClick={() => navigate('/riders')}>
           Back to Riders
         </Button>
       </Container>
@@ -116,8 +108,8 @@ export default function RiderDetailPage() {
           <Button
             startIcon={<ArrowBackIcon />}
             onClick={() => navigate('/riders')}
-            sx={{ 
-              color: '#fff', 
+            sx={{
+              color: '#fff',
               mb: 3,
               '&:hover': {
                 backgroundColor: 'rgba(255, 255, 255, 0.1)'
@@ -126,9 +118,9 @@ export default function RiderDetailPage() {
           >
             Back to Riders
           </Button>
-          
+
           <RiderNumber>{rider.racingNumber}</RiderNumber>
-          
+
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
             <Typography variant="h2" component="h1" sx={{ fontWeight: 900, mr: 2 }}>
               {rider.fullName}
@@ -140,22 +132,20 @@ export default function RiderDetailPage() {
               sx={{ fontWeight: 600 }}
             />
           </Box>
-          
+
           {rider.nickname && (
             <Typography variant="h5" sx={{ color: '#e10600', fontStyle: 'italic', mb: 3 }}>
               "{rider.nickname}"
             </Typography>
           )}
-          
+
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
             <Typography variant="h6" sx={{ fontSize: '2rem' }}>
               {rider.countryFlag}
             </Typography>
-            <Typography variant="h6">
-              {rider.countryName}
-            </Typography>
+            <Typography variant="h6">{rider.countryName}</Typography>
           </Box>
-          
+
           <Typography variant="h6" sx={{ color: '#ccc' }}>
             Current Team: {rider.currentTeamName || 'Free Agent'}
           </Typography>
@@ -166,7 +156,7 @@ export default function RiderDetailPage() {
         <Typography variant="h4" sx={{ mb: 4, fontWeight: 700 }}>
           Rider Statistics
         </Typography>
-        
+
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', lg: '1fr 1fr 1fr 1fr' }, gap: 3, mb: 6 }}>
           <StatsCard>
             <CardContent sx={{ textAlign: 'center' }}>
@@ -178,7 +168,7 @@ export default function RiderDetailPage() {
               </Typography>
             </CardContent>
           </StatsCard>
-          
+
           <StatsCard>
             <CardContent sx={{ textAlign: 'center' }}>
               <Typography variant="h3" sx={{ color: '#4caf50', fontWeight: 700 }}>
@@ -189,7 +179,7 @@ export default function RiderDetailPage() {
               </Typography>
             </CardContent>
           </StatsCard>
-          
+
           <StatsCard>
             <CardContent sx={{ textAlign: 'center' }}>
               <Typography variant="h3" sx={{ color: '#2196f3', fontWeight: 700 }}>
@@ -200,7 +190,7 @@ export default function RiderDetailPage() {
               </Typography>
             </CardContent>
           </StatsCard>
-          
+
           <StatsCard>
             <CardContent sx={{ textAlign: 'center' }}>
               <Typography variant="h3" sx={{ color: '#ff9800', fontWeight: 700 }}>
@@ -224,9 +214,7 @@ export default function RiderDetailPage() {
                   <Typography variant="body2" color="textSecondary">
                     Birth Date
                   </Typography>
-                  <Typography variant="body1">
-                    {new Date(rider.birthDate).toLocaleDateString()}
-                  </Typography>
+                  <Typography variant="body1">{new Date(rider.birthDate).toLocaleDateString()}</Typography>
                 </Box>
                 <Box>
                   <Typography variant="body2" color="textSecondary">

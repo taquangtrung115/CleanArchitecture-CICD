@@ -3,8 +3,10 @@ const mockNewsData = [
   {
     id: '1',
     title: 'Bagnaia wins dramatic season finale at Valencia',
-    summary: 'Francesco Bagnaia secured a thrilling victory in the final race of the MotoGP season at Valencia, finishing ahead of championship rival Jorge Martin in a spectacular showdown.',
-    content: 'In an unforgettable season finale at the Circuit Ricardo Tormo, Francesco Bagnaia delivered a masterclass performance to claim victory in Valencia...',
+    summary:
+      'Francesco Bagnaia secured a thrilling victory in the final race of the MotoGP season at Valencia, finishing ahead of championship rival Jorge Martin in a spectacular showdown.',
+    content:
+      'In an unforgettable season finale at the Circuit Ricardo Tormo, Francesco Bagnaia delivered a masterclass performance to claim victory in Valencia...',
     category: 'RaceResults',
     status: 'Published',
     authorId: '123',
@@ -26,8 +28,10 @@ const mockNewsData = [
   {
     id: '2',
     title: 'Marc Marquez announces switch to factory Ducati for 2024',
-    summary: 'Eight-time world champion Marc Marquez will join the factory Ducati team next season, ending his long association with Honda.',
-    content: 'In a move that has sent shockwaves through the MotoGP paddock, Marc Marquez has confirmed his switch to the factory Ducati team...',
+    summary:
+      'Eight-time world champion Marc Marquez will join the factory Ducati team next season, ending his long association with Honda.',
+    content:
+      'In a move that has sent shockwaves through the MotoGP paddock, Marc Marquez has confirmed his switch to the factory Ducati team...',
     category: 'Transfers',
     status: 'Published',
     authorId: '123',
@@ -72,8 +76,9 @@ const mockNewsData = [
   {
     id: '4',
     title: 'BREAKING: Unexpected weather forces race postponement',
-    summary: 'Severe weather conditions at the circuit have forced officials to postpone today\'s MotoGP race to tomorrow morning.',
-    content: 'In an unprecedented turn of events, race officials have been forced to postpone today\'s MotoGP race due to severe weather conditions...',
+    summary: "Severe weather conditions at the circuit have forced officials to postpone today's MotoGP race to tomorrow morning.",
+    content:
+      "In an unprecedented turn of events, race officials have been forced to postpone today's MotoGP race due to severe weather conditions...",
     category: 'Breaking',
     status: 'Published',
     authorId: '123',
@@ -96,7 +101,7 @@ const mockNewsData = [
     id: '5',
     title: 'Jorge Martin leads championship with two races remaining',
     summary: 'The Pramac Ducati rider has extended his championship lead to 14 points with just two races left in the season.',
-    content: 'Jorge Martin\'s championship aspirations received a major boost with his commanding victory at the Malaysian Grand Prix...',
+    content: "Jorge Martin's championship aspirations received a major boost with his commanding victory at the Malaysian Grand Prix...",
     category: 'Championship',
     status: 'Published',
     authorId: '123',
@@ -118,7 +123,7 @@ const mockNewsData = [
   {
     id: '6',
     title: 'Exclusive: Valentino Rossi on the new generation of riders',
-    summary: 'The MotoGP legend shares his thoughts on today\'s young stars and the evolution of the sport.',
+    summary: "The MotoGP legend shares his thoughts on today's young stars and the evolution of the sport.",
     content: 'In an exclusive interview, nine-time world champion Valentino Rossi reflected on the current state of MotoGP...',
     category: 'Interviews',
     status: 'Published',
@@ -141,39 +146,38 @@ const mockNewsData = [
 ];
 
 // Mock API functions
-export const getNewsMock = async ({ 
-  pageIndex = 1, 
-  pageSize = 10, 
-  category = null, 
-  searchTerm = null, 
-  isFeatured = null, 
-  isBreaking = null 
+export const getNewsMock = async ({
+  pageIndex = 1,
+  pageSize = 10,
+  category = null,
+  searchTerm = null,
+  isFeatured = null,
+  isBreaking = null
 } = {}) => {
   // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
   let filteredNews = [...mockNewsData];
 
   // Apply filters
   if (category) {
-    filteredNews = filteredNews.filter(news => news.category === category);
+    filteredNews = filteredNews.filter((news) => news.category === category);
   }
 
   if (searchTerm) {
     const term = searchTerm.toLowerCase();
-    filteredNews = filteredNews.filter(news => 
-      news.title.toLowerCase().includes(term) ||
-      news.summary.toLowerCase().includes(term) ||
-      news.content.toLowerCase().includes(term)
+    filteredNews = filteredNews.filter(
+      (news) =>
+        news.title.toLowerCase().includes(term) || news.summary.toLowerCase().includes(term) || news.content.toLowerCase().includes(term)
     );
   }
 
   if (isFeatured !== null) {
-    filteredNews = filteredNews.filter(news => news.isFeatured === isFeatured);
+    filteredNews = filteredNews.filter((news) => news.isFeatured === isFeatured);
   }
 
   if (isBreaking !== null) {
-    filteredNews = filteredNews.filter(news => news.isBreaking === isBreaking);
+    filteredNews = filteredNews.filter((news) => news.isBreaking === isBreaking);
   }
 
   // Sort by published date (newest first)
@@ -196,11 +200,9 @@ export const getNewsMock = async ({
 };
 
 export const getFeaturedNewsMock = async (limit = 5) => {
-  await new Promise(resolve => setTimeout(resolve, 300));
-  
-  const featuredNews = mockNewsData
-    .filter(news => news.isFeatured)
-    .slice(0, limit);
+  await new Promise((resolve) => setTimeout(resolve, 300));
+
+  const featuredNews = mockNewsData.filter((news) => news.isFeatured).slice(0, limit);
 
   return {
     isSuccess: true,
@@ -209,9 +211,9 @@ export const getFeaturedNewsMock = async (limit = 5) => {
 };
 
 export const getBreakingNewsMock = async () => {
-  await new Promise(resolve => setTimeout(resolve, 200));
-  
-  const breakingNews = mockNewsData.filter(news => news.isBreaking);
+  await new Promise((resolve) => setTimeout(resolve, 200));
+
+  const breakingNews = mockNewsData.filter((news) => news.isBreaking);
 
   return {
     isSuccess: true,
@@ -220,10 +222,10 @@ export const getBreakingNewsMock = async () => {
 };
 
 export const getNewsByIdMock = async (id) => {
-  await new Promise(resolve => setTimeout(resolve, 300));
-  
-  const news = mockNewsData.find(n => n.id === id);
-  
+  await new Promise((resolve) => setTimeout(resolve, 300));
+
+  const news = mockNewsData.find((n) => n.id === id);
+
   if (news) {
     return {
       isSuccess: true,

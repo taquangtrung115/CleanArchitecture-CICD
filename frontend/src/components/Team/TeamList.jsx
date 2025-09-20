@@ -10,7 +10,7 @@ const TeamList = ({ token, filters = {}, onSelect }) => {
   useEffect(() => {
     setLoading(true);
     getTeams(filters, token)
-      .then((res) => {
+ .then((res) => {
         if (res.data && res.data.value) {
           // Handle both paginated and direct array responses
           const teamData = res.data.value.items || res.data.value || [];

@@ -135,20 +135,20 @@ export default function MediaPage() {
 
   const getVideoTypeColor = (type) => {
     const colors = {
-      'Highlight': '#e10600',
-      'Interview': '#ff9800',
-      'Analysis': '#2196f3',
-      'OnBoard': '#4caf50',
-      'PressConference': '#9c27b0',
-      'Documentary': '#607d8b',
-      'LiveStream': '#f44336'
+      Highlight: '#e10600',
+      Interview: '#ff9800',
+      Analysis: '#2196f3',
+      OnBoard: '#4caf50',
+      PressConference: '#9c27b0',
+      Documentary: '#607d8b',
+      LiveStream: '#f44336'
     };
     return colors[type] || '#757575';
   };
 
   const VideoCard = ({ video, isFeatured = false }) => (
-    <Card 
-      sx={{ 
+    <Card
+      sx={{
         height: '100%',
         borderRadius: 2,
         boxShadow: isFeatured ? 4 : 2,
@@ -156,7 +156,7 @@ export default function MediaPage() {
         transition: 'all 0.3s ease',
         '&:hover': {
           transform: 'translateY(-4px)',
-          boxShadow: 6,
+          boxShadow: 6
         }
       }}
     >
@@ -222,20 +222,13 @@ export default function MediaPage() {
                 fontWeight: 600
               }}
             />
-            {video.platform && (
-              <Chip
-                label={video.platform}
-                size="small"
-                variant="outlined"
-                sx={{ fontSize: '0.75rem' }}
-              />
-            )}
+            {video.platform && <Chip label={video.platform} size="small" variant="outlined" sx={{ fontSize: '0.75rem' }} />}
           </Box>
-          
-          <Typography 
-            variant={isFeatured ? 'h6' : 'subtitle1'} 
-            sx={{ 
-              fontWeight: 700, 
+
+          <Typography
+            variant={isFeatured ? 'h6' : 'subtitle1'}
+            sx={{
+              fontWeight: 700,
               mb: 1,
               display: '-webkit-box',
               WebkitLineClamp: 2,
@@ -246,11 +239,11 @@ export default function MediaPage() {
           >
             {video.title}
           </Typography>
-          
-          <Typography 
-            variant="body2" 
-            color="text.secondary" 
-            sx={{ 
+
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
               mb: 2,
               display: '-webkit-box',
               WebkitLineClamp: 2,
@@ -260,7 +253,7 @@ export default function MediaPage() {
           >
             {video.description}
           </Typography>
-          
+
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 'auto' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <ViewIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
@@ -326,7 +319,7 @@ export default function MediaPage() {
                       <InputAdornment position="start">
                         <SearchIcon />
                       </InputAdornment>
-                    ),
+                    )
                   }}
                   sx={{
                     '& .MuiOutlinedInput-root': {
@@ -371,7 +364,7 @@ export default function MediaPage() {
               onChange={handleTabChange}
               sx={{
                 '& .MuiTabs-indicator': { backgroundColor: '#e10600' },
-                '& .MuiTab-root': { 
+                '& .MuiTab-root': {
                   color: 'rgba(255,255,255,0.7)',
                   '&.Mui-selected': { color: '#e10600' }
                 }
@@ -414,11 +407,7 @@ export default function MediaPage() {
                   {/* Pagination */}
                   {totalCount > pageSize && (
                     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-                      <Pagination
-                        currentPage={currentPage}
-                        totalPages={Math.ceil(totalCount / pageSize)}
-                        onPageChange={handlePageChange}
-                      />
+                      <Pagination currentPage={currentPage} totalPages={Math.ceil(totalCount / pageSize)} onPageChange={handlePageChange} />
                     </Box>
                   )}
                 </>

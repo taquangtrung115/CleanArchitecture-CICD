@@ -121,15 +121,15 @@ const VideoManagementPage = () => {
   const handleCreate = async () => {
     try {
       setLoading(true);
-      
+
       // Convert duration string to TimeSpan format for API
       const durationParts = formData.duration.split(':');
       const duration = `${durationParts[0].padStart(2, '0')}:${durationParts[1].padStart(2, '0')}:${durationParts[2] || '00'.padStart(2, '0')}`;
-      
+
       const videoData = {
         ...formData,
         duration,
-        tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : []
+        tags: formData.tags ? formData.tags.split(',').map((tag) => tag.trim()) : []
       };
 
       const response = await createVideo(videoData);
@@ -152,15 +152,15 @@ const VideoManagementPage = () => {
   const handleEdit = async () => {
     try {
       setLoading(true);
-      
+
       const durationParts = formData.duration.split(':');
       const duration = `${durationParts[0].padStart(2, '0')}:${durationParts[1].padStart(2, '0')}:${durationParts[2] || '00'.padStart(2, '0')}`;
-      
+
       const videoData = {
         id: selectedVideo.id,
         ...formData,
         duration,
-        tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : []
+        tags: formData.tags ? formData.tags.split(',').map((tag) => tag.trim()) : []
       };
 
       const response = await updateVideo(selectedVideo.id, videoData);
@@ -270,7 +270,7 @@ const VideoManagementPage = () => {
   };
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [field]: value
     }));
@@ -278,13 +278,13 @@ const VideoManagementPage = () => {
 
   const getVideoTypeColor = (type) => {
     const colors = {
-      'Highlight': '#e10600',
-      'Interview': '#ff9800',
-      'Analysis': '#2196f3',
-      'OnBoard': '#4caf50',
-      'PressConference': '#9c27b0',
-      'Documentary': '#607d8b',
-      'LiveStream': '#f44336'
+      Highlight: '#e10600',
+      Interview: '#ff9800',
+      Analysis: '#2196f3',
+      OnBoard: '#4caf50',
+      PressConference: '#9c27b0',
+      Documentary: '#607d8b',
+      LiveStream: '#f44336'
     };
     return colors[type] || '#757575';
   };
@@ -292,15 +292,9 @@ const VideoManagementPage = () => {
   const VideoForm = () => (
     <Grid container spacing={3}>
       <Grid item xs={12}>
-        <TextField
-          fullWidth
-          label="Title"
-          value={formData.title}
-          onChange={(e) => handleInputChange('title', e.target.value)}
-          required
-        />
+        <TextField fullWidth label="Title" value={formData.title} onChange={(e) => handleInputChange('title', e.target.value)} required />
       </Grid>
-      
+
       <Grid item xs={12}>
         <TextField
           fullWidth
@@ -316,13 +310,11 @@ const VideoManagementPage = () => {
       <Grid item xs={12} sm={6}>
         <FormControl fullWidth>
           <InputLabel>Type</InputLabel>
-          <Select
-            value={formData.type}
-            onChange={(e) => handleInputChange('type', e.target.value)}
-            label="Type"
-          >
+          <Select value={formData.type} onChange={(e) => handleInputChange('type', e.target.value)} label="Type">
             {Object.values(VideoTypes).map((type) => (
-              <MenuItem key={type} value={type}>{type}</MenuItem>
+              <MenuItem key={type} value={type}>
+                {type}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -331,13 +323,11 @@ const VideoManagementPage = () => {
       <Grid item xs={12} sm={6}>
         <FormControl fullWidth>
           <InputLabel>Platform</InputLabel>
-          <Select
-            value={formData.platform}
-            onChange={(e) => handleInputChange('platform', e.target.value)}
-            label="Platform"
-          >
+          <Select value={formData.platform} onChange={(e) => handleInputChange('platform', e.target.value)} label="Platform">
             {Object.values(VideoPlatforms).map((platform) => (
-              <MenuItem key={platform} value={platform}>{platform}</MenuItem>
+              <MenuItem key={platform} value={platform}>
+                {platform}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -397,12 +387,7 @@ const VideoManagementPage = () => {
 
       <Grid item xs={12}>
         <FormControlLabel
-          control={
-            <Switch
-              checked={formData.isFeatured}
-              onChange={(e) => handleInputChange('isFeatured', e.target.checked)}
-            />
-          }
+          control={<Switch checked={formData.isFeatured} onChange={(e) => handleInputChange('isFeatured', e.target.checked)} />}
           label="Featured Video"
         />
       </Grid>
@@ -439,24 +424,22 @@ const VideoManagementPage = () => {
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
           <FormControl sx={{ minWidth: 200 }}>
             <InputLabel>Filter by Type</InputLabel>
-            <Select
-              value={selectedFilter}
-              onChange={(e) => setSelectedFilter(e.target.value)}
-              label="Filter by Type"
-            >
+            <Select value={selectedFilter} onChange={(e) => setSelectedFilter(e.target.value)} label="Filter by Type">
               <MenuItem value="">All Types</MenuItem>
               {Object.values(VideoTypes).map((type) => (
-                <MenuItem key={type} value={type}>{type}</MenuItem>
+                <MenuItem key={type} value={type}>
+                  {type}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
         </Box>
-        
+
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={() => setIsCreateDialogOpen(true)}
-          sx={{ 
+          sx={{
             backgroundColor: '#e10600',
             '&:hover': { backgroundColor: '#c10500' }
           }}
@@ -511,7 +494,7 @@ const VideoManagementPage = () => {
                       </Box>
                     </Box>
                   </TableCell>
-                  
+
                   <TableCell>
                     <Chip
                       label={video.type}
@@ -523,7 +506,7 @@ const VideoManagementPage = () => {
                       }}
                     />
                   </TableCell>
-                  
+
                   <TableCell>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <Chip
@@ -542,26 +525,22 @@ const VideoManagementPage = () => {
                       )}
                     </Box>
                   </TableCell>
-                  
+
                   <TableCell>
-                    <Typography variant="body2">
-                      {video.viewCount?.toLocaleString() || 0}
-                    </Typography>
+                    <Typography variant="body2">{video.viewCount?.toLocaleString() || 0}</Typography>
                   </TableCell>
-                  
+
                   <TableCell>
                     <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                       <TimeIcon sx={{ fontSize: 16 }} />
                       {video.formattedDuration}
                     </Typography>
                   </TableCell>
-                  
+
                   <TableCell>
-                    <Typography variant="body2">
-                      {new Date(video.publishedDate).toLocaleDateString()}
-                    </Typography>
+                    <Typography variant="body2">{new Date(video.publishedDate).toLocaleDateString()}</Typography>
                   </TableCell>
-                  
+
                   <TableCell>
                     <Box sx={{ display: 'flex', gap: 1 }}>
                       <Tooltip title="Edit">
@@ -569,35 +548,27 @@ const VideoManagementPage = () => {
                           <EditIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>
-                      
+
                       {video.status !== 'Published' && (
                         <Tooltip title="Publish">
-                          <IconButton 
-                            size="small" 
-                            onClick={() => handlePublish(video.id)}
-                            sx={{ color: 'green' }}
-                          >
+                          <IconButton size="small" onClick={() => handlePublish(video.id)} sx={{ color: 'green' }}>
                             <PublishIcon fontSize="small" />
                           </IconButton>
                         </Tooltip>
                       )}
-                      
-                      <Tooltip title={video.isFeatured ? "Remove from Featured" : "Set as Featured"}>
-                        <IconButton 
-                          size="small" 
+
+                      <Tooltip title={video.isFeatured ? 'Remove from Featured' : 'Set as Featured'}>
+                        <IconButton
+                          size="small"
                           onClick={() => handleToggleFeatured(video.id)}
                           sx={{ color: video.isFeatured ? '#e10600' : 'default' }}
                         >
                           <StarIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>
-                      
+
                       <Tooltip title="Delete">
-                        <IconButton 
-                          size="small" 
-                          onClick={() => handleDelete(video.id)}
-                          sx={{ color: 'error.main' }}
-                        >
+                        <IconButton size="small" onClick={() => handleDelete(video.id)} sx={{ color: 'error.main' }}>
                           <DeleteIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>
@@ -613,31 +584,20 @@ const VideoManagementPage = () => {
       {/* Pagination */}
       {totalCount > pageSize && (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-          <Button
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(currentPage - 1)}
-          >
+          <Button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
             Previous
           </Button>
           <Typography sx={{ mx: 2, display: 'flex', alignItems: 'center' }}>
             Page {currentPage} of {Math.ceil(totalCount / pageSize)}
           </Typography>
-          <Button
-            disabled={currentPage >= Math.ceil(totalCount / pageSize)}
-            onClick={() => setCurrentPage(currentPage + 1)}
-          >
+          <Button disabled={currentPage >= Math.ceil(totalCount / pageSize)} onClick={() => setCurrentPage(currentPage + 1)}>
             Next
           </Button>
         </Box>
       )}
 
       {/* Create Video Dialog */}
-      <Dialog
-        open={isCreateDialogOpen}
-        onClose={() => setIsCreateDialogOpen(false)}
-        maxWidth="md"
-        fullWidth
-      >
+      <Dialog open={isCreateDialogOpen} onClose={() => setIsCreateDialogOpen(false)} maxWidth="md" fullWidth>
         <DialogTitle>
           <Typography variant="h6" sx={{ fontWeight: 700 }}>
             Create New Video
@@ -649,10 +609,7 @@ const VideoManagementPage = () => {
           </Box>
         </DialogContent>
         <DialogActions sx={{ p: 3, pt: 1 }}>
-          <Button 
-            onClick={() => setIsCreateDialogOpen(false)}
-            startIcon={<CancelIcon />}
-          >
+          <Button onClick={() => setIsCreateDialogOpen(false)} startIcon={<CancelIcon />}>
             Cancel
           </Button>
           <Button
@@ -660,7 +617,7 @@ const VideoManagementPage = () => {
             onClick={handleCreate}
             disabled={loading}
             startIcon={<SaveIcon />}
-            sx={{ 
+            sx={{
               backgroundColor: '#e10600',
               '&:hover': { backgroundColor: '#c10500' }
             }}
@@ -671,12 +628,7 @@ const VideoManagementPage = () => {
       </Dialog>
 
       {/* Edit Video Dialog */}
-      <Dialog
-        open={isEditDialogOpen}
-        onClose={() => setIsEditDialogOpen(false)}
-        maxWidth="md"
-        fullWidth
-      >
+      <Dialog open={isEditDialogOpen} onClose={() => setIsEditDialogOpen(false)} maxWidth="md" fullWidth>
         <DialogTitle>
           <Typography variant="h6" sx={{ fontWeight: 700 }}>
             Edit Video
@@ -688,10 +640,7 @@ const VideoManagementPage = () => {
           </Box>
         </DialogContent>
         <DialogActions sx={{ p: 3, pt: 1 }}>
-          <Button 
-            onClick={() => setIsEditDialogOpen(false)}
-            startIcon={<CancelIcon />}
-          >
+          <Button onClick={() => setIsEditDialogOpen(false)} startIcon={<CancelIcon />}>
             Cancel
           </Button>
           <Button
@@ -699,7 +648,7 @@ const VideoManagementPage = () => {
             onClick={handleEdit}
             disabled={loading}
             startIcon={<SaveIcon />}
-            sx={{ 
+            sx={{
               backgroundColor: '#e10600',
               '&:hover': { backgroundColor: '#c10500' }
             }}

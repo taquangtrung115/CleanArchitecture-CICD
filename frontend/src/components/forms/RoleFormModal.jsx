@@ -41,10 +41,10 @@ export default function RoleFormModal({ open, onClose, onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
-    
+
     setError('');
     setLoading(true);
-    
+
     try {
       const res = await createRole(form);
       if (res.data) {
@@ -75,8 +75,8 @@ export default function RoleFormModal({ open, onClose, onSuccess }) {
   };
 
   return (
-    <Dialog 
-      open={open} 
+    <Dialog
+      open={open}
       onClose={handleClose}
       maxWidth="sm"
       fullWidth
@@ -100,16 +100,16 @@ export default function RoleFormModal({ open, onClose, onSuccess }) {
             onClick={handleClose}
             disabled={loading}
             sx={{
-              color: (theme) => theme.palette.grey[500],
+              color: (theme) => theme.palette.grey[500]
             }}
           >
             <CloseIcon />
           </IconButton>
         </Stack>
       </DialogTitle>
-      
+
       <Divider />
-      
+
       <form onSubmit={handleSubmit}>
         <DialogContent sx={{ py: 3 }}>
           <Grid container spacing={3}>
@@ -127,7 +127,7 @@ export default function RoleFormModal({ open, onClose, onSuccess }) {
                 placeholder="Nhập tên role"
               />
             </Grid>
-            
+
             <Grid item xs={12}>
               <TextField
                 label="Role Code"
@@ -142,7 +142,7 @@ export default function RoleFormModal({ open, onClose, onSuccess }) {
                 placeholder="Nhập mã role"
               />
             </Grid>
-            
+
             <Grid item xs={12}>
               <TextField
                 label="Description"
@@ -158,7 +158,7 @@ export default function RoleFormModal({ open, onClose, onSuccess }) {
                 placeholder="Nhập mô tả role (tùy chọn)"
               />
             </Grid>
-            
+
             {error && (
               <Grid item xs={12}>
                 <Typography color="error" variant="body2" sx={{ mt: 1 }}>
@@ -168,16 +168,11 @@ export default function RoleFormModal({ open, onClose, onSuccess }) {
             )}
           </Grid>
         </DialogContent>
-        
+
         <Divider />
-        
+
         <DialogActions sx={{ p: 3 }}>
-          <Button 
-            onClick={handleClose} 
-            disabled={loading}
-            color="inherit"
-            variant="outlined"
-          >
+          <Button onClick={handleClose} disabled={loading} color="inherit" variant="outlined">
             Hủy
           </Button>
           <Button
