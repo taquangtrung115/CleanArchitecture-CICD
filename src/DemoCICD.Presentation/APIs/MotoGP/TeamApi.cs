@@ -1,6 +1,7 @@
 using Carter;
 using DemoCICD.Contract.Abstractions.Shared;
 using DemoCICD.Contract.Services.V1.MotoGP.Team;
+using DemoCICD.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Routing;
 
 namespace DemoCICD.Presentation.APIs.MotoGP;
 
-public class TeamApi : ICarterModule
+public class TeamApi : ApiEndpoint, ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
@@ -50,7 +51,7 @@ public class TeamApi : ICarterModule
         var result = await sender.Send(command);
 
         if (result.IsFailure)
-            return HandleFailure(result);
+            return HandlerFailure(result);
 
         return Results.Created($"/api/v1/motogp/teams", result);
     }
@@ -84,7 +85,7 @@ public class TeamApi : ICarterModule
         var result = await sender.Send(new Query.GetTeamByIdQuery(id));
 
         if (result.IsFailure)
-            return HandleFailure(result);
+            return HandlerFailure(result);
 
         return Results.Ok(result.Value);
     }
@@ -94,41 +95,10 @@ public class TeamApi : ICarterModule
         var result = await sender.Send(new Query.GetTeamWithRidersQuery(id));
 
         if (result.IsFailure)
-            return HandleFailure(result);
+            return HandlerFailure(result);
 
         return Results.Ok(result.Value);
     }
-
-    private static IResult HandleFailure(Result result) =>
-        result switch
-        {
-            { IsSuccess: true } => throw new InvalidOperationException(),
-            IValidationResult validationResult =>
-                Results.BadRequest(
-                    CreateProblemDetails(
-                        "Validation Error", StatusCodes.Status400BadRequest,
-                        result.Error,
-                        validationResult.Errors)),
-            _ =>
-                Results.BadRequest(
-                    CreateProblemDetails(
-                        "Bad Request", StatusCodes.Status400BadRequest,
-                        result.Error))
-        };
-
-    private static ProblemDetails CreateProblemDetails(
-        string title,
-        int status,
-        Error error,
-        Error[]? errors = null) =>
-        new()
-        {
-            Title = title,
-            Type = error.Code,
-            Detail = error.Message,
-            Status = status,
-            Extensions = { ["errors"] = errors }
-        };
 
     private static Contract.Enumerations.SortOrder? ParseSortOrder(string? sortOrder) =>
         sortOrder?.ToLower() switch

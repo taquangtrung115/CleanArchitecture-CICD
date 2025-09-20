@@ -1,5 +1,6 @@
 // src/api/user.js
 import axiosInstance from './axios';
+import { handleApiError } from '../utils/errorHandler';
 
 const USER_ENDPOINT = '/api/v1/users';
 
@@ -9,11 +10,7 @@ export const createUser = async (payload) => {
     const response = await axiosInstance.post(USER_ENDPOINT, payload);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 

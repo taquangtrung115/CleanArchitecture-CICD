@@ -1,6 +1,7 @@
 // src/api/auth.js
 // API functions for authentication (Login & Logout)
 import axiosInstance from './axios';
+import { handleApiError } from '../utils/errorHandler';
 
 const AUTH_ENDPOINT = '/api/v1/auth';
 // Đăng ký tài khoản mới
@@ -14,11 +15,7 @@ export const register = async ({ userName, email, password, firstName, lastName,
       error: null
     };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 // Refresh token
@@ -37,11 +34,7 @@ export const refreshToken = async (refreshToken) => {
       error: null
     };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -63,15 +56,15 @@ export const login = async (userName, password) => {
       return {
         data: null,
         status: response.status,
-        error: res.error?.message || 'Login failed'
+        error: {
+          title: 'Login Failed',
+          detail: res.error?.message || 'Login failed',
+          errors: null
+        }
       };
     }
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -84,10 +77,6 @@ export const logout = async () => {
       error: null
     };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };

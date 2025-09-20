@@ -1,5 +1,6 @@
 // src/api/role.js
 import axiosInstance from './axios';
+import { handleApiError } from '../utils/errorHandler';
 
 const ROLE_ENDPOINT = '/api/v1/roles';
 
@@ -9,11 +10,7 @@ export const createRole = async ({ name, description, roleCode }) => {
     const response = await axiosInstance.post(ROLE_ENDPOINT, { name, description, roleCode });
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
