@@ -4,34 +4,24 @@ import { lazy } from 'react';
 import Loadable from 'components/Loadable';
 import DashboardLayout from 'layout/Dashboard';
 
-// render- Dashboard
+// admin pages
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/default')));
-
-// render - color
-const Color = Loadable(lazy(() => import('pages/component-overview/color')));
 const Typography = Loadable(lazy(() => import('pages/component-overview/typography')));
+const Color = Loadable(lazy(() => import('pages/component-overview/color')));
 const Shadow = Loadable(lazy(() => import('pages/component-overview/shadows')));
-
-// render - sample page
 const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')));
 const UserPage = Loadable(lazy(() => import('pages/user/UserPage')));
 const RolePage = Loadable(lazy(() => import('pages/role/RolePage')));
 const PermissionPage = Loadable(lazy(() => import('pages/permission/PermissionPage')));
 const ChatPage = Loadable(lazy(() => import('pages/chat/ChatPage')));
+const RidersPage = Loadable(lazy(() => import('pages/RidersPage')));
+const TeamsPage = Loadable(lazy(() => import('pages/TeamsPage')));
 
-// ==============================|| MAIN ROUTING ||============================== //
+// ==============================|| ADMIN ROUTING ||============================== //
 
-import ClientApp from '../client/index';
-import RidersPage from 'pages/RidersPage';
-import TeamsPage from 'pages/TeamsPage';
-
-const MainRoutes = [
+const AdminRoutes = [
   {
-    path: '/*',
-    element: <ClientApp />
-  },
-  {
-    path: '/admin',
+    path: '',
     element: <DashboardLayout />,
     children: [
       {
@@ -40,12 +30,7 @@ const MainRoutes = [
       },
       {
         path: 'dashboard',
-        children: [
-          {
-            path: 'default',
-            element: <DashboardDefault />
-          }
-        ]
+        element: <DashboardDefault />
       },
       {
         path: 'typography',
@@ -91,4 +76,4 @@ const MainRoutes = [
   }
 ];
 
-export default MainRoutes;
+export default AdminRoutes;

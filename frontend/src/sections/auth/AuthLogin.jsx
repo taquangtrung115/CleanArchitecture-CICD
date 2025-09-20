@@ -83,7 +83,13 @@ export default function AuthLogin({ isDemo = false }) {
         onSubmit={handleSubmit}
       >
         {({ errors, handleBlur, handleChange, touched, values, isSubmitting }) => (
-          <form noValidate onSubmit={e => { e.preventDefault(); handleSubmit(values, { setSubmitting: () => { } }); }}>
+          <form
+            noValidate
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit(values, { setSubmitting: () => {} });
+            }}
+          >
             <Grid container spacing={3}>
               <Grid size={12}>
                 <Stack sx={{ gap: 1 }}>
@@ -160,9 +166,7 @@ export default function AuthLogin({ isDemo = false }) {
                 </Stack>
               </Grid>
               <Grid size={12}>
-                {formError && (
-                  <FormHelperText error>{formError}</FormHelperText>
-                )}
+                {formError && <FormHelperText error>{formError}</FormHelperText>}
                 <AnimateButton>
                   <Button fullWidth size="large" variant="contained" color="primary" type="submit" disabled={isSubmitting}>
                     Login

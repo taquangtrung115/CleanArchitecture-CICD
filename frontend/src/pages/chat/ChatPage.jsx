@@ -47,7 +47,7 @@ const ChatPage = () => {
     try {
       const result = await getChatHistory();
       if (result.data && result.data.value && result.data.value.messages) {
-        const historyMessages = result.data.value.messages.map(msg => ({
+        const historyMessages = result.data.value.messages.map((msg) => ({
           id: msg.id,
           type: 'history',
           userMessage: msg.message,
@@ -77,11 +77,11 @@ const ChatPage = () => {
       userMessage,
       timestamp: new Date()
     };
-    setMessages(prev => [...prev, tempMessage]);
+    setMessages((prev) => [...prev, tempMessage]);
 
     try {
       const result = await sendChatMessage(userMessage);
-      
+
       if (result.data && result.data.value) {
         const response = result.data.value;
         const botMessage = {
@@ -96,8 +96,8 @@ const ChatPage = () => {
         };
 
         // Replace temp message with complete conversation
-        setMessages(prev => {
-          const filtered = prev.filter(msg => msg.id !== tempMessage.id);
+        setMessages((prev) => {
+          const filtered = prev.filter((msg) => msg.id !== tempMessage.id);
           return [...filtered, botMessage];
         });
       } else {
@@ -106,9 +106,9 @@ const ChatPage = () => {
     } catch (err) {
       setError('Có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại.');
       console.error('Error sending message:', err);
-      
+
       // Remove temp message on error
-      setMessages(prev => prev.filter(msg => msg.id !== tempMessage.id));
+      setMessages((prev) => prev.filter((msg) => msg.id !== tempMessage.id));
     } finally {
       setLoading(false);
     }
@@ -123,25 +123,23 @@ const ChatPage = () => {
 
   const renderMessage = (message) => {
     const isBot = message.type === 'bot' || message.type === 'history';
-    
+
     return (
       <Box key={message.id} sx={{ mb: 2 }}>
         <Stack direction="row" spacing={2} alignItems="flex-start">
-          <Avatar sx={{ bgcolor: isBot ? 'primary.main' : 'secondary.main' }}>
-            {isBot ? <BotIcon /> : <PersonIcon />}
-          </Avatar>
-          
+          <Avatar sx={{ bgcolor: isBot ? 'primary.main' : 'secondary.main' }}>{isBot ? <BotIcon /> : <PersonIcon />}</Avatar>
+
           <Box sx={{ flex: 1 }}>
             <Typography variant="caption" color="text.secondary">
               {isBot ? 'AI Assistant' : 'Bạn'} • {message.timestamp?.toLocaleTimeString()}
             </Typography>
-            
+
             <Card variant="outlined" sx={{ mt: 0.5 }}>
               <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
                 <Typography variant="body2" sx={{ mb: 1 }}>
                   <strong>Tin nhắn:</strong> {message.userMessage}
                 </Typography>
-                
+
                 {message.botResponse && (
                   <>
                     <Divider sx={{ my: 1 }} />
@@ -150,7 +148,7 @@ const ChatPage = () => {
                     </Typography>
                   </>
                 )}
-                
+
                 {message.actionPerformed && (
                   <Box sx={{ mt: 2 }}>
                     <Chip
@@ -174,7 +172,7 @@ const ChatPage = () => {
       <Typography variant="h4" sx={{ mb: 3 }}>
         AI Assistant - Quản lý Quyền và Vai trò
       </Typography>
-      
+
       <Grid container spacing={3} sx={{ flex: 1 }}>
         <Grid item xs={12} md={8}>
           <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -195,9 +193,9 @@ const ChatPage = () => {
                   </Typography>
                 </Box>
               )}
-              
+
               {messages.map(renderMessage)}
-              
+
               {loading && (
                 <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
                   <CircularProgress size={24} />
@@ -206,7 +204,7 @@ const ChatPage = () => {
                   </Typography>
                 </Box>
               )}
-              
+
               <div ref={messagesEndRef} />
             </Box>
 
@@ -217,7 +215,7 @@ const ChatPage = () => {
                   {error}
                 </Alert>
               )}
-              
+
               <Stack direction="row" spacing={1}>
                 <TextField
                   fullWidth
@@ -250,11 +248,11 @@ const ChatPage = () => {
             <Typography variant="h6" sx={{ mb: 2 }}>
               Hướng dẫn sử dụng
             </Typography>
-            
+
             <Typography variant="body2" sx={{ mb: 2 }}>
               Bạn có thể sử dụng các lệnh sau:
             </Typography>
-            
+
             <Stack spacing={1}>
               <Chip label="Tạo role [tên role]" variant="outlined" size="small" />
               <Chip label="Tạo quyền [tên quyền]" variant="outlined" size="small" />
@@ -263,7 +261,7 @@ const ChatPage = () => {
               <Chip label="Danh sách roles" variant="outlined" size="small" />
               <Chip label="Danh sách users" variant="outlined" size="small" />
             </Stack>
-            
+
             <Typography variant="body2" sx={{ mt: 3, color: 'text.secondary' }}>
               AI sẽ hiểu và thực hiện các thao tác quản lý quyền tự động.
             </Typography>
