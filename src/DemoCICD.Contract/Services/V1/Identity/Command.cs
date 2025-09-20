@@ -26,6 +26,12 @@ public static class Command
     public record AssignUserToRole(Guid UserId, Guid RoleId) : ICommand;
     public record RemoveUserFromRole(Guid UserId, Guid RoleId) : ICommand;
     
+    // Account Settings Commands
+    public record UpdateNotificationSettings(Guid UserId, bool EmailNotifications, bool PushNotifications, bool SmsNotifications, bool NewsUpdates, bool SecurityAlerts, bool MarketingEmails) : ICommand;
+    public record UpdatePrivacySettings(Guid UserId, string ProfileVisibility, bool ShowEmail, bool ShowPhone, bool AllowSearchByEmail, bool AllowSearchByPhone) : ICommand;
+    public record RevokeUserSession(Guid UserId, string SessionId) : ICommand;
+    public record RevokeAllUserSessions(Guid UserId) : ICommand;
+    
     // Role Management Commands
     public record CreateRole(string Name, string Description, string RoleCode) : ICommand<Response.RoleCreated>;
     public record UpdateRole(Guid RoleId, string Name, string Description, string RoleCode) : ICommand<Response.RoleUpdated>;

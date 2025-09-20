@@ -35,6 +35,15 @@ public class UserManagementApi : ApiEndpoint, ICarterModule
         group1.MapGet("{userId:guid}/roles", GetUserRolesV1).RequireAuthorization();
         group1.MapPost("{userId:guid}/roles/{roleId:guid}", AssignUserToRoleV1).RequireAuthorization();
         group1.MapDelete("{userId:guid}/roles/{roleId:guid}", RemoveUserFromRoleV1).RequireAuthorization();
+        
+        // Account settings operations
+        group1.MapGet("{userId:guid}/notifications", GetNotificationSettingsV1).RequireAuthorization();
+        group1.MapPut("{userId:guid}/notifications", UpdateNotificationSettingsV1).RequireAuthorization();
+        group1.MapGet("{userId:guid}/privacy", GetPrivacySettingsV1).RequireAuthorization();
+        group1.MapPut("{userId:guid}/privacy", UpdatePrivacySettingsV1).RequireAuthorization();
+        group1.MapGet("{userId:guid}/sessions", GetUserSessionsV1).RequireAuthorization();
+        group1.MapDelete("{userId:guid}/sessions/{sessionId}", RevokeUserSessionV1).RequireAuthorization();
+        group1.MapDelete("{userId:guid}/sessions", RevokeAllUserSessionsV1).RequireAuthorization();
     }
 
     public static async Task<IResult> CreateUserV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.CreateUser command)

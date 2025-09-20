@@ -31,4 +31,10 @@ public static class Response
     public record PermissionDetails(Guid RoleId, string FunctionId, string ActionId, string RoleName, string FunctionName, string ActionName);
     public record PermissionList(IEnumerable<PermissionSummary> Permissions, int TotalCount, int Page, int PageSize);
     public record PermissionSummary(Guid RoleId, string FunctionId, string ActionId, string RoleName, string FunctionName, string ActionName);
+    
+    // Account Settings Responses
+    public record NotificationSettings(bool EmailNotifications, bool PushNotifications, bool SmsNotifications, bool NewsUpdates, bool SecurityAlerts, bool MarketingEmails);
+    public record PrivacySettings(string ProfileVisibility, bool ShowEmail, bool ShowPhone, bool AllowSearchByEmail, bool AllowSearchByPhone);
+    public record UserSession(string SessionId, string DeviceType, string Browser, string Location, DateTime LastActive, bool IsCurrent);
+    public record UserSessionList(IEnumerable<UserSession> Sessions);
 }
