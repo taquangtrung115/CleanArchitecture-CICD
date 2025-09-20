@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Thêm cấu hình
 
 Log.Logger = new LoggerConfiguration().ReadFrom
-    .Configuration(builder.Configuration)
+    .Configuration(builder.Configuration).WriteTo.Console()
     .CreateLogger();
 
 builder.Logging
@@ -96,16 +96,20 @@ try
 {
     await app.RunAsync();
     Log.Information("Dừng lại một cách gọn gàng");
+    Console.WriteLine("Dừng lại một cách gọn gàng");
 }
 catch (Exception ex)
 {
     Log.Fatal(ex, "Đã xảy ra ngoại lệ không được xử lý trong quá trình khởi động");
+    Console.WriteLine("Đã xảy ra ngoại lệ không được xử lý trong quá trình khởi động: \n" + ex);
     await app.StopAsync();
 }
 finally
 {
     Log.Information("Dừng lại một cách gọn gàng 2");
+    Console.WriteLine("Dừng lại một cách gọn gàng 2");
     await app.DisposeAsync();
 }
+
 
 public partial class Program { }
