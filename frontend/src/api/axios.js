@@ -29,18 +29,18 @@ const processQueue = (error, token = null) => {
 
 // Interceptor: Tự động thêm token vào header nếu có, trừ login/register
 axiosInstance.interceptors.request.use(
-    (config) => {
-        // Không thêm Authorization cho login/register
-        const isAuthApi = config.url?.includes('/auth/login') || config.url?.includes('/auth/register');
-        if (!isAuthApi) {
-            const token = localStorage.getItem('token');
-            if (token) {
-                config.headers['Authorization'] = `Bearer ${token}`;
-            }
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
+  (config) => {
+    // Không thêm Authorization cho login/register
+    const isAuthApi = config.url?.includes('/auth/login') || config.url?.includes('/auth/register');
+    if (!isAuthApi) {
+      const token = localStorage.getItem('token');
+      if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+      }
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
 );
 
 // Interceptor: Xử lý lỗi trả về
