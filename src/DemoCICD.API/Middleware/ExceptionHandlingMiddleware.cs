@@ -2,6 +2,7 @@
 using System;
 using DemoCICD.Domain.Exceptions;
 using Serilog;
+using System.Linq;
 
 namespace DemoCICD.API.Middleware;
 
@@ -31,9 +32,10 @@ internal sealed class ExceptionHandlingMiddleware : IMiddleware
         var response = new
         {
             title = GetTitle(exception),
+            type = GetErrorCode(exception),
             status = statusCode,
             detail = exception.Message,
-            //errors = GetErrors(exception),
+            errors = GetErrors(exception),
         };
 
         httpContext.Response.ContentType = "application/json";
@@ -48,7 +50,7 @@ internal sealed class ExceptionHandlingMiddleware : IMiddleware
         {
             BadRequestException => StatusCodes.Status400BadRequest,
             NotFoundException => StatusCodes.Status404NotFound,
-            //Application.Exceptions.ValidationException => StatusCodes.Status422UnprocessableEntity,
+            Application.Exceptions.ValidationException => StatusCodes.Status400BadRequest,
             FluentValidation.ValidationException => StatusCodes.Status400BadRequest,
             FormatException => StatusCodes.Status422UnprocessableEntity,
             _ => StatusCodes.Status500InternalServerError
@@ -57,19 +59,30 @@ internal sealed class ExceptionHandlingMiddleware : IMiddleware
     private static string GetTitle(Exception exception) =>
         exception switch
         {
+            Application.Exceptions.ValidationException => "Validation Error",
+            FluentValidation.ValidationException => "Validation Error",
             DomainException applicationException => applicationException.Title,
             _ => "Server Error"
         };
 
-    private static IReadOnlyCollection<Application.Exceptions.ValidationError> GetErrors(Exception exception)
-    {
-        IReadOnlyCollection<Application.Exceptions.ValidationError> errors = null;
-
-        if (exception is Application.Exceptions.ValidationException validationException)
+    private static string GetErrorCode(Exception exception) =>
+        exception switch
         {
-            errors = validationException.Errors;
-        }
+            Application.Exceptions.ValidationException => "ValidationError",
+            FluentValidation.ValidationException => "ValidationError",
+            DomainException domainException => domainException.GetType().Name,
+            _ => "InternalServerError"
+        };
 
-        return errors;
+    private static object? GetErrors(Exception exception)
+    {
+        return exception switch
+        {
+            Application.Exceptions.ValidationException validationException =>
+                validationException.Errors.Select(e => new { code = e.PropertyName, message = e.ErrorMessage }).ToArray(),
+            FluentValidation.ValidationException fluentValidationException =>
+                fluentValidationException.Errors.Select(e => new { code = e.PropertyName, message = e.ErrorMessage }).ToArray(),
+            _ => null
+        };
     }
 }
