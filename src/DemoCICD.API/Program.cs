@@ -104,7 +104,7 @@ catch (Exception ex)
 }
 finally
 {
-    Log.CloseAndFlush();
+    Log.Information("Dừng lại một cách gọn gàng 2");
     await app.DisposeAsync();
 }
 
