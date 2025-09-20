@@ -19,6 +19,7 @@ const TeamsPage = Loadable(lazy(() => import('pages/TeamsPage')));
 const ProductPage = Loadable(lazy(() => import('pages/product/ProductPage')));
 const VideoManagementPage = Loadable(lazy(() => import('pages/VideoManagementPage')));
 const NewsManagementPage = Loadable(lazy(() => import('pages/news/NewsManagementPage')));
+const ProfileViewPage = Loadable(lazy(() => import('pages/profile/ProfileViewPage')));
 const NotFound = Loadable(lazy(() => import('pages/error/NotFound')));
 
 // ==============================|| ADMIN ROUTING ||============================== //
@@ -87,6 +88,10 @@ const AdminRoutes = [
       {
         path: 'news',
         element: <NewsManagementPage />
+      },
+      {
+        path: 'profile',
+        element: <ProfileViewPage />
       },
       {
         path: '*',
