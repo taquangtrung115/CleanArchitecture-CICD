@@ -1,6 +1,7 @@
 using DemoCICD.Application.Abstractions;
 using DemoCICD.Contract.Services.V1.Identity;
 using DemoCICD.Domain.Entities.Identity;
+using DemoCICD.Domain.Services.Identity;
 using DemoCICD.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -10,19 +11,28 @@ namespace DemoCICD.Infrastructure.Authentication;
 public class PositionManagementService : IPositionManagementService
 {
     private readonly ApplicationDbContext _context;
+    private readonly IPositionDomainService _positionDomainService;
 
-    public PositionManagementService(ApplicationDbContext context)
+    public PositionManagementService(ApplicationDbContext context, IPositionDomainService positionDomainService)
     {
         _context = context;
+        _positionDomainService = positionDomainService;
     }
 
     public async Task<(Guid PositionId, string Name, string Code)?> CreatePositionAsync(string name, string description, string code, int level = 1, CancellationToken cancellationToken = default)
     {
         try
         {
-            // Check if position code already exists
+            // Use domain service to validate business rules
+            if (!_positionDomainService.CanCreatePosition(name, code, level))
+            {
+                Log.Warning("Position creation failed - invalid parameters: {Name}, {Code}, {Level}", name, code, level);
+                return null;
+            }
+
+            // Check if position code already exists (data access concern)
             var existingPosition = await _context.Positions
-                .FirstOrDefaultAsync(p => p.Code == code, cancellationToken);
+                .FirstOrDefaultAsync(p => p.Code == code.ToUpper(), cancellationToken);
 
             if (existingPosition != null)
             {
@@ -30,21 +40,13 @@ public class PositionManagementService : IPositionManagementService
                 return null;
             }
 
-            var position = new Position
-            {
-                Id = Guid.NewGuid(),
-                Name = name,
-                Description = description,
-                Code = code,
-                Level = level,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            };
+            // Use domain service to create position with business rules applied
+            var position = _positionDomainService.CreatePosition(name, description, code, level);
 
             _context.Positions.Add(position);
             await _context.SaveChangesAsync(cancellationToken);
 
-            Log.Information("Position created successfully: {Name} ({Code})", name, code);
+            Log.Information("Position created successfully: {Name} ({Code})", position.Name, position.Code);
             return (position.Id, position.Name, position.Code);
         }
         catch (Exception ex)
@@ -67,9 +69,16 @@ public class PositionManagementService : IPositionManagementService
                 return null;
             }
 
-            // Check if code already exists for another position
+            // Use domain service to validate business rules
+            if (!_positionDomainService.CanUpdatePosition(position, name, code, level))
+            {
+                Log.Warning("Position update failed - invalid parameters: {Name}, {Code}, {Level}", name, code, level);
+                return null;
+            }
+
+            // Check if code already exists for another position (data access concern)
             var existingPosition = await _context.Positions
-                .FirstOrDefaultAsync(p => p.Code == code && p.Id != positionId, cancellationToken);
+                .FirstOrDefaultAsync(p => p.Code == code.ToUpper() && p.Id != positionId, cancellationToken);
 
             if (existingPosition != null)
             {
@@ -77,16 +86,12 @@ public class PositionManagementService : IPositionManagementService
                 return null;
             }
 
-            position.Name = name;
-            position.Description = description;
-            position.Code = code;
-            position.Level = level;
-            position.IsActive = isActive;
-            position.UpdatedAt = DateTime.UtcNow;
+            // Use domain service to update position with business rules applied
+            _positionDomainService.UpdatePosition(position, name, description, code, level, isActive);
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            Log.Information("Position updated successfully: {Name} ({Code})", name, code);
+            Log.Information("Position updated successfully: {Name} ({Code})", position.Name, position.Code);
             return (position.Id, position.Name, position.Code);
         }
         catch (Exception ex)
@@ -109,13 +114,21 @@ public class PositionManagementService : IPositionManagementService
                 return false;
             }
 
-            // Check if any users are assigned to this position
-            var usersWithPosition = await _context.AppUses
+            // Check if any users are assigned to this position (data access concern)
+            var hasAssignedUsers = await _context.AppUses
                 .AnyAsync(u => u.PositionId == positionId, cancellationToken);
 
-            if (usersWithPosition)
+            // Use domain service to validate business rules for deletion
+            if (!_positionDomainService.CanDeletePosition(position, hasAssignedUsers))
             {
-                Log.Warning("Position deletion failed - position '{PositionId}' is assigned to users", positionId);
+                if (hasAssignedUsers)
+                {
+                    Log.Warning("Position deletion failed - position '{PositionId}' is assigned to users", positionId);
+                }
+                else
+                {
+                    Log.Warning("Position deletion failed - business rules prevent deletion of position '{PositionId}'", positionId);
+                }
                 return false;
             }
 
