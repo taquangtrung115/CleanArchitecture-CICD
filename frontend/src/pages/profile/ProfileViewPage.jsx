@@ -173,20 +173,20 @@ export default function ProfileViewPage() {
   const handleTabChange = useCallback((event, newValue) => {
     setActiveTab(newValue);
   }, []);
-  const handleNotificationChange = (setting) => (event) => {
+  const handleNotificationChange = useCallback((setting) => (event) => {
     setNotificationSettings((prev) => ({
       ...prev,
       [setting]: event.target.checked
     }));
-  };
+  }, []);
 
 
-  const handlePrivacyChange = (setting) => (event) => {
+  const handlePrivacyChange = useCallback((setting) => (event) => {
     setPrivacySettings((prev) => ({
       ...prev,
       [setting]: event.target.checked || event.target.value
     }));
-  };
+  }, []);
 
 
   const handleEditModeToggle = useCallback(() => {
@@ -214,13 +214,13 @@ export default function ProfileViewPage() {
   }, [editMode, profile]);
 
 
-  const handleFormDataChange = (field) => (event) => {
+  const handleFormDataChange = useCallback((field) => (event) => {
     setEditFormData((prev) => ({
       ...prev,
       [field]: event.target.value
     }));
-  }
-  const handleContactEditModeToggle = () => {
+  }, []);
+  const handleContactEditModeToggle = useCallback(() => {
     if (contactEditMode) {
       // Reset only contact form data if canceling edit
       setEditFormData(prev => ({
@@ -232,7 +232,7 @@ export default function ProfileViewPage() {
       }));
     }
     setContactEditMode(!contactEditMode);
-  };
+  }, [contactEditMode, profile]);
 
   const handleSaveProfile = async () => {
     setSaving(true);
@@ -539,13 +539,35 @@ export default function ProfileViewPage() {
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <UserOutlined />
                           </ListItemIcon>
-                          <ListItemText primary="Họ" secondary={profile.firstName || 'N/A'} />
+                          {editMode ? (
+                            <TextField
+                              fullWidth
+                              size="small"
+                              label="Họ"
+                              value={editFormData.firstName}
+                              onChange={handleFormDataChange('firstName')}
+                              variant="outlined"
+                            />
+                          ) : (
+                            <ListItemText primary="Họ" secondary={profile.firstName || 'N/A'} />
+                          )}
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <UserOutlined />
                           </ListItemIcon>
-                          <ListItemText primary="Tên" secondary={profile.lastName || 'N/A'} />
+                          {editMode ? (
+                            <TextField
+                              fullWidth
+                              size="small"
+                              label="Tên"
+                              value={editFormData.lastName}
+                              onChange={handleFormDataChange('lastName')}
+                              variant="outlined"
+                            />
+                          ) : (
+                            <ListItemText primary="Tên" secondary={profile.lastName || 'N/A'} />
+                          )}
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
@@ -558,6 +580,42 @@ export default function ProfileViewPage() {
                             <MailOutlined />
                           </ListItemIcon>
                           <ListItemText primary="Email" secondary={profile.email} />
+                        </ListItem>
+                        <ListItem disablePadding sx={{ mb: 1 }}>
+                          <ListItemIcon sx={{ minWidth: 40 }}>
+                            <UserOutlined />
+                          </ListItemIcon>
+                          {editMode ? (
+                            <TextField
+                              fullWidth
+                              size="small"
+                              label="Tiểu sử"
+                              value={editFormData.bio}
+                              onChange={handleFormDataChange('bio')}
+                              variant="outlined"
+                              multiline
+                              rows={2}
+                            />
+                          ) : (
+                            <ListItemText primary="Tiểu sử" secondary={profile?.bio || 'Chưa cập nhật'} />
+                          )}
+                        </ListItem>
+                        <ListItem disablePadding sx={{ mb: 1 }}>
+                          <ListItemIcon sx={{ minWidth: 40 }}>
+                            <GlobalOutlined />
+                          </ListItemIcon>
+                          {editMode ? (
+                            <TextField
+                              fullWidth
+                              size="small"
+                              label="Website"
+                              value={editFormData.website}
+                              onChange={handleFormDataChange('website')}
+                              variant="outlined"
+                            />
+                          ) : (
+                            <ListItemText primary="Website" secondary={profile?.website || 'Chưa cập nhật'} />
+                          )}
                         </ListItem>
                       </List>
                     </CardContent>
@@ -580,7 +638,6 @@ export default function ProfileViewPage() {
                           </ListItemIcon>
                           {editMode || contactEditMode ? (
                             <TextField
-                              key="phone-edit"
                               fullWidth
                               size="small"
                               label="Số điện thoại"
@@ -598,7 +655,6 @@ export default function ProfileViewPage() {
                           </ListItemIcon>
                           {editMode || contactEditMode ? (
                             <TextField
-                              key="address-edit"
                               fullWidth
                               size="small"
                               label="Địa chỉ"
@@ -616,7 +672,6 @@ export default function ProfileViewPage() {
                           </ListItemIcon>
                           {editMode || contactEditMode ? (
                             <TextField
-                              key="city-edit"
                               fullWidth
                               size="small"
                               label="Thành phố"
@@ -634,7 +689,6 @@ export default function ProfileViewPage() {
                           </ListItemIcon>
                           {editMode || contactEditMode ? (
                             <TextField
-                              key="country-edit"
                               fullWidth
                               size="small"
                               label="Quốc gia"
