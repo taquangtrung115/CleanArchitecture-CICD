@@ -1,5 +1,6 @@
 using DemoCICD.Application.Abstractions;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,9 @@ namespace DemoCICD.Infrastructure.Email;
 
 public class EmailService : IEmailService
 {
-    private readonly ILogger<EmailService> _logger;
 
-    public EmailService(ILogger<EmailService> logger)
+    public EmailService()
     {
-        _logger = logger;
     }
 
     public async Task<bool> SendPasswordResetEmailAsync(string toEmail, string resetToken, string userName)
@@ -27,9 +26,9 @@ public class EmailService : IEmailService
             var subject = "Password Reset Request";
             var body = GeneratePasswordResetEmailBody(userName, resetToken);
             
-            _logger.LogInformation("Sending password reset email to {Email} for user {UserName}", toEmail, userName);
-            _logger.LogInformation("Reset token: {Token}", resetToken);
-            _logger.LogInformation("Email body: {Body}", body);
+            Log.Information("Sending password reset email to {Email} for user {UserName}", toEmail, userName);
+            Log.Information("Reset token: {Token}", resetToken);
+            Log.Information("Email body: {Body}", body);
             
             // Simulate sending email
             await Task.Delay(100);
@@ -38,7 +37,7 @@ public class EmailService : IEmailService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error sending password reset email to {Email}", toEmail);
+            Log.Error(ex, "Error sending password reset email to {Email}", toEmail);
             return false;
         }
     }
@@ -47,8 +46,8 @@ public class EmailService : IEmailService
     {
         try
         {
-            _logger.LogInformation("Sending email to {Email} with subject {Subject}", toEmail, subject);
-            _logger.LogInformation("Email body: {Body}", body);
+            Log.Information("Sending email to {Email} with subject {Subject}", toEmail, subject);
+            Log.Information("Email body: {Body}", body);
             
             // Simulate sending email
             await Task.Delay(100);
@@ -57,7 +56,7 @@ public class EmailService : IEmailService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error sending email to {Email}", toEmail);
+            Log.Error(ex, "Error sending email to {Email}", toEmail);
             return false;
         }
     }
