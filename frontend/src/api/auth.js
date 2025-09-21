@@ -80,3 +80,16 @@ export const logout = async () => {
     return handleApiError(error);
   }
 };
+
+export const forgotPassword = async (email) => {
+  try {
+    const response = await axiosInstance.post(`${AUTH_ENDPOINT}/forgot-password`, { email });
+    return {
+      data: response.data,
+      status: response.status,
+      error: null
+    };
+  } catch (error) {
+    return handleApiError(error);
+  }
+};

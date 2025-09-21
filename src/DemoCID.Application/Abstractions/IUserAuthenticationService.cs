@@ -12,6 +12,7 @@ public interface IUserAuthenticationService
     Task<UserAuthResult> ValidateUserAsync(string userName, string password);
     Task<IEnumerable<string>> GetUserRolesAsync(string userId);
     Task<UserAuthResult> RegisterUserAsync(string userName, string email, string password, string firstName, string lastName, DateTime? dayOfBirth);
+    Task<bool> SendForgotPasswordEmailAsync(string email);
 }
 
 public interface IUserManagementService
