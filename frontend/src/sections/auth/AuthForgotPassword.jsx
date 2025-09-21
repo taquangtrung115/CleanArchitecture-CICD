@@ -47,7 +47,7 @@ export default function AuthForgotPassword({ isDemo = false }) {
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           setLoading(true);
           setErrorMessage('');
-          
+
           if (isDemo) {
             setTimeout(() => {
               setStatus({ success: true });
@@ -106,15 +106,7 @@ export default function AuthForgotPassword({ isDemo = false }) {
               )}
               <Grid size={12} sx={{ mb: -2 }}>
                 <AnimateButton>
-                  <Button
-                    disableElevation
-                    disabled={isSubmitting}
-                    fullWidth
-                    size="large"
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                  >
+                  <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
                     Send Reset Email
                   </Button>
                 </AnimateButton>
@@ -125,9 +117,7 @@ export default function AuthForgotPassword({ isDemo = false }) {
       </Formik>
       {success && (
         <Stack spacing={1} sx={{ mt: 3 }}>
-          <Alert severity="success">
-            Check your email for reset instructions
-          </Alert>
+          <Alert severity="success">Check your email for reset instructions</Alert>
         </Stack>
       )}
     </>

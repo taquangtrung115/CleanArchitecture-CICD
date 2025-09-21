@@ -58,18 +58,18 @@ export default function AuthResetPassword({ email, token }) {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     if (loading || !email || !token) return;
-    
+
     setLoading(true);
     setErrorMessage('');
-    
+
     const res = await resetPasswordWithToken(email, token, values.password);
-    
+
     if (res.error) {
       setErrorMessage(res.error.detail || 'Failed to reset password. Please try again.');
     } else {
       setSuccess(true);
     }
-    
+
     setLoading(false);
     setSubmitting(false);
   };
@@ -82,21 +82,12 @@ export default function AuthResetPassword({ email, token }) {
             <Typography variant="h6" sx={{ mb: 1 }}>
               Password Reset Successfully
             </Typography>
-            <Typography variant="body2">
-              Your password has been reset successfully. You can now log in with your new password.
-            </Typography>
+            <Typography variant="body2">Your password has been reset successfully. You can now log in with your new password.</Typography>
           </Alert>
         </Grid>
         <Grid size={12}>
           <AnimateButton>
-            <Button
-              component={RouterLink}
-              to="/login"
-              variant="contained"
-              color="primary"
-              fullWidth
-              size="large"
-            >
+            <Button component={RouterLink} to="/login" variant="contained" color="primary" fullWidth size="large">
               Go to Login
             </Button>
           </AnimateButton>
@@ -121,22 +112,11 @@ export default function AuthResetPassword({ email, token }) {
         <Grid size={12}>
           <Stack direction="row" spacing={2}>
             <AnimateButton>
-              <Button
-                component={RouterLink}
-                to="/forgot-password"
-                variant="contained"
-                color="primary"
-                fullWidth
-              >
+              <Button component={RouterLink} to="/forgot-password" variant="contained" color="primary" fullWidth>
                 Request New Reset
               </Button>
             </AnimateButton>
-            <Button
-              component={RouterLink}
-              to="/login"
-              variant="outlined"
-              fullWidth
-            >
+            <Button component={RouterLink} to="/login" variant="outlined" fullWidth>
               Back to Login
             </Button>
           </Stack>
@@ -153,9 +133,7 @@ export default function AuthResetPassword({ email, token }) {
         submit: null
       }}
       validationSchema={Yup.object().shape({
-        password: Yup.string()
-          .min(6, 'Password must be at least 6 characters')
-          .required('Password is required'),
+        password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
         confirmPassword: Yup.string()
           .required('Please confirm your password')
           .oneOf([Yup.ref('password')], 'Passwords must match')
@@ -260,9 +238,7 @@ export default function AuthResetPassword({ email, token }) {
             </Grid>
             <Grid size={12}>
               <Stack direction="row" spacing={1} sx={{ justifyContent: 'center' }}>
-                <Typography variant="body2">
-                  Remember your password?
-                </Typography>
+                <Typography variant="body2">Remember your password?</Typography>
                 <Link variant="body2" component={RouterLink} to="/login" color="primary">
                   Sign in
                 </Link>
@@ -275,7 +251,7 @@ export default function AuthResetPassword({ email, token }) {
   );
 }
 
-AuthResetPassword.propTypes = { 
+AuthResetPassword.propTypes = {
   email: PropTypes.string,
   token: PropTypes.string
 };

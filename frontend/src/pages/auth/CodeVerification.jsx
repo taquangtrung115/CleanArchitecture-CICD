@@ -2,16 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 // material-ui
-import {
-  Button,
-  FormHelperText,
-  Grid,
-  Stack,
-  Typography,
-  Box,
-  Alert,
-  TextField
-} from '@mui/material';
+import { Button, FormHelperText, Grid, Stack, Typography, Box, Alert, TextField } from '@mui/material';
 
 // third party
 import AnimateButton from 'components/@extended/AnimateButton';
@@ -72,7 +63,7 @@ const CodeVerificationPage = () => {
         }
       });
       setCode(newCode);
-      
+
       // Focus next empty input or last input
       const nextIndex = Math.min(index + pastedCode.length, 5);
       inputRefs.current[nextIndex]?.focus();
@@ -113,16 +104,16 @@ const CodeVerificationPage = () => {
 
     try {
       const response = await verifyResetCode(email, verificationCode);
-      
+
       if (response.error) {
         setError(response.error.detail || 'Invalid verification code');
       } else if (response.data?.value?.isValid) {
         // Code is valid, navigate to reset password page
-        navigate('/auth/reset-password', { 
-          state: { 
-            email, 
-            resetCode: verificationCode 
-          } 
+        navigate('/auth/reset-password', {
+          state: {
+            email,
+            resetCode: verificationCode
+          }
         });
       } else {
         setError('Invalid or expired verification code');
@@ -141,13 +132,13 @@ const CodeVerificationPage = () => {
 
     try {
       const response = await forgotPassword(email);
-      
+
       if (response.error) {
         setError(response.error.detail || 'Failed to resend code');
       } else {
         setResendSuccess(true);
         setTimeLeft(60);
-        
+
         // Start countdown again
         const timer = setInterval(() => {
           setTimeLeft((prev) => {
@@ -158,7 +149,7 @@ const CodeVerificationPage = () => {
             return prev - 1;
           });
         }, 1000);
-        
+
         // Clear success message after 3 seconds
         setTimeout(() => setResendSuccess(false), 3000);
       }
@@ -188,9 +179,9 @@ const CodeVerificationPage = () => {
             >
               Back
             </Button>
-            
+
             <SafetyOutlined style={{ fontSize: '48px', color: '#1976d2', marginBottom: '16px' }} />
-            
+
             <Typography variant="h3" gutterBottom>
               Verify Your Email
             </Typography>
@@ -202,7 +193,7 @@ const CodeVerificationPage = () => {
             </Typography>
           </Stack>
         </Grid>
-        
+
         <Grid item xs={12}>
           <Stack spacing={2}>
             <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
@@ -235,13 +226,13 @@ const CodeVerificationPage = () => {
                 />
               ))}
             </Box>
-            
+
             {error && (
               <FormHelperText error sx={{ textAlign: 'center', fontSize: '0.875rem' }}>
                 {error}
               </FormHelperText>
             )}
-            
+
             {resendSuccess && (
               <Alert severity="success" sx={{ textAlign: 'left' }}>
                 Verification code sent successfully!
@@ -269,17 +260,13 @@ const CodeVerificationPage = () => {
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             Didn't receive the code?
           </Typography>
-          
+
           {timeLeft > 0 ? (
             <Typography variant="body2" color="text.secondary">
               Resend code in {timeLeft}s
             </Typography>
           ) : (
-            <Button
-              variant="text"
-              onClick={handleResendCode}
-              disabled={resending}
-            >
+            <Button variant="text" onClick={handleResendCode} disabled={resending}>
               {resending ? 'Sending...' : 'Resend Code'}
             </Button>
           )}
