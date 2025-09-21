@@ -14,6 +14,7 @@ const UserPage = Loadable(lazy(() => import('pages/user/UserPage')));
 const RolePage = Loadable(lazy(() => import('pages/role/RolePage')));
 const PositionPage = Loadable(lazy(() => import('pages/position/PositionPage')));
 const PermissionPage = Loadable(lazy(() => import('pages/permission/PermissionPage')));
+const ActionPage = Loadable(lazy(() => import('pages/action/ActionPage')));
 const ChatPage = Loadable(lazy(() => import('pages/chat/ChatPage')));
 const UserChatPage = Loadable(lazy(() => import('pages/chat/UserChatPage')));
 const RidersPage = Loadable(lazy(() => import('pages/RidersPage')));
@@ -78,6 +79,10 @@ const AdminRoutes = [
       {
         path: 'permissions',
         element: <PermissionPage />
+      },
+      {
+        path: 'actions',
+        element: <ActionPage />
       },
       {
         path: 'chat',
