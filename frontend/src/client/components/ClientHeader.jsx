@@ -26,6 +26,7 @@ const navigationItems = [
   { label: 'News', path: '/news' },
   { label: 'Media', path: '/media' },
   { label: 'Videos', path: '/videos' },
+  { label: 'Map', path: '/map' },
   { label: 'Search', path: '/search' }
 ];
 
