@@ -66,7 +66,7 @@ public class PointsCalculationService : IPointsCalculationService
         var podiums = stats.Sum(s => s.Podiums);
         var polePositions = stats.Sum(s => s.PolePositions);
         var fastestLaps = stats.Sum(s => s.FastestLaps);
-        var racesParticipated = stats.Max(s => s.RacesParticipated); // Team participates if any rider participates
+        var racesParticipated = stats.Count > 0 ? stats.Max(s => s.RacesParticipated) : 0; // Team participates if any rider participates
 
         return new TeamStats(teamId, seasonId, totalPoints, wins, podiums, 
                            polePositions, fastestLaps, racesParticipated);
