@@ -14,7 +14,7 @@ class ChatService {
     }
 
     const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-    
+
     this.connection = new HubConnectionBuilder()
       .withUrl(`${baseURL}/chathub`, {
         accessTokenFactory: () => token
@@ -46,7 +46,7 @@ class ChatService {
       await this.connection.start();
       this.isConnected = true;
       console.log('SignalR connected successfully');
-      
+
       // Get online users after connecting
       await this.getOnlineUsers();
     } catch (error) {
@@ -123,7 +123,7 @@ class ChatService {
 
   emit(event, data) {
     if (this.eventHandlers.has(event)) {
-      this.eventHandlers.get(event).forEach(handler => {
+      this.eventHandlers.get(event).forEach((handler) => {
         try {
           handler(data);
         } catch (error) {

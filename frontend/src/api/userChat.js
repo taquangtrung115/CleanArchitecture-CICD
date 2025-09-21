@@ -25,14 +25,14 @@ export const sendMessage = async (senderId, receiverId, roomId, content, type = 
 
 export const getChatHistory = async (userId, otherUserId = null, roomId = null, page = 1, pageSize = 50) => {
   try {
-    const params = new URLSearchParams({ 
-      userId: userId.toString(), 
-      page: page.toString(), 
-      pageSize: pageSize.toString() 
+    const params = new URLSearchParams({
+      userId: userId.toString(),
+      page: page.toString(),
+      pageSize: pageSize.toString()
     });
     if (otherUserId) params.append('otherUserId', otherUserId.toString());
     if (roomId) params.append('roomId', roomId.toString());
-    
+
     const response = await axiosInstance.get(`${USER_CHAT_ENDPOINT}/messages/history?${params.toString()}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
@@ -91,10 +91,10 @@ export const createChatRoom = async (name, description = null, type = 'Group', m
 
 export const getChatRooms = async (userId, page = 1, pageSize = 20) => {
   try {
-    const params = new URLSearchParams({ 
-      userId: userId.toString(), 
-      page: page.toString(), 
-      pageSize: pageSize.toString() 
+    const params = new URLSearchParams({
+      userId: userId.toString(),
+      page: page.toString(),
+      pageSize: pageSize.toString()
     });
     const response = await axiosInstance.get(`${USER_CHAT_ENDPOINT}/rooms?${params.toString()}`);
     return { data: response.data, status: response.status, error: null };
@@ -135,9 +135,9 @@ export const leaveChatRoom = async (roomId, userId) => {
 
 export const getRoomMembers = async (roomId, page = 1, pageSize = 50) => {
   try {
-    const params = new URLSearchParams({ 
-      page: page.toString(), 
-      pageSize: pageSize.toString() 
+    const params = new URLSearchParams({
+      page: page.toString(),
+      pageSize: pageSize.toString()
     });
     const response = await axiosInstance.get(`${USER_CHAT_ENDPOINT}/rooms/${roomId}/members?${params.toString()}`);
     return { data: response.data, status: response.status, error: null };

@@ -32,37 +32,26 @@ export default function AuthCheckMail() {
         >
           <MailOutlined />
         </Box>
-        
+
         <Stack spacing={1} alignItems="center">
           <Typography variant="h4" gutterBottom>
             Check Your Email
           </Typography>
           <Typography variant="body1" color="text.secondary" textAlign="center">
-            We've sent a password reset link to your email address. Please check your inbox and follow the instructions to reset your password.
+            We've sent a password reset link to your email address. Please check your inbox and follow the instructions to reset your
+            password.
           </Typography>
         </Stack>
 
         <Alert severity="info" sx={{ width: '100%' }}>
-          <Typography variant="body2">
-            Didn't receive the email? Check your spam folder or try requesting a new reset link.
-          </Typography>
+          <Typography variant="body2">Didn't receive the email? Check your spam folder or try requesting a new reset link.</Typography>
         </Alert>
 
         <Stack spacing={2} sx={{ width: '100%' }}>
-          <Button 
-            component={RouterLink} 
-            to="/forgot-password"
-            variant="outlined" 
-            fullWidth
-          >
+          <Button component={RouterLink} to="/forgot-password" variant="outlined" fullWidth>
             Resend Email
           </Button>
-          <Button 
-            component={RouterLink} 
-            to="/login"
-            variant="contained" 
-            fullWidth
-          >
+          <Button component={RouterLink} to="/login" variant="contained" fullWidth>
             Back to Login
           </Button>
         </Stack>

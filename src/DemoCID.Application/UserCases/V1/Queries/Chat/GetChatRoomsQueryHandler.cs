@@ -1,14 +1,24 @@
 using DemoCICD.Contract.Abstractions.Message;
 using DemoCICD.Contract.Abstractions.Shared;
 using DemoCICD.Contract.Services.V1.Chat;
+using DemoCICD.Domain.Abstractions.Reponsitories;
+using DemoCICD.Domain.Entities.Chat;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace DemoCICD.Application.UserCases.V1.Queries.Chat;
 
 public sealed class GetChatRoomsQueryHandler : IQueryHandler<Query.GetChatRooms, Response.ChatRoomsResponse>
 {
-    public GetChatRoomsQueryHandler()
+    private readonly IRepositoryBase<ChatRoom, Guid> _roomRepository;
+    private readonly IRepositoryBase<ChatRoomMember, Guid> _memberRepository;
+
+    public GetChatRoomsQueryHandler(
+        IRepositoryBase<ChatRoom, Guid> roomRepository,
+        IRepositoryBase<ChatRoomMember, Guid> memberRepository)
     {
+        _roomRepository = roomRepository;
+        _memberRepository = memberRepository;
     }
 
     public async Task<Result<Response.ChatRoomsResponse>> Handle(Query.GetChatRooms request, CancellationToken cancellationToken)
@@ -17,69 +27,59 @@ public sealed class GetChatRoomsQueryHandler : IQueryHandler<Query.GetChatRooms,
         {
             Log.Information("Getting chat rooms for user {UserId}", request.UserId);
 
-            // Simulate loading from database
-            await Task.Delay(150, cancellationToken);
+            // Get rooms where the user is a member
+            var userRoomsQuery = _memberRepository.FindAll(m => m.UserId == request.UserId && m.IsActive)
+                .Include(m => m.Room)
+                .ThenInclude(r => r.Messages)
+                .Where(m => m.Room.IsActive)
+                .Select(m => m.Room)
+                .Distinct();
 
-            // Mock chat rooms data
-            var rooms = new List<Response.ChatRoomResponse>
+            // Apply pagination
+            var totalCount = await userRoomsQuery.CountAsync(cancellationToken);
+            
+            var rooms = await userRoomsQuery
+                .OrderByDescending(r => r.UpdatedAt ?? r.CreatedAt)
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .ToListAsync(cancellationToken);
+
+            var roomResponses = new List<Response.ChatRoomResponse>();
+
+            foreach (var room in rooms)
             {
-                new()
+                // Get member count for each room
+                var memberCount = await _memberRepository
+                    .FindAll(m => m.RoomId == room.Id && m.IsActive)
+                    .CountAsync(cancellationToken);
+
+                // Get last message info
+                var lastMessage = room.Messages
+                    .Where(m => !m.IsDeleted)
+                    .OrderByDescending(m => m.CreatedAt)
+                    .FirstOrDefault();
+
+                roomResponses.Add(new Response.ChatRoomResponse
                 {
-                    Id = Guid.NewGuid(),
-                    Name = "Alice Johnson",
-                    Description = "Direct conversation",
-                    Type = "Direct",
-                    IsActive = true,
-                    CreatedDate = DateTime.UtcNow.AddDays(-5),
-                    MemberCount = 2,
-                    LastMessageDate = DateTime.UtcNow.AddMinutes(-15),
-                    LastMessage = "Thanks for the update!"
-                },
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Development Team",
-                    Description = "Team discussions and updates",
-                    Type = "Group",
-                    IsActive = true,
-                    CreatedDate = DateTime.UtcNow.AddDays(-10),
-                    MemberCount = 5,
-                    LastMessageDate = DateTime.UtcNow.AddHours(-2),
-                    LastMessage = "Let's review the new features tomorrow"
-                },
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Bob Smith",
-                    Description = "Direct conversation",
-                    Type = "Direct",
-                    IsActive = true,
-                    CreatedDate = DateTime.UtcNow.AddDays(-3),
-                    MemberCount = 2,
-                    LastMessageDate = DateTime.UtcNow.AddHours(-4),
-                    LastMessage = "See you tomorrow!"
-                },
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Project Alpha",
-                    Description = "Project Alpha coordination",
-                    Type = "Group",
-                    IsActive = true,
-                    CreatedDate = DateTime.UtcNow.AddDays(-7),
-                    MemberCount = 8,
-                    LastMessageDate = DateTime.UtcNow.AddMinutes(-30),
-                    LastMessage = "The new deployment looks good"
-                }
-            };
+                    Id = room.Id,
+                    Name = room.Name,
+                    Description = room.Description,
+                    Type = room.Type.ToString(),
+                    IsActive = room.IsActive,
+                    CreatedDate = room.CreatedAt,
+                    MemberCount = memberCount,
+                    LastMessageDate = lastMessage?.CreatedAt,
+                    LastMessage = lastMessage?.Content
+                });
+            }
 
             var response = new Response.ChatRoomsResponse
             {
-                Rooms = rooms,
-                TotalCount = rooms.Count,
+                Rooms = roomResponses,
+                TotalCount = totalCount,
                 Page = request.Page,
                 PageSize = request.PageSize,
-                HasNext = false
+                HasNext = (request.Page * request.PageSize) < totalCount
             };
 
             return Result.Success(response);

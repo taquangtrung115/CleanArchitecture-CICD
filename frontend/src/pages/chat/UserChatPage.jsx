@@ -68,7 +68,7 @@ const UserChatPage = () => {
   const [newChatDialog, setNewChatDialog] = useState(false);
   const [searchUsers, setSearchUsers] = useState('');
   const [menuAnchor, setMenuAnchor] = useState(null);
-  
+
   const messagesEndRef = useRef(null);
   const currentUser = {
     id: 'current-user-id', // This should come from auth context
@@ -90,18 +90,18 @@ const UserChatPage = () => {
       try {
         setLoading(true);
         const token = localStorage.getItem('token'); // Get from auth context
-        
+
         if (token) {
           await chatService.startConnection(token);
           setConnectionStatus('connected');
-          
+
           // Set up event listeners
           chatService.on('messageReceived', handleMessageReceived);
           chatService.on('messageSent', handleMessageSent);
           chatService.on('userOnline', handleUserOnline);
           chatService.on('userOffline', handleUserOffline);
           chatService.on('onlineUsers', handleOnlineUsers);
-          
+
           // Load initial data
           await loadConversations();
           await loadOnlineUsers();
@@ -131,33 +131,39 @@ const UserChatPage = () => {
 
   // Event handlers
   const handleMessageReceived = useCallback((messageData) => {
-    setMessages(prev => [...prev, {
-      id: Date.now(),
-      content: messageData.Message,
-      senderId: messageData.SenderId,
-      receiverId: messageData.ReceiverId,
-      timestamp: new Date(messageData.Timestamp),
-      type: 'received'
-    }]);
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        content: messageData.Message,
+        senderId: messageData.SenderId,
+        receiverId: messageData.ReceiverId,
+        timestamp: new Date(messageData.Timestamp),
+        type: 'received'
+      }
+    ]);
   }, []);
 
   const handleMessageSent = useCallback((messageData) => {
-    setMessages(prev => [...prev, {
-      id: Date.now(),
-      content: messageData.Message,
-      senderId: messageData.SenderId,
-      receiverId: messageData.ReceiverId,
-      timestamp: new Date(messageData.Timestamp),
-      type: 'sent'
-    }]);
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        content: messageData.Message,
+        senderId: messageData.SenderId,
+        receiverId: messageData.ReceiverId,
+        timestamp: new Date(messageData.Timestamp),
+        type: 'sent'
+      }
+    ]);
   }, []);
 
   const handleUserOnline = useCallback((userId) => {
-    setOnlineUsers(prev => [...new Set([...prev, userId])]);
+    setOnlineUsers((prev) => [...new Set([...prev, userId])]);
   }, []);
 
   const handleUserOffline = useCallback((userId) => {
-    setOnlineUsers(prev => prev.filter(id => id !== userId));
+    setOnlineUsers((prev) => prev.filter((id) => id !== userId));
   }, []);
 
   const handleOnlineUsers = useCallback((users) => {
@@ -180,7 +186,7 @@ const UserChatPage = () => {
     try {
       const result = await userChatApi.getOnlineUsers(currentUser.id);
       if (result.data && result.data.isSuccess) {
-        setOnlineUsers(result.data.value.users.map(u => u.id) || []);
+        setOnlineUsers(result.data.value.users.map((u) => u.id) || []);
       }
     } catch (error) {
       console.error('Failed to load online users:', error);
@@ -190,14 +196,10 @@ const UserChatPage = () => {
   const loadChatHistory = async (conversationId, isRoom = false) => {
     try {
       setLoading(true);
-      const result = await userChatApi.getChatHistory(
-        currentUser.id,
-        isRoom ? null : conversationId,
-        isRoom ? conversationId : null
-      );
-      
+      const result = await userChatApi.getChatHistory(currentUser.id, isRoom ? null : conversationId, isRoom ? conversationId : null);
+
       if (result.data && result.data.isSuccess) {
-        const historyMessages = result.data.value.messages.map(msg => ({
+        const historyMessages = result.data.value.messages.map((msg) => ({
           id: msg.id,
           content: msg.content,
           senderId: msg.senderId,
@@ -261,16 +263,19 @@ const UserChatPage = () => {
   // Get connection status color
   const getConnectionStatusColor = () => {
     switch (connectionStatus) {
-      case 'connected': return 'success';
-      case 'connecting': return 'warning';
-      case 'error': return 'error';
-      default: return 'default';
+      case 'connected':
+        return 'success';
+      case 'connecting':
+        return 'warning';
+      case 'error':
+        return 'error';
+      default:
+        return 'default';
     }
   };
 
-  const filteredOnlineUsers = onlineUsers.filter(userId => 
-    userId !== currentUser.id && 
-    userId.toLowerCase().includes(searchUsers.toLowerCase())
+  const filteredOnlineUsers = onlineUsers.filter(
+    (userId) => userId !== currentUser.id && userId.toLowerCase().includes(searchUsers.toLowerCase())
   );
 
   return (
@@ -282,17 +287,8 @@ const UserChatPage = () => {
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             User Chat
           </Typography>
-          <Chip
-            icon={<CircleIcon />}
-            label={connectionStatus}
-            color={getConnectionStatusColor()}
-            size="small"
-            sx={{ mr: 2 }}
-          />
-          <IconButton
-            onClick={(e) => setMenuAnchor(e.currentTarget)}
-            size="small"
-          >
+          <Chip icon={<CircleIcon />} label={connectionStatus} color={getConnectionStatusColor()} size="small" sx={{ mr: 2 }} />
+          <IconButton onClick={(e) => setMenuAnchor(e.currentTarget)} size="small">
             <MoreVertIcon />
           </IconButton>
         </Toolbar>
@@ -325,7 +321,7 @@ const UserChatPage = () => {
                     <InputAdornment position="start">
                       <SearchIcon />
                     </InputAdornment>
-                  ),
+                  )
                 }}
               />
             </Box>
@@ -343,19 +339,13 @@ const UserChatPage = () => {
                       borderBottom: 1,
                       borderColor: 'divider',
                       '&.Mui-selected': {
-                        backgroundColor: theme.palette.action.selected,
+                        backgroundColor: theme.palette.action.selected
                       }
                     }}
                   >
                     <ListItemAvatar>
-                      <Badge
-                        color="success"
-                        variant="dot"
-                        invisible={!onlineUsers.includes(conversation.id)}
-                      >
-                        <Avatar>
-                          {conversation.type === 'room' ? <GroupIcon /> : <PersonIcon />}
-                        </Avatar>
+                      <Badge color="success" variant="dot" invisible={!onlineUsers.includes(conversation.id)}>
+                        <Avatar>{conversation.type === 'room' ? <GroupIcon /> : <PersonIcon />}</Avatar>
                       </Badge>
                     </ListItemAvatar>
                     <ListItemText
@@ -366,13 +356,7 @@ const UserChatPage = () => {
                         sx: { maxWidth: 150 }
                       }}
                     />
-                    {conversation.unreadCount > 0 && (
-                      <Chip
-                        label={conversation.unreadCount}
-                        color="primary"
-                        size="small"
-                      />
-                    )}
+                    {conversation.unreadCount > 0 && <Chip label={conversation.unreadCount} color="primary" size="small" />}
                   </ListItem>
                 ))}
               </List>
@@ -388,16 +372,15 @@ const UserChatPage = () => {
               <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Avatar sx={{ mr: 2 }}>
-                      {selectedConversation.type === 'room' ? <GroupIcon /> : <PersonIcon />}
-                    </Avatar>
+                    <Avatar sx={{ mr: 2 }}>{selectedConversation.type === 'room' ? <GroupIcon /> : <PersonIcon />}</Avatar>
                     <Box>
                       <Typography variant="h6">{selectedConversation.name}</Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {selectedConversation.type === 'room' 
+                        {selectedConversation.type === 'room'
                           ? `${selectedConversation.memberCount || 0} members`
-                          : onlineUsers.includes(selectedConversation.id) ? 'Online' : 'Offline'
-                        }
+                          : onlineUsers.includes(selectedConversation.id)
+                            ? 'Online'
+                            : 'Offline'}
                       </Typography>
                     </Box>
                   </Box>
@@ -435,12 +418,8 @@ const UserChatPage = () => {
                         <Card
                           sx={{
                             maxWidth: '70%',
-                            backgroundColor: message.type === 'sent' 
-                              ? theme.palette.primary.main 
-                              : theme.palette.grey[100],
-                            color: message.type === 'sent' 
-                              ? theme.palette.primary.contrastText 
-                              : theme.palette.text.primary,
+                            backgroundColor: message.type === 'sent' ? theme.palette.primary.main : theme.palette.grey[100],
+                            color: message.type === 'sent' ? theme.palette.primary.contrastText : theme.palette.text.primary
                           }}
                         >
                           <CardContent sx={{ p: 1.5, '&:last-child': { pb: 1.5 } }}>
@@ -449,9 +428,7 @@ const UserChatPage = () => {
                                 {message.senderName}
                               </Typography>
                             )}
-                            <Typography variant="body1">
-                              {message.content}
-                            </Typography>
+                            <Typography variant="body1">{message.content}</Typography>
                             <Typography variant="caption" sx={{ opacity: 0.7 }}>
                               {message.timestamp.toLocaleTimeString()}
                             </Typography>
@@ -487,25 +464,21 @@ const UserChatPage = () => {
                     ),
                     endAdornment: (
                       <InputAdornment position="end">
-                        <IconButton 
-                          onClick={handleSendMessage}
-                          disabled={!newMessage.trim()}
-                          color="primary"
-                        >
+                        <IconButton onClick={handleSendMessage} disabled={!newMessage.trim()} color="primary">
                           <SendIcon />
                         </IconButton>
                       </InputAdornment>
-                    ),
+                    )
                   }}
                 />
               </Box>
             </Paper>
           ) : (
-            <Box 
-              sx={{ 
-                height: '100%', 
-                display: 'flex', 
-                alignItems: 'center', 
+            <Box
+              sx={{
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
                 justifyContent: 'center',
                 flexDirection: 'column'
               }}
@@ -539,7 +512,7 @@ const UserChatPage = () => {
                 <InputAdornment position="start">
                   <SearchIcon />
                 </InputAdornment>
-              ),
+              )
             }}
           />
           <List>
@@ -571,11 +544,7 @@ const UserChatPage = () => {
       </Dialog>
 
       {/* Menu */}
-      <Menu
-        anchorEl={menuAnchor}
-        open={Boolean(menuAnchor)}
-        onClose={() => setMenuAnchor(null)}
-      >
+      <Menu anchorEl={menuAnchor} open={Boolean(menuAnchor)} onClose={() => setMenuAnchor(null)}>
         <MenuItemComponent onClick={() => setMenuAnchor(null)}>
           <ListItemIcon>
             <PersonIcon />

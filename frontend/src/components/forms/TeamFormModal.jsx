@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 // material-ui
@@ -14,63 +14,102 @@ import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import CircularProgress from '@mui/material/CircularProgress';
-import Alert from '@mui/material/Alert';
 
 // material-ui icons
 import CloseIcon from '@mui/icons-material/Close';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import SportsMotorsportsIcon from '@mui/icons-material/SportsMotorsports';
+import GroupsIcon from '@mui/icons-material/Groups';
 
-const initialState = {
-  firstName: '',
-  lastName: '',
-  racingNumber: '',
-  countryCode: '',
-  countryName: '',
-  countryFlag: '',
-  dateOfBirth: '',
-  height: '',
-  weight: '',
-  nickname: ''
-};
+// project imports
+import { createTeam } from '../../api/teams';
 
-const RiderFormModal = ({ open, onClose, onSubmit, initial = initialState, loading, error }) => {
-  const [form, setForm] = useState(initial);
+// ==============================|| TEAM FORM MODAL ||============================== //
+
+export default function TeamFormModal({ open, onClose, onSuccess, token }) {
+  const [form, setForm] = useState({
+    name: '',
+    shortName: '',
+    countryCode: '',
+    countryName: '',
+    countryFlag: '',
+    foundedYear: '',
+    description: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
-    onSubmit(form);
+
+    setError('');
+    setLoading(true);
+
+    try {
+      const result = await createTeam(form, token);
+      if (result && !result.error) {
+        // Reset form
+        setForm({
+          name: '',
+          shortName: '',
+          countryCode: '',
+          countryName: '',
+          countryFlag: '',
+          foundedYear: '',
+          description: ''
+        });
+        setLoading(false);
+        onSuccess();
+        onClose();
+      } else {
+        setError(result.error?.message || 'Tạo team thất bại');
+        setLoading(false);
+      }
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Có lỗi xảy ra khi tạo team');
+      setLoading(false);
+    }
   };
 
   const handleClose = () => {
     if (!loading) {
-      setForm(initialState);
+      setError('');
+      setForm({
+        name: '',
+        shortName: '',
+        countryCode: '',
+        countryName: '',
+        countryFlag: '',
+        foundedYear: '',
+        description: ''
+      });
       onClose();
     }
   };
 
   return (
-    <Dialog 
-      open={open} 
-      onClose={handleClose} 
-      maxWidth="md" 
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      maxWidth="md"
       fullWidth
       PaperProps={{
-        sx: { borderRadius: 2 }
+        sx: {
+          borderRadius: 2,
+          boxShadow: (theme) => theme.customShadows?.z16 || 16
+        }
       }}
     >
-      <DialogTitle sx={{ pb: 2 }}>
+      <DialogTitle>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Stack direction="row" alignItems="center" spacing={2}>
-            <SportsMotorsportsIcon color="primary" />
+            <GroupsIcon color="primary" />
             <Typography variant="h4" component="div">
-              Tạo Rider Mới
+              Tạo Team MotoGP Mới
             </Typography>
           </Stack>
           <IconButton
@@ -90,60 +129,40 @@ const RiderFormModal = ({ open, onClose, onSubmit, initial = initialState, loadi
 
       <form onSubmit={handleSubmit}>
         <DialogContent sx={{ py: 3 }}>
-          {error && (
-            <Alert severity="error" sx={{ mb: 3 }}>
-              {error}
-            </Alert>
-          )}
-          
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} md={6}>
               <TextField
-                label="Tên"
-                name="firstName"
-                value={form.firstName}
+                label="Tên Team"
+                name="name"
+                value={form.name}
                 onChange={handleChange}
                 fullWidth
                 required
                 disabled={loading}
                 variant="outlined"
                 size="medium"
+                placeholder="Nhập tên đầy đủ của team"
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} md={6}>
               <TextField
-                label="Họ"
-                name="lastName"
-                value={form.lastName}
+                label="Tên Viết Tắt"
+                name="shortName"
+                value={form.shortName}
                 onChange={handleChange}
                 fullWidth
                 required
                 disabled={loading}
                 variant="outlined"
                 size="medium"
+                placeholder="VD: YAM, HON, DUC"
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} md={4}>
               <TextField
-                label="Số đua"
-                name="racingNumber"
-                type="number"
-                value={form.racingNumber}
-                onChange={handleChange}
-                fullWidth
-                required
-                disabled={loading}
-                variant="outlined"
-                size="medium"
-                inputProps={{ min: 1, max: 99 }}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Mã quốc gia"
+                label="Mã Quốc Gia"
                 name="countryCode"
                 value={form.countryCode}
                 onChange={handleChange}
@@ -152,13 +171,14 @@ const RiderFormModal = ({ open, onClose, onSubmit, initial = initialState, loadi
                 disabled={loading}
                 variant="outlined"
                 size="medium"
-                placeholder="VD: IT, ES, JP"
+                placeholder="VD: JP, IT, ES"
+                inputProps={{ maxLength: 3, style: { textTransform: 'uppercase' } }}
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} md={8}>
               <TextField
-                label="Tên quốc gia"
+                label="Tên Quốc Gia"
                 name="countryName"
                 value={form.countryName}
                 onChange={handleChange}
@@ -167,12 +187,13 @@ const RiderFormModal = ({ open, onClose, onSubmit, initial = initialState, loadi
                 disabled={loading}
                 variant="outlined"
                 size="medium"
+                placeholder="VD: Japan, Italy, Spain"
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} md={6}>
               <TextField
-                label="Cờ quốc gia"
+                label="Cờ Quốc Gia"
                 name="countryFlag"
                 value={form.countryFlag}
                 onChange={handleChange}
@@ -181,110 +202,79 @@ const RiderFormModal = ({ open, onClose, onSubmit, initial = initialState, loadi
                 disabled={loading}
                 variant="outlined"
                 size="medium"
-                placeholder="VD: 🇮🇹, 🇪🇸, 🇯🇵"
+                placeholder="VD: 🇯🇵, 🇮🇹, 🇪🇸"
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} md={6}>
               <TextField
-                label="Ngày sinh"
-                name="dateOfBirth"
-                type="date"
-                value={form.dateOfBirth}
+                label="Năm Thành Lập"
+                name="foundedYear"
+                value={form.foundedYear}
                 onChange={handleChange}
                 fullWidth
                 required
                 disabled={loading}
                 variant="outlined"
                 size="medium"
+                type="date"
                 InputLabelProps={{
                   shrink: true,
                 }}
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
-                label="Chiều cao (cm)"
-                name="height"
-                type="number"
-                value={form.height}
+                label="Mô Tả"
+                name="description"
+                value={form.description}
                 onChange={handleChange}
                 fullWidth
-                required
                 disabled={loading}
                 variant="outlined"
                 size="medium"
-                inputProps={{ min: 100 }}
+                multiline
+                rows={4}
+                placeholder="Nhập thông tin mô tả về team (tùy chọn)"
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Cân nặng (kg)"
-                name="weight"
-                type="number"
-                value={form.weight}
-                onChange={handleChange}
-                fullWidth
-                required
-                disabled={loading}
-                variant="outlined"
-                size="medium"
-                inputProps={{ min: 30 }}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Biệt danh"
-                name="nickname"
-                value={form.nickname}
-                onChange={handleChange}
-                fullWidth
-                disabled={loading}
-                variant="outlined"
-                size="medium"
-                placeholder="Tùy chọn"
-              />
-            </Grid>
+            {error && (
+              <Grid item xs={12}>
+                <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+                  {error}
+                </Typography>
+              </Grid>
+            )}
           </Grid>
         </DialogContent>
 
         <Divider />
 
         <DialogActions sx={{ p: 3 }}>
-          <Button 
-            onClick={handleClose} 
-            disabled={loading} 
-            color="inherit" 
-            variant="outlined"
-          >
+          <Button onClick={handleClose} disabled={loading} color="inherit" variant="outlined">
             Hủy
           </Button>
           <Button
             type="submit"
             variant="contained"
-            disabled={loading}
-            startIcon={loading ? <CircularProgress size={16} /> : <PersonAddIcon />}
+            disabled={loading || !form.name || !form.shortName || !form.countryCode || !form.countryName || !form.countryFlag || !form.foundedYear}
+            startIcon={loading ? <CircularProgress size={16} /> : <GroupsIcon />}
             color="primary"
             sx={{ minWidth: 120 }}
           >
-            {loading ? 'Đang lưu...' : 'Lưu'}
+            {loading ? 'Đang tạo...' : 'Tạo Team'}
           </Button>
         </DialogActions>
       </form>
     </Dialog>
   );
-};
+}
 
-RiderFormModal.propTypes = {
+TeamFormModal.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  initial: PropTypes.object,
-  loading: PropTypes.bool,
-  error: PropTypes.string
+  onSuccess: PropTypes.func.isRequired,
+  token: PropTypes.string.isRequired
 };
-
-export default RiderFormModal;

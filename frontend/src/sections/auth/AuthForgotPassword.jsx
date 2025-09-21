@@ -28,12 +28,6 @@ import AnimateButton from 'components/@extended/AnimateButton';
 
 export default function AuthForgotPassword({ isDemo = false }) {
   const [loading, setLoading] = React.useState(false);
-  const [success, setSuccess] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState('');
-// ============================|| FORGOT PASSWORD ||============================ //
-
-export default function AuthForgotPassword({ isDemo = false }) {
-  const [loading, setLoading] = React.useState(false);
   const [formError, setFormError] = React.useState('');
   const [success, setSuccess] = React.useState(false);
   const navigate = useNavigate();
@@ -42,37 +36,21 @@ export default function AuthForgotPassword({ isDemo = false }) {
     if (loading) return;
     
     setLoading(true);
-    setErrorMessage('');
-    
-    const res = await forgotPassword(values.email);
-    
-    if (res.error) {
-      setErrorMessage(res.error.detail || 'An error occurred. Please try again.');
-    } else {
-      setSuccess(true);
-    }
-    
-    setLoading(false);
-    setSubmitting(false);
     setFormError('');
-    setLoading(true);
 
     try {
-      const res = await forgotPassword(values.email);
-      if (res.error) {
-        setFormError(res.error.detail || 'Failed to send reset email');
-      } else {
+      const result = await forgotPassword(values.email);
+      if (result.data) {
         setSuccess(true);
-        // Redirect to check mail page after 2 seconds
         setTimeout(() => {
-          navigate('/auth/check-mail');
+          navigate('/login');
         }, 2000);
+      } else {
+        setFormError(result.error?.detail || 'Failed to send reset email');
       }
     } catch (err) {
-      setFormError('An unexpected error occurred');
+      setFormError('An error occurred while sending reset email');
     }
-
-    setSubmitting(false);
     setLoading(false);
   };
 
@@ -90,13 +68,12 @@ export default function AuthForgotPassword({ isDemo = false }) {
           </Alert>
         </Grid>
         <Grid size={12}>
-          <Stack direction="row" spacing={2}>
+          <Stack spacing={2}>
             <AnimateButton>
               <Button
                 component={RouterLink}
                 to="/login"
                 variant="contained"
-                color="primary"
                 fullWidth
               >
                 Back to Login
@@ -112,93 +89,16 @@ export default function AuthForgotPassword({ isDemo = false }) {
           </Stack>
         </Grid>
       </Grid>
-      <Stack spacing={2}>
-        <Alert severity="success">
-          A password reset link has been sent to your email address.
-        </Alert>
-        <Typography variant="body2" color="text.secondary" align="center">
-          Redirecting to check mail page...
-        </Typography>
-      </Stack>
     );
   }
+  const [success, setSuccess] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState('');
+  const navigate = useNavigate();
+
+  if (loading) return <Loader />;
 
   return (
-    <Formik
-      initialValues={{
-        email: '',
-        submit: null
-      }}
-      validationSchema={Yup.object().shape({
-        email: Yup.string().email('Must be a valid email').max(255).required('Email is required')
-      })}
-      onSubmit={handleSubmit}
-    >
-      {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-        <form noValidate onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
-            <Grid size={12}>
-              <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
-                Enter your email address and we'll send you instructions to reset your password.
-              </Typography>
-            </Grid>
-            <Grid size={12}>
-              <Stack spacing={1}>
-                <InputLabel htmlFor="email-forgot">Email Address</InputLabel>
-                <OutlinedInput
-                  id="email-forgot"
-                  type="email"
-                  value={values.email}
-                  name="email"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  placeholder="Enter your email address"
-                  fullWidth
-                  error={Boolean(touched.email && errors.email)}
-                />
-              </Stack>
-              {touched.email && errors.email && (
-                <FormHelperText error id="standard-weight-helper-text-email-forgot">
-                  {errors.email}
-                </FormHelperText>
-              )}
-            </Grid>
-            <Grid size={12}>
-              {errorMessage && (
-                <FormHelperText error sx={{ mb: 1 }}>
-                  {errorMessage}
-                </FormHelperText>
-              )}
-              <AnimateButton>
-                <Button
-                  disableElevation
-                  disabled={isSubmitting || loading}
-                  fullWidth
-                  size="large"
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                >
-                  {loading ? 'Sending...' : 'Send Reset Instructions'}
-                </Button>
-              </AnimateButton>
-            </Grid>
-            <Grid size={12}>
-              <Stack direction="row" spacing={1} sx={{ justifyContent: 'center' }}>
-                <Typography variant="body2">
-                  Remember your password?
-                </Typography>
-                <Link variant="body2" component={RouterLink} to="/login" color="primary">
-                  Sign in
-                </Link>
-              </Stack>
-            </Grid>
-          </Grid>
-        </form>
-      )}
-    </Formik>
     <>
-      {loading && <Loader />}
       <Formik
         initialValues={{
           email: '',
@@ -207,72 +107,109 @@ export default function AuthForgotPassword({ isDemo = false }) {
         validationSchema={Yup.object().shape({
           email: Yup.string().email('Must be a valid email').max(255).required('Email is required')
         })}
-        onSubmit={handleSubmit}
+        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+          setLoading(true);
+          setErrorMessage('');
+
+          if (isDemo) {
+            setTimeout(() => {
+              setStatus({ success: true });
+              setLoading(false);
+              setSuccess(true);
+              setSubmitting(false);
+            }, 500);
+          } else {
+            try {
+              const result = await forgotPassword(values.email);
+              if (result.error) {
+                setErrorMessage(result.error.message || 'Failed to send reset email');
+                setErrors({ submit: result.error.message || 'Failed to send reset email' });
+              } else {
+                setStatus({ success: true });
+                setSuccess(true);
+              }
+            } catch (err) {
+              setErrorMessage('An error occurred while sending reset email');
+              setErrors({ submit: 'An error occurred while sending reset email' });
+            }
+            setLoading(false);
+            setSubmitting(false);
+          }
+        }}
       >
-        {({ errors, handleBlur, handleChange, touched, values, isSubmitting }) => (
-          <form
-            noValidate
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSubmit(values, { setSubmitting: () => {} });
-            }}
-          >
+        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+          <form noValidate onSubmit={handleSubmit}>
             <Grid container spacing={3}>
               <Grid size={12}>
                 <Stack spacing={1}>
-                  <Typography variant="h4" gutterBottom>
-                    Forgot Password
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Enter your email address and we'll send you a link to reset your password.
-                  </Typography>
-                </Stack>
-              </Grid>
-              <Grid size={12}>
-                <Stack sx={{ gap: 1 }}>
                   <InputLabel htmlFor="email-forgot">Email Address</InputLabel>
                   <OutlinedInput
+                    fullWidth
+                    error={Boolean(touched.email && errors.email)}
                     id="email-forgot"
                     type="email"
                     value={values.email}
                     name="email"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    placeholder="Enter your email address"
-                    fullWidth
-                    error={Boolean(touched.email && errors.email)}
+                    placeholder="Enter email address"
+                    inputProps={{}}
                   />
+                  {touched.email && errors.email && (
+                    <FormHelperText error id="helper-text-email-forgot">
+                      {errors.email}
+                    </FormHelperText>
+                  )}
                 </Stack>
-                {touched.email && errors.email && (
-                  <FormHelperText error id="standard-weight-helper-text-email-forgot">
-                    {errors.email}
-                  </FormHelperText>
-                )}
+              </Grid>
+              {formError && (
+                <Grid size={12}>
+                  <FormHelperText error>{formError}</FormHelperText>
+                </Grid>
+              )}
+              <Grid size={12} sx={{ mb: -1 }}>
+                <Typography variant="body2">
+                  Do not forgot to check SPAM box.
+                </Typography>
               </Grid>
               <Grid size={12}>
-                {formError && <FormHelperText error>{formError}</FormHelperText>}
                 <AnimateButton>
-                  <Button fullWidth size="large" variant="contained" color="primary" type="submit" disabled={isSubmitting}>
-                    Send Reset Link
+                  <Button
+                    disableElevation
+                    disabled={isSubmitting || loading}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                  >
+                    Send Password Reset Email
+              </Grid>
+              {errors.submit && (
+                <Grid size={12}>
+                  <FormHelperText error>{errors.submit}</FormHelperText>
+                </Grid>
+              )}
+              <Grid size={12} sx={{ mb: -2 }}>
+                <AnimateButton>
+                  <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
+                    Send Reset Email
                   </Button>
                 </AnimateButton>
-              </Grid>
-              <Grid size={12}>
-                <Stack direction="row" justifyContent="center" alignItems="center">
-                  <Typography variant="body2">
-                    Remember your password?{' '}
-                    <Link variant="h6" component={RouterLink} to="/login" color="text.primary">
-                      Back to Login
-                    </Link>
-                  </Typography>
-                </Stack>
               </Grid>
             </Grid>
           </form>
         )}
       </Formik>
+      {success && (
+        <Stack spacing={1} sx={{ mt: 3 }}>
+          <Alert severity="success">Check your email for reset instructions</Alert>
+        </Stack>
+      )}
     </>
   );
 }
 
-AuthForgotPassword.propTypes = { isDemo: PropTypes.bool };
+AuthForgotPassword.propTypes = {
+  isDemo: PropTypes.bool
+};

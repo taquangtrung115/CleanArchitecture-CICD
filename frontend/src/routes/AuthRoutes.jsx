@@ -13,7 +13,6 @@ const CheckMailPage = Loadable(lazy(() => import('pages/auth/CheckMail')));
 const CodeVerificationPage = Loadable(lazy(() => import('pages/auth/CodeVerification')));
 const ResetPasswordPage = Loadable(lazy(() => import('pages/auth/ResetPassword')));
 
-
 // ==============================|| AUTH ROUTING ||============================== //
 
 const AuthRoutes = [
