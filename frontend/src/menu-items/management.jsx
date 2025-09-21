@@ -1,5 +1,5 @@
 // assets
-import { UserOutlined, TeamOutlined, SafetyOutlined, RobotOutlined, IdcardOutlined, MessageOutlined, TrophyOutlined } from '@ant-design/icons';
+import { UserOutlined, TeamOutlined, SafetyOutlined, RobotOutlined, IdcardOutlined, MessageOutlined, TrophyOutlined, SettingOutlined } from '@ant-design/icons';
 
 const icons = {
   UserOutlined,
@@ -8,7 +8,8 @@ const icons = {
   RobotOutlined,
   IdcardOutlined,
   MessageOutlined,
-  TrophyOutlined
+  TrophyOutlined,
+  SettingOutlined
 };
 
 const management = {
@@ -50,6 +51,13 @@ const management = {
       type: 'item',
       url: '/admin/permissions',
       icon: icons.SafetyOutlined
+    },
+    {
+      id: 'action-management',
+      title: 'Actions',
+      type: 'item',
+      url: '/admin/actions',
+      icon: icons.SettingOutlined
     },
     {
       id: 'ai-chat',
