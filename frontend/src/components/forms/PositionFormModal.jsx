@@ -24,6 +24,7 @@ import WorkIcon from '@mui/icons-material/Work';
 
 // project imports
 import { createPosition, updatePosition } from 'api/position';
+import { getErrorMessage } from '../../utils/errorHandler';
 
 // ==============================|| POSITION FORM MODAL ||============================== //
 
@@ -95,7 +96,7 @@ export default function PositionFormModal({ open, onClose, onSuccess, editPositi
         onSuccess();
         onClose();
       } else if (res.error) {
-        setError(res.error.message || `Có lỗi xảy ra khi ${editPosition ? 'cập nhật' : 'tạo'} position`);
+        setError(getErrorMessage(res) || `Có lỗi xảy ra khi ${editPosition ? 'cập nhật' : 'tạo'} position`);
       }
     } catch (error) {
       setError(`Có lỗi xảy ra khi ${editPosition ? 'cập nhật' : 'tạo'} position`);

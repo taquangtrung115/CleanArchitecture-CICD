@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { forgotPassword } from 'api/auth';
+import { getErrorMessage } from '../../utils/errorHandler';
 
 import Loader from 'components/Loader';
 import { Link as RouterLink } from 'react-router-dom';
@@ -46,7 +47,7 @@ export default function AuthForgotPassword({ isDemo = false }) {
           navigate('/login');
         }, 2000);
       } else {
-        setFormError(result.error?.detail || 'Failed to send reset email');
+        setFormError(getErrorMessage(result) || 'Failed to send reset email');
       }
     } catch (err) {
       setFormError('An error occurred while sending reset email');
@@ -119,8 +120,9 @@ export default function AuthForgotPassword({ isDemo = false }) {
             try {
               const result = await forgotPassword(values.email);
               if (result.error) {
-                setErrorMessage(result.error.message || 'Failed to send reset email');
-                setErrors({ submit: result.error.message || 'Failed to send reset email' });
+                const errorMsg = getErrorMessage(result) || 'Failed to send reset email';
+                setErrorMessage(errorMsg);
+                setErrors({ submit: errorMsg });
               } else {
                 setStatus({ success: true });
                 setSuccess(true);

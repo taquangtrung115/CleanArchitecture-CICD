@@ -1,5 +1,6 @@
 // src/api/userChat.js
 import axiosInstance from './axios';
+import { handleApiError } from '../utils/errorHandler';
 
 const USER_CHAT_ENDPOINT = '/api/v1/user-chat';
 
@@ -15,11 +16,7 @@ export const sendMessage = async (senderId, receiverId, roomId, content, type = 
     });
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -36,11 +33,7 @@ export const getChatHistory = async (userId, otherUserId = null, roomId = null, 
     const response = await axiosInstance.get(`${USER_CHAT_ENDPOINT}/messages/history?${params.toString()}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -49,11 +42,7 @@ export const markMessageAsRead = async (messageId, userId) => {
     const response = await axiosInstance.patch(`${USER_CHAT_ENDPOINT}/messages/${messageId}/read?userId=${userId}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -62,11 +51,7 @@ export const getUnreadCount = async (userId) => {
     const response = await axiosInstance.get(`${USER_CHAT_ENDPOINT}/messages/unread-count?userId=${userId}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -81,11 +66,7 @@ export const createChatRoom = async (name, description = null, type = 'Group', m
     });
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -99,11 +80,7 @@ export const getChatRooms = async (userId, page = 1, pageSize = 20) => {
     const response = await axiosInstance.get(`${USER_CHAT_ENDPOINT}/rooms?${params.toString()}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -112,11 +89,7 @@ export const joinChatRoom = async (roomId, userId) => {
     const response = await axiosInstance.post(`${USER_CHAT_ENDPOINT}/rooms/${roomId}/join?userId=${userId}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -125,11 +98,7 @@ export const leaveChatRoom = async (roomId, userId) => {
     const response = await axiosInstance.post(`${USER_CHAT_ENDPOINT}/rooms/${roomId}/leave?userId=${userId}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -142,11 +111,7 @@ export const getRoomMembers = async (roomId, page = 1, pageSize = 50) => {
     const response = await axiosInstance.get(`${USER_CHAT_ENDPOINT}/rooms/${roomId}/members?${params.toString()}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -156,10 +121,6 @@ export const getOnlineUsers = async (currentUserId) => {
     const response = await axiosInstance.get(`${USER_CHAT_ENDPOINT}/users/online?currentUserId=${currentUserId}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };

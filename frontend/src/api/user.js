@@ -22,11 +22,7 @@ export const getUsers = async (page = 1, pageSize = 20, searchTerm = '') => {
     const response = await axiosInstance.get(`${USER_ENDPOINT}?${params.toString()}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -36,11 +32,7 @@ export const getUserDetail = async (userId) => {
     const response = await axiosInstance.get(`${USER_ENDPOINT}/${userId}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -50,11 +42,7 @@ export const getCurrentUserProfile = async () => {
     const response = await axiosInstance.get(`${USER_ENDPOINT}/profile/me`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -64,11 +52,7 @@ export const updateCurrentUserProfile = async (profileData) => {
     const response = await axiosInstance.put(`${USER_ENDPOINT}/profile/me`, profileData);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -78,11 +62,7 @@ export const updateUser = async (userId, payload) => {
     const response = await axiosInstance.put(`${USER_ENDPOINT}/${userId}`, payload);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -92,11 +72,7 @@ export const deleteUser = async (userId) => {
     const response = await axiosInstance.delete(`${USER_ENDPOINT}/${userId}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -106,11 +82,7 @@ export const changePassword = async (userId, { currentPassword, newPassword }) =
     const response = await axiosInstance.post(`${USER_ENDPOINT}/${userId}/change-password`, { userId, currentPassword, newPassword });
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -120,11 +92,7 @@ export const resetPassword = async (userId, newPassword) => {
     const response = await axiosInstance.post(`${USER_ENDPOINT}/${userId}/reset-password`, { userId, newPassword });
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -134,11 +102,7 @@ export const lockUser = async (userId) => {
     const response = await axiosInstance.post(`${USER_ENDPOINT}/${userId}/lock`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -148,11 +112,7 @@ export const unlockUser = async (userId) => {
     const response = await axiosInstance.post(`${USER_ENDPOINT}/${userId}/unlock`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -162,11 +122,7 @@ export const getUserRoles = async (userId) => {
     const response = await axiosInstance.get(`${USER_ENDPOINT}/${userId}/roles`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -176,11 +132,7 @@ export const addUserToRole = async (userId, roleId) => {
     const response = await axiosInstance.post(`${USER_ENDPOINT}/${userId}/roles/${roleId}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -190,11 +142,7 @@ export const removeUserFromRole = async (userId, roleId) => {
     const response = await axiosInstance.delete(`${USER_ENDPOINT}/${userId}/roles/${roleId}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -204,10 +152,6 @@ export const getManagerOptions = async () => {
     const response = await axiosInstance.get(`${USER_ENDPOINT}/managers`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };

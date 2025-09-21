@@ -23,6 +23,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 
 // project imports
 import { createAction, updateAction } from 'api/action';
+import { getErrorMessage } from '../../utils/errorHandler';
 
 // ==============================|| ACTION FORM MODAL ||============================== //
 
@@ -91,7 +92,7 @@ export default function ActionFormModal({ open, onClose, onSuccess, editingActio
         onSuccess();
         onClose();
       } else {
-        setError(res.error?.message || `${editingAction ? 'Cập nhật' : 'Tạo'} action thất bại`);
+        setError(getErrorMessage(res) || `${editingAction ? 'Cập nhật' : 'Tạo'} action thất bại`);
         setLoading(false);
       }
     } catch (err) {
