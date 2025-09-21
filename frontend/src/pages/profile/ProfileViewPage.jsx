@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   Typography,
   Box,
@@ -50,7 +51,6 @@ import IdcardOutlined from '@ant-design/icons/IdcardOutlined';
 import ClockCircleOutlined from '@ant-design/icons/ClockCircleOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import BellOutlined from '@ant-design/icons/BellOutlined';
-import LockOutlined from '@ant-design/icons/LockOutlined';
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import MobileOutlined from '@ant-design/icons/MobileOutlined';
@@ -59,6 +59,7 @@ import GlobalOutlined from '@ant-design/icons/GlobalOutlined';
 import avatar1 from 'assets/images/users/avatar-1.png';
 
 export default function ProfileViewPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -114,7 +115,7 @@ export default function ProfileViewPage() {
       } else {
         setError('Không thể tải thông tin profile');
       }
-    } catch {
+    } catch (error) {
       setError('Đã xảy ra lỗi khi tải profile');
     } finally {
       setLoading(false);
@@ -123,7 +124,12 @@ export default function ProfileViewPage() {
 
   useEffect(() => {
     fetchProfile();
-  }, []);
+    
+    // Check if edit mode should be activated from URL parameter
+    if (searchParams.get('edit') === 'true') {
+      setEditMode(true);
+    }
+  }, [searchParams]);
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -156,6 +162,13 @@ export default function ProfileViewPage() {
         bio: profile?.bio || '',
         website: profile?.website || ''
       });
+      // Remove edit parameter from URL
+      searchParams.delete('edit');
+      setSearchParams(searchParams);
+    } else {
+      // Add edit parameter to URL
+      searchParams.set('edit', 'true');
+      setSearchParams(searchParams);
     }
     setEditMode(!editMode);
   };
@@ -180,10 +193,13 @@ export default function ProfileViewPage() {
         setError('Không thể cập nhật profile: ' + (res.error.message || res.error));
       } else {
         setEditMode(false);
+        // Remove edit parameter from URL
+        searchParams.delete('edit');
+        setSearchParams(searchParams);
         // Refresh profile data
         await fetchProfile();
       }
-    } catch (err) {
+    } catch (error) {
       setError('Đã xảy ra lỗi khi cập nhật profile');
     } finally {
       setSaving(false);
