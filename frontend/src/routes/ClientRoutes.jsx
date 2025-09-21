@@ -19,6 +19,7 @@ const VideoPage = Loadable(lazy(() => import('client/pages/video/VideoPage')));
 const SearchPage = Loadable(lazy(() => import('client/pages/search/SearchPage')));
 const MapPage = Loadable(lazy(() => import('client/pages/map/MapPage')));
 const AccountSettingsDemo = Loadable(lazy(() => import('pages/profile/AccountSettingsDemo')));
+const RiderFormDemo = Loadable(lazy(() => import('pages/RiderFormDemo')));
 
 // ==============================|| CLIENT ROUTING ||============================== //
 
@@ -82,6 +83,10 @@ const ClientRoutes = [
       {
         path: 'account-settings-demo',
         element: <AccountSettingsDemo />
+      },
+      {
+        path: 'rider-form-demo',
+        element: <RiderFormDemo />
       }
     ]
   }
