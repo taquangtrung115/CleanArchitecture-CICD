@@ -1,5 +1,6 @@
 using DemoCICD.Application.Abstractions;
 using DemoCICD.Domain.Entities.Identity;
+using DemoCICD.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -11,13 +12,19 @@ public class UserManagementService : IUserManagementService
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly RoleManager<AppRole> _roleManager;
+    private readonly ApplicationDbContext _context;
+    private readonly IEmailService _emailService;
 
     public UserManagementService(
         UserManager<AppUser> userManager,
-        RoleManager<AppRole> roleManager)
+        RoleManager<AppRole> roleManager,
+        ApplicationDbContext context,
+        IEmailService emailService)
     {
         _userManager = userManager;
         _roleManager = roleManager;
+        _context = context;
+        _emailService = emailService;
     }
 
     public async Task<AppUser?> GetUserByIdAsync(Guid userId)
@@ -341,5 +348,137 @@ public class UserManagementService : IUserManagementService
             Log.Error(ex, "Error getting roles for user: {UserId}", userId);
             return Enumerable.Empty<AppRole>();
         }
+    }
+
+    // Password Reset Methods
+    public async Task<bool> InitiatePasswordResetAsync(string email)
+    {
+        try
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                // For security, don't reveal if email exists
+                Log.Warning("Password reset requested for non-existent email: {Email}", email);
+                return false;
+            }
+
+            // Generate a 6-digit reset code
+            var resetCode = GenerateResetCode();
+            
+            // Clean up old reset tokens for this email
+            var oldTokens = await _context.PasswordResetTokens
+                .Where(t => t.Email == email && !t.IsUsed)
+                .ToListAsync();
+                
+            foreach (var oldToken in oldTokens)
+            {
+                oldToken.IsUsed = true;
+                oldToken.UsedAt = DateTime.UtcNow;
+            }
+
+            // Create new reset token
+            var resetToken = new PasswordResetToken
+            {
+                Id = Guid.NewGuid(),
+                Email = email,
+                ResetCode = resetCode,
+                ExpiresAt = DateTime.UtcNow.AddMinutes(15), // 15 minute expiry
+                CreatedAt = DateTime.UtcNow,
+                IsUsed = false
+            };
+
+            _context.PasswordResetTokens.Add(resetToken);
+            await _context.SaveChangesAsync();
+
+            // Send email with reset code
+            var emailSent = await _emailService.SendPasswordResetCodeAsync(email, resetCode, user.FirstName);
+            
+            if (!emailSent)
+            {
+                Log.Error("Failed to send password reset email to: {Email}", email);
+                return false;
+            }
+
+            Log.Information("Password reset code sent to: {Email}", email);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error initiating password reset for email: {Email}", email);
+            return false;
+        }
+    }
+
+    public async Task<bool> VerifyResetCodeAsync(string email, string resetCode)
+    {
+        try
+        {
+            var token = await _context.PasswordResetTokens
+                .Where(t => t.Email == email && t.ResetCode == resetCode && t.IsValid)
+                .FirstOrDefaultAsync();
+
+            return token != null;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error verifying reset code for email: {Email}", email);
+            return false;
+        }
+    }
+
+    public async Task<bool> ResetPasswordWithCodeAsync(string email, string resetCode, string newPassword)
+    {
+        try
+        {
+            var token = await _context.PasswordResetTokens
+                .Where(t => t.Email == email && t.ResetCode == resetCode && t.IsValid)
+                .FirstOrDefaultAsync();
+
+            if (token == null)
+            {
+                Log.Warning("Invalid or expired reset code used for email: {Email}", email);
+                return false;
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                Log.Error("User not found for email during password reset: {Email}", email);
+                return false;
+            }
+
+            // Reset password using Identity
+            var resetTokenCore = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, resetTokenCore, newPassword);
+
+            if (result.Succeeded)
+            {
+                // Mark token as used
+                token.IsUsed = true;
+                token.UsedAt = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+
+                Log.Information("Password reset successful for email: {Email}", email);
+                return true;
+            }
+            else
+            {
+                Log.Error("Password reset failed for email: {Email}. Errors: {Errors}", 
+                    email, string.Join(", ", result.Errors.Select(e => e.Description)));
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error resetting password for email: {Email}", email);
+            return false;
+        }
+    }
+
+    private string GenerateResetCode()
+    {
+        var random = new Random();
+        return random.Next(100000, 999999).ToString(); // 6-digit code
     }
 }
