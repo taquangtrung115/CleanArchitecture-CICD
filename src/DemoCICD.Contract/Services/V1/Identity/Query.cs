@@ -31,6 +31,14 @@ public static class Query
     public record GetPermissions(int Page = 1, int PageSize = 10) : IQuery<Response.PermissionList>;
     public record GetPermissionById(Guid RoleId, string FunctionId, string ActionId) : IQuery<Response.PermissionDetails>;
     
+    // Position Management Queries
+    public record GetPositions(int Page = 1, int PageSize = 10, string? SearchTerm = null) : IQuery<Response.PositionList>;
+    public record GetPositionById(Guid PositionId) : IQuery<Response.PositionDetails>;
+    public record GetActivePositions() : IQuery<Response.PositionList>;
+    
+    // User Management Helper Queries  
+    public record GetUsersForManagerSelection() : IQuery<Response.UserList>;
+    
     // Account Settings Queries
     public record GetNotificationSettings(Guid UserId) : IQuery<Response.NotificationSettings>;
     public record GetPrivacySettings(Guid UserId) : IQuery<Response.PrivacySettings>;

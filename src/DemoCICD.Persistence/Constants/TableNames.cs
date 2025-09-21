@@ -12,6 +12,7 @@ internal static class TableNames
     internal const string AppUsers = nameof(AppUsers);
     internal const string AppRoles = nameof(AppRoles);
     internal const string AppUserRoles = nameof(AppUserRoles);
+    internal const string Positions = nameof(Positions);
 
     internal const string AppUserClaims = nameof(AppUserClaims); // IdentityUserClaim
     internal const string AppRoleClaims = nameof(AppRoleClaims); // IdentityRoleClaim

@@ -45,6 +45,9 @@ public class UserManagementApi : ApiEndpoint, ICarterModule
         group1.MapGet("{userId:guid}/sessions", GetUserSessionsV1).RequireAuthorization();
         group1.MapDelete("{userId:guid}/sessions/{sessionId}", RevokeUserSessionV1).RequireAuthorization();
         group1.MapDelete("{userId:guid}/sessions", RevokeAllUserSessionsV1).RequireAuthorization();
+        
+        // Helper endpoints for form dropdowns
+        group1.MapGet("managers", GetUsersForManagerSelectionV1).RequireAuthorization();
     }
 
     public static async Task<IResult> CreateUserV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.CreateUser command)
@@ -264,5 +267,15 @@ public class UserManagementApi : ApiEndpoint, ICarterModule
             return HandlerFailure(result);
 
         return Results.NoContent();
+    }
+
+    public static async Task<IResult> GetUsersForManagerSelectionV1(ISender sender)
+    {
+        var query = new DemoCICD.Contract.Services.V1.Identity.Query.GetUsersForManagerSelection();
+        var result = await sender.Send(query);
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Results.Ok(result.Value);
     }
 }

@@ -48,4 +48,9 @@ public static class Command
     // Permission Management Commands
     public record CreatePermission(Guid RoleId, string FunctionId, string ActionId) : ICommand<Response.PermissionCreated>;
     public record DeletePermission(Guid RoleId, string FunctionId, string ActionId) : ICommand;
+    
+    // Position Management Commands
+    public record CreatePosition(string Name, string Description, string Code, int Level = 1) : ICommand<Response.PositionCreated>;
+    public record UpdatePosition(Guid PositionId, string Name, string Description, string Code, int Level, bool IsActive) : ICommand<Response.PositionUpdated>;
+    public record DeletePosition(Guid PositionId) : ICommand;
 }
