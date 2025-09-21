@@ -1,5 +1,6 @@
 // src/api/chat.js
 import axiosInstance from './axios';
+import { handleApiError } from '../utils/errorHandler';
 
 const CHAT_ENDPOINT = '/api/v1/chat';
 
@@ -12,11 +13,7 @@ export const sendChatMessage = async (message, userId = null) => {
     });
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -28,10 +25,6 @@ export const getChatHistory = async (userId = null, page = 1, pageSize = 20) => 
     const response = await axiosInstance.get(`${CHAT_ENDPOINT}/history?${params.toString()}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };

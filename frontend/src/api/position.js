@@ -22,11 +22,7 @@ export const getPositions = async (page = 1, pageSize = 10, searchTerm = '') => 
     const response = await axiosInstance.get(`${POSITION_ENDPOINT}?${params.toString()}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -36,11 +32,7 @@ export const getActivePositions = async () => {
     const response = await axiosInstance.get(`${POSITION_ENDPOINT}/active`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -50,11 +42,7 @@ export const getPositionById = async (positionId) => {
     const response = await axiosInstance.get(`${POSITION_ENDPOINT}/${positionId}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -64,11 +52,7 @@ export const updatePosition = async (positionId, payload) => {
     const response = await axiosInstance.put(`${POSITION_ENDPOINT}/${positionId}`, payload);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -78,10 +62,6 @@ export const deletePosition = async (positionId) => {
     const response = await axiosInstance.delete(`${POSITION_ENDPOINT}/${positionId}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };

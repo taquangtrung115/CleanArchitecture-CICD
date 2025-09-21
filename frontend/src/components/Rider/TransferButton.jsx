@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { transferRider } from '../../api/riders';
+import { getErrorMessage } from '../../utils/errorHandler';
 
 export default function TransferButton({ riderId, teams, onTransferred }) {
   const [show, setShow] = useState(false);
@@ -17,7 +18,7 @@ export default function TransferButton({ riderId, teams, onTransferred }) {
       setShow(false);
       onTransferred?.();
     } else {
-      setError(res.error?.message || 'Transfer failed');
+      setError(getErrorMessage(res) || 'Transfer failed');
     }
   };
 
