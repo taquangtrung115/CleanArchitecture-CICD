@@ -24,7 +24,7 @@ public class PermissionManagementApi : ApiEndpoint, ICarterModule
         group1.MapDelete("{roleId:guid}/{functionId}/{actionId}", DeletePermissionV1).RequireAuthorization();
     }
 
-    public static async Task<IResult> CreatePermissionV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.CreatePermission command)
+    public static async Task<IResult> CreatePermissionV1(ISender sender, DemoCICD.Contract.Services.V1.Identity.Command.CreatePermission command)
     {
         var result = await sender.Send(command);
         if (result.IsFailure)

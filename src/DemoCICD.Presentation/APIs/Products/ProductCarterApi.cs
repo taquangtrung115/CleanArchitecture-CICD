@@ -41,7 +41,7 @@ public class ProductCarterApi : ApiEndpoint, ICarterModule
 
     #region ====== version 1 ======
 
-    public static async Task<IResult> CreateProductsV1(ISender sender, [FromBody] CommandV1.Command.CreateProductCommand CreateProduct)
+    public static async Task<IResult> CreateProductsV1(ISender sender, CommandV1.Command.CreateProductCommand CreateProduct)
     {
         var result = await sender.Send(CreateProduct);
 
@@ -78,7 +78,7 @@ public class ProductCarterApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> UpdateProductsV1(ISender sender, Guid productId, [FromBody] CommandV1.Command.UpdateProductCommand updateProduct)
+    public static async Task<IResult> UpdateProductsV1(ISender sender, Guid productId, CommandV1.Command.UpdateProductCommand updateProduct)
     {
         var updateProductCommand = new CommandV1.Command.UpdateProductCommand(productId, updateProduct.Name, updateProduct.Price, updateProduct.Description);
         var result = await sender.Send(updateProductCommand);
@@ -89,7 +89,7 @@ public class ProductCarterApi : ApiEndpoint, ICarterModule
 
     #region ====== version 2 ======
 
-    public static async Task<IResult> CreateProductsV2(ISender sender, [FromBody] CommandV2.Command.CreateProductCommand CreateProduct)
+    public static async Task<IResult> CreateProductsV2(ISender sender, CommandV2.Command.CreateProductCommand CreateProduct)
     {
         var result = await sender.Send(CreateProduct);
 
@@ -117,7 +117,7 @@ public class ProductCarterApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> UpdateProductsV2(ISender sender, Guid productId, [FromBody] CommandV2.Command.UpdateProductCommand updateProduct)
+    public static async Task<IResult> UpdateProductsV2(ISender sender, Guid productId, CommandV2.Command.UpdateProductCommand updateProduct)
     {
         var updateProductCommand = new CommandV2.Command.UpdateProductCommand(productId, updateProduct.Name, updateProduct.Price, updateProduct.Description);
         var result = await sender.Send(updateProductCommand);

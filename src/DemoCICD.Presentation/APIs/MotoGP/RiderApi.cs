@@ -83,7 +83,7 @@ public class RiderApi : ApiEndpoint, ICarterModule
             .Produces(StatusCodes.Status404NotFound);
     }
 
-    public static async Task<IResult> CreateRider(ISender sender, [FromBody] Command.CreateRiderCommand command)
+    public static async Task<IResult> CreateRider(ISender sender, Command.CreateRiderCommand command)
     {
         var result = await sender.Send(command);
 
@@ -142,7 +142,7 @@ public class RiderApi : ApiEndpoint, ICarterModule
     public static async Task<IResult> UpdateRiderPersonalInfo(
         ISender sender,
         Guid id,
-        [FromBody] UpdateRiderPersonalInfoRequest request)
+        UpdateRiderPersonalInfoRequest request)
     {
         var command = new Command.UpdateRiderPersonalInfoCommand(
             id,
@@ -163,7 +163,7 @@ public class RiderApi : ApiEndpoint, ICarterModule
     public static async Task<IResult> TransferRiderToTeam(
         ISender sender,
         Guid id,
-        [FromBody] TransferRiderRequest request)
+        TransferRiderRequest request)
     {
         var command = new Command.TransferRiderToTeamCommand(
             id,
@@ -182,7 +182,7 @@ public class RiderApi : ApiEndpoint, ICarterModule
     public static async Task<IResult> RetireRider(
         ISender sender,
         Guid id,
-        [FromBody] RetireRiderRequest request)
+        RetireRiderRequest request)
     {
         var command = new Command.RetireRiderCommand(id, request.RetirementDate);
         var result = await sender.Send(command);
