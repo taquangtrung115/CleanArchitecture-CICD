@@ -47,7 +47,7 @@ public class UserManagementApi : ApiEndpoint, ICarterModule
         group1.MapDelete("{userId:guid}/sessions", RevokeAllUserSessionsV1).RequireAuthorization();
     }
 
-    public static async Task<IResult> CreateUserV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.CreateUser command)
+    public static async Task<IResult> CreateUserV1(ISender sender, DemoCICD.Contract.Services.V1.Identity.Command.CreateUser command)
     {
         var result = await sender.Send(command);
         if (result.IsFailure)
@@ -86,7 +86,7 @@ public class UserManagementApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> UpdateCurrentUserProfileV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.UpdateProfile command)
+    public static async Task<IResult> UpdateCurrentUserProfileV1(ISender sender, DemoCICD.Contract.Services.V1.Identity.Command.UpdateProfile command)
     {
         var result = await sender.Send(command);
         if (result.IsFailure)
@@ -95,7 +95,7 @@ public class UserManagementApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> UpdateUserV1(ISender sender, [FromRoute] Guid userId, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.UpdateUser command)
+    public static async Task<IResult> UpdateUserV1(ISender sender, [FromRoute] Guid userId, DemoCICD.Contract.Services.V1.Identity.Command.UpdateUser command)
     {
         if (userId != command.UserId)
             return Results.BadRequest("User ID mismatch");
@@ -117,7 +117,7 @@ public class UserManagementApi : ApiEndpoint, ICarterModule
         return Results.NoContent();
     }
 
-    public static async Task<IResult> ChangePasswordV1(ISender sender, [FromRoute] Guid userId, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.ChangePassword command)
+    public static async Task<IResult> ChangePasswordV1(ISender sender, [FromRoute] Guid userId, DemoCICD.Contract.Services.V1.Identity.Command.ChangePassword command)
     {
         if (userId != command.UserId)
             return Results.BadRequest("User ID mismatch");
@@ -129,7 +129,7 @@ public class UserManagementApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> ResetPasswordV1(ISender sender, [FromRoute] Guid userId, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.ResetPassword command)
+    public static async Task<IResult> ResetPasswordV1(ISender sender, [FromRoute] Guid userId, DemoCICD.Contract.Services.V1.Identity.Command.ResetPassword command)
     {
         if (userId != command.UserId)
             return Results.BadRequest("User ID mismatch");
@@ -202,7 +202,7 @@ public class UserManagementApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> UpdateNotificationSettingsV1(ISender sender, [FromRoute] Guid userId, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.UpdateNotificationSettings command)
+    public static async Task<IResult> UpdateNotificationSettingsV1(ISender sender, [FromRoute] Guid userId, DemoCICD.Contract.Services.V1.Identity.Command.UpdateNotificationSettings command)
     {
         if (userId != command.UserId)
             return Results.BadRequest("User ID mismatch");
@@ -224,7 +224,7 @@ public class UserManagementApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> UpdatePrivacySettingsV1(ISender sender, [FromRoute] Guid userId, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.UpdatePrivacySettings command)
+    public static async Task<IResult> UpdatePrivacySettingsV1(ISender sender, [FromRoute] Guid userId, DemoCICD.Contract.Services.V1.Identity.Command.UpdatePrivacySettings command)
     {
         if (userId != command.UserId)
             return Results.BadRequest("User ID mismatch");

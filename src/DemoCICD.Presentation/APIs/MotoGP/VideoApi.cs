@@ -225,7 +225,7 @@ public class VideoApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> CreateVideo(ISender sender, [FromBody] Command.CreateVideoCommand command)
+    public static async Task<IResult> CreateVideo(ISender sender, Command.CreateVideoCommand command)
     {
         var result = await sender.Send(command);
         
@@ -235,7 +235,7 @@ public class VideoApi : ApiEndpoint, ICarterModule
         return Results.Created($"/api/v1/motogp/videos", result);
     }
 
-    public static async Task<IResult> UpdateVideo(ISender sender, Guid id, [FromBody] Command.UpdateVideoCommand command)
+    public static async Task<IResult> UpdateVideo(ISender sender, Guid id, Command.UpdateVideoCommand command)
     {
         if (id != command.Id)
         {

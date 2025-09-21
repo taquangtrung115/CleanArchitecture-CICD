@@ -33,7 +33,7 @@ public class RoleManagementApi : ApiEndpoint, ICarterModule
         group1.MapDelete("{roleId:guid}/permissions", RevokePermissionFromRoleV1).RequireAuthorization();
     }
 
-    public static async Task<IResult> CreateRoleV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.CreateRole command)
+    public static async Task<IResult> CreateRoleV1(ISender sender, DemoCICD.Contract.Services.V1.Identity.Command.CreateRole command)
     {
         var result = await sender.Send(command);
         if (result.IsFailure)
@@ -62,7 +62,7 @@ public class RoleManagementApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> UpdateRoleV1(ISender sender, [FromRoute] Guid roleId, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.UpdateRole command)
+    public static async Task<IResult> UpdateRoleV1(ISender sender, [FromRoute] Guid roleId, DemoCICD.Contract.Services.V1.Identity.Command.UpdateRole command)
     {
         if (roleId != command.RoleId)
             return Results.BadRequest("Role ID mismatch");
@@ -104,7 +104,7 @@ public class RoleManagementApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> GrantPermissionToRoleV1(ISender sender, [FromRoute] Guid roleId, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.GrantPermissionToRole command)
+    public static async Task<IResult> GrantPermissionToRoleV1(ISender sender, [FromRoute] Guid roleId, DemoCICD.Contract.Services.V1.Identity.Command.GrantPermissionToRole command)
     {
         if (roleId != command.RoleId)
             return Results.BadRequest("Role ID mismatch");
@@ -116,7 +116,7 @@ public class RoleManagementApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> RevokePermissionFromRoleV1(ISender sender, [FromRoute] Guid roleId, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.RevokePermissionFromRole command)
+    public static async Task<IResult> RevokePermissionFromRoleV1(ISender sender, [FromRoute] Guid roleId, DemoCICD.Contract.Services.V1.Identity.Command.RevokePermissionFromRole command)
     {
         if (roleId != command.RoleId)
             return Results.BadRequest("Role ID mismatch");
