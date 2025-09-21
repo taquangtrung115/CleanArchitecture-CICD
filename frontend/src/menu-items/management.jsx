@@ -1,12 +1,13 @@
 // assets
-import { UserOutlined, TeamOutlined, SafetyOutlined, RobotOutlined, IdcardOutlined } from '@ant-design/icons';
+import { UserOutlined, TeamOutlined, SafetyOutlined, RobotOutlined, IdcardOutlined, MessageOutlined } from '@ant-design/icons';
 
 const icons = {
   UserOutlined,
   TeamOutlined,
   SafetyOutlined,
   RobotOutlined,
-  IdcardOutlined
+  IdcardOutlined,
+  MessageOutlined
 };
 
 const management = {
@@ -48,6 +49,13 @@ const management = {
       type: 'item',
       url: '/admin/chat',
       icon: icons.RobotOutlined
+    },
+    {
+      id: 'user-chat',
+      title: 'User Chat',
+      type: 'item',
+      url: '/admin/user-chat',
+      icon: icons.MessageOutlined
     }
   ]
 };
