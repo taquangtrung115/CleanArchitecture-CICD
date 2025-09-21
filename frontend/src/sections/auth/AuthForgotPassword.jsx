@@ -47,7 +47,7 @@ export default function AuthForgotPassword({ isDemo = false }) {
           navigate('/auth/check-mail');
         }, 2000);
       }
-    } catch (error) {
+    } catch (err) {
       setFormError('An unexpected error occurred');
     }
 
