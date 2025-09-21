@@ -58,6 +58,7 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
   const [positions, setPositions] = useState([]);
   const [managers, setManagers] = useState([]);
   const [loadingOptions, setLoadingOptions] = useState(false);
+  const [optionsError, setOptionsError] = useState('');
 
   // Load positions and managers when modal opens
   useEffect(() => {
@@ -68,21 +69,29 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
 
   const loadOptions = async () => {
     setLoadingOptions(true);
+    setOptionsError('');
     try {
-      const [positionsRes, managersRes] = await Promise.all([
-        getActivePositions(),
-        getManagerOptions()
-      ]);
+      const [positionsRes, managersRes] = await Promise.all([getActivePositions(), getManagerOptions()]);
 
-      if (positionsRes.data && positionsRes.data.value) {
+      // Check for API errors
+      if (positionsRes.error) {
+        console.error('Error loading positions:', positionsRes.error);
+        setOptionsError('Không thể tải danh sách vị trí. Vui lòng thử lại.');
+      } else if (positionsRes.data && positionsRes.data.value) {
         setPositions(positionsRes.data.value.positions || []);
       }
 
-      if (managersRes.data && managersRes.data.value) {
+      if (managersRes.error) {
+        console.error('Error loading managers:', managersRes.error);
+        setOptionsError((prev) =>
+          prev ? `${prev} Không thể tải danh sách manager.` : 'Không thể tải danh sách manager. Vui lòng thử lại.'
+        );
+      } else if (managersRes.data && managersRes.data.value) {
         setManagers(managersRes.data.value.users || []);
       }
     } catch (error) {
       console.error('Error loading options:', error);
+      setOptionsError('Có lỗi xảy ra khi tải dữ liệu. Vui lòng thử lại.');
     }
     setLoadingOptions(false);
   };
@@ -132,15 +141,36 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
         setError(res.error?.message || 'Tạo user thất bại');
         setLoading(false);
       }
-    } catch (err) {
+    } catch (error) {
+      console.error('Error creating user:', error);
       setError('Có lỗi xảy ra khi tạo user');
       setLoading(false);
     }
   };
 
   const handleClose = () => {
-    if (!loading) {
+    if (!loading && !loadingOptions) {
       setError('');
+      setOptionsError('');
+      setForm({
+        userName: '',
+        email: '',
+        password: '',
+        firstName: '',
+        lastName: '',
+        dayOfBirth: '',
+        isDirector: false,
+        isHeadOfDepartment: false,
+        managerId: '',
+        positionId: '',
+        // Profile fields
+        phone: '',
+        address: '',
+        city: '',
+        country: '',
+        bio: '',
+        website: ''
+      });
       onClose();
     }
   };
@@ -169,7 +199,7 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
           <IconButton
             aria-label="close"
             onClick={handleClose}
-            disabled={loading}
+            disabled={loading || loadingOptions}
             sx={{
               color: (theme) => theme.palette.grey[500]
             }}
@@ -183,6 +213,20 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
 
       <form onSubmit={handleSubmit}>
         <DialogContent sx={{ py: 3 }}>
+          {optionsError && (
+            <Alert
+              severity="warning"
+              sx={{ mb: 3 }}
+              action={
+                <Button color="inherit" size="small" onClick={loadOptions} disabled={loadingOptions}>
+                  Thử lại
+                </Button>
+              }
+            >
+              {optionsError}
+            </Alert>
+          )}
+
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -280,15 +324,24 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
                   value={form.managerId}
                   onChange={handleChange}
                   label="Manager"
+                  endAdornment={loadingOptions ? <CircularProgress size={20} sx={{ mr: 2 }} /> : null}
                 >
-                  <MenuItem value="">
-                    <em>Không có manager</em>
-                  </MenuItem>
-                  {managers.map((manager) => (
-                    <MenuItem key={manager.userId} value={manager.userId}>
-                      {manager.fullName} ({manager.email})
+                  {loadingOptions ? (
+                    <MenuItem disabled>
+                      <em>Đang tải danh sách manager...</em>
                     </MenuItem>
-                  ))}
+                  ) : (
+                    <>
+                      <MenuItem value="">
+                        <em>Không có manager</em>
+                      </MenuItem>
+                      {managers.map((manager) => (
+                        <MenuItem key={manager.userId} value={manager.userId}>
+                          {manager.fullName} ({manager.email})
+                        </MenuItem>
+                      ))}
+                    </>
+                  )}
                 </Select>
               </FormControl>
             </Grid>
@@ -301,12 +354,19 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
                   value={form.positionId}
                   onChange={handleChange}
                   label="Position *"
+                  endAdornment={loadingOptions ? <CircularProgress size={20} sx={{ mr: 2 }} /> : null}
                 >
-                  {positions.map((position) => (
-                    <MenuItem key={position.positionId} value={position.positionId}>
-                      {position.name} (Level {position.level})
+                  {loadingOptions ? (
+                    <MenuItem disabled>
+                      <em>Đang tải danh sách vị trí...</em>
                     </MenuItem>
-                  ))}
+                  ) : (
+                    positions.map((position) => (
+                      <MenuItem key={position.positionId} value={position.positionId}>
+                        {position.name} (Level {position.level})
+                      </MenuItem>
+                    ))
+                  )}
                 </Select>
               </FormControl>
             </Grid>
