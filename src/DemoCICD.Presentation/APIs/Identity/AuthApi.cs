@@ -25,7 +25,7 @@ public class AuthApi : ApiEndpoint, ICarterModule
         group1.MapPost("login", LoginV1).AllowAnonymous();
         group1.MapPost("register", RegisterV1).AllowAnonymous();
         group1.MapPost("forgot-password", ForgotPasswordV1).AllowAnonymous();
-        group1.MapPost("reset-password", ResetPasswordWithTokenV1).AllowAnonymous();
+        group1.MapPost("reset-password", ResetPasswordWithCodeV1).AllowAnonymous();
         group1.MapPost("logout", LogoutV1).RequireAuthorization();
         group1.MapPost("refresh-token", RefreshTokenV1).AllowAnonymous();
         

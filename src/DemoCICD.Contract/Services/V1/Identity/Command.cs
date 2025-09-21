@@ -25,7 +25,6 @@ public static class Command
     public record ResetPassword(Guid UserId, string NewPassword) : ICommand;
     
     // Password Reset Commands
-    public record ForgotPassword(string Email) : ICommand;
     public record VerifyResetCode(string Email, string ResetCode) : ICommand<Response.ResetCodeVerified>;
     public record ResetPasswordWithCode(string Email, string ResetCode, string NewPassword) : ICommand;
     public record LockUser(Guid UserId) : ICommand;

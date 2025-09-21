@@ -3,7 +3,6 @@ using DemoCICD.Domain.Entities.Identity;
 using DemoCICD.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Serilog;
 
 namespace DemoCICD.Infrastructure.Authentication;
@@ -437,7 +436,7 @@ public class UserManagementService : IUserManagementService
             await _context.SaveChangesAsync();
 
             // Send email with reset code
-            var emailSent = await _emailService.SendPasswordResetCodeAsync(email, resetCode, user.FirstName);
+            var emailSent = await _emailService.SendPasswordResetEmailAsync(email, resetCode, user.FirstName);
             
             if (!emailSent)
             {

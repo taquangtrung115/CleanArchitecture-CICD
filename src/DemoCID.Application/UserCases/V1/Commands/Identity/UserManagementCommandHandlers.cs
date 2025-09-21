@@ -408,49 +408,6 @@ public sealed class UpdateProfileCommandHandler : ICommandHandler<Command.Update
     }
 }
 
-// Password Reset Command Handlers
-public sealed class ForgotPasswordCommandHandler : ICommandHandler<Command.ForgotPassword>
-{
-    private readonly IUserManagementService _userManagementService;
-    private readonly IEmailService _emailService;
-    private readonly ILogger<ForgotPasswordCommandHandler> _logger;
-
-    public ForgotPasswordCommandHandler(
-        IUserManagementService userManagementService,
-        IEmailService emailService,
-        ILogger<ForgotPasswordCommandHandler> logger)
-    {
-        _userManagementService = userManagementService;
-        _emailService = emailService;
-        _logger = logger;
-    }
-
-    public async Task<Result> Handle(Command.ForgotPassword request, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var success = await _userManagementService.InitiatePasswordResetAsync(request.Email);
-
-            if (!success)
-            {
-                // For security reasons, we don't reveal if email exists or not
-                _logger.LogWarning("Password reset requested for non-existent email: {Email}", request.Email);
-            }
-            else
-            {
-                _logger.LogInformation("Password reset initiated for email: {Email}", request.Email);
-            }
-
-            // Always return success to avoid email enumeration attacks
-            return Result.Success();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error during password reset initiation for email: {Email}", request.Email);
-            return Result.Failure(new Error("ForgotPassword.Error", "An error occurred during password reset initiation"));
-        }
-    }
-}
 
 public sealed class VerifyResetCodeCommandHandler : ICommandHandler<Command.VerifyResetCode, Response.ResetCodeVerified>
 {
@@ -570,94 +527,42 @@ public sealed class RevokeAllUserSessionsCommandHandler : ICommandHandler<Comman
     }
 }
 
-public sealed class ForgotPasswordCommandHandler : ICommandHandler<Command.ForgotPassword>
-{
-    private readonly IUserManagementService _userManagementService;
-    private readonly IEmailService _emailService;
-    private readonly ILogger<ForgotPasswordCommandHandler> _logger;
 
-    public ForgotPasswordCommandHandler(
-        IUserManagementService userManagementService,
-        IEmailService emailService,
-        ILogger<ForgotPasswordCommandHandler> logger)
-    {
-        _userManagementService = userManagementService;
-        _emailService = emailService;
-        _logger = logger;
-    }
+//public sealed class ResetPasswordWithTokenCommandHandler : ICommandHandler<Command.ResetPasswordWithToken>
+//{
+//    private readonly IUserManagementService _userManagementService;
+//    private readonly ILogger<ResetPasswordWithTokenCommandHandler> _logger;
 
-    public async Task<Result> Handle(Command.ForgotPassword request, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var user = await _userManagementService.GetUserByEmailAsync(request.Email);
-            if (user == null)
-            {
-                // For security reasons, don't reveal if the email exists or not
-                // Return success even if user doesn't exist
-                _logger.LogWarning("Password reset requested for non-existent email: {Email}", request.Email);
-                return Result.Success();
-            }
+//    public ResetPasswordWithTokenCommandHandler(
+//        IUserManagementService userManagementService,
+//        ILogger<ResetPasswordWithTokenCommandHandler> logger)
+//    {
+//        _userManagementService = userManagementService;
+//        _logger = logger;
+//    }
 
-            var resetToken = await _userManagementService.GeneratePasswordResetTokenAsync(user);
-            
-            var emailSent = await _emailService.SendPasswordResetEmailAsync(
-                user.Email!, 
-                resetToken, 
-                user.UserName!);
+//    public async Task<Result> Handle(Command.ResetPasswordWithToken request, CancellationToken cancellationToken)
+//    {
+//        try
+//        {
+//            var success = await _userManagementService.ResetPasswordWithTokenAsync(
+//                request.Email,
+//                request.Token,
+//                request.NewPassword);
 
-            if (!emailSent)
-            {
-                _logger.LogError("Failed to send password reset email to {Email}", request.Email);
-                return Result.Failure(new Error("ForgotPassword.EmailFailed", "Failed to send password reset email"));
-            }
+//            if (!success)
+//            {
+//                _logger.LogWarning("Failed to reset password with token for email: {Email}", request.Email);
+//                return Result.Failure(new Error("ResetPassword.Failed", "Invalid reset token or email"));
+//            }
 
-            _logger.LogInformation("Password reset email sent successfully to {Email}", request.Email);
-            return Result.Success();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error processing forgot password request for email: {Email}", request.Email);
-            return Result.Failure(new Error("ForgotPassword.Error", "An error occurred while processing your request"));
-        }
-    }
-}
-
-public sealed class ResetPasswordWithTokenCommandHandler : ICommandHandler<Command.ResetPasswordWithToken>
-{
-    private readonly IUserManagementService _userManagementService;
-    private readonly ILogger<ResetPasswordWithTokenCommandHandler> _logger;
-
-    public ResetPasswordWithTokenCommandHandler(
-        IUserManagementService userManagementService,
-        ILogger<ResetPasswordWithTokenCommandHandler> logger)
-    {
-        _userManagementService = userManagementService;
-        _logger = logger;
-    }
-
-    public async Task<Result> Handle(Command.ResetPasswordWithToken request, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var success = await _userManagementService.ResetPasswordWithTokenAsync(
-                request.Email,
-                request.Token,
-                request.NewPassword);
-
-            if (!success)
-            {
-                _logger.LogWarning("Failed to reset password with token for email: {Email}", request.Email);
-                return Result.Failure(new Error("ResetPassword.Failed", "Invalid reset token or email"));
-            }
-
-            _logger.LogInformation("Password reset successfully for email: {Email}", request.Email);
-            return Result.Success();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error resetting password with token for email: {Email}", request.Email);
-            return Result.Failure(new Error("ResetPassword.Error", "An error occurred while resetting your password"));
-        }
-    }
-}
+//            _logger.LogInformation("Password reset successfully for email: {Email}", request.Email);
+//            return Result.Success();
+//        }
+//        catch (Exception ex)
+//        {
+//            _logger.LogError(ex, "Error resetting password with token for email: {Email}", request.Email);
+//            return Result.Failure(new Error("ResetPassword.Error", "An error occurred while resetting your password"));
+//        }
+//    }
+//}
