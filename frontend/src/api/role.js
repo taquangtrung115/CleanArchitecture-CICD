@@ -22,11 +22,7 @@ export const getRoles = async (page = 1, pageSize = 20, searchTerm = '') => {
     const response = await axiosInstance.get(`${ROLE_ENDPOINT}?${params.toString()}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -36,11 +32,7 @@ export const getRoleDetail = async (roleId) => {
     const response = await axiosInstance.get(`${ROLE_ENDPOINT}/${roleId}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -50,11 +42,7 @@ export const updateRole = async (roleId, { name, description, roleCode }) => {
     const response = await axiosInstance.put(`${ROLE_ENDPOINT}/${roleId}`, { roleId, name, description, roleCode });
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -64,11 +52,7 @@ export const deleteRole = async (roleId) => {
     const response = await axiosInstance.delete(`${ROLE_ENDPOINT}/${roleId}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -78,11 +62,7 @@ export const getRoleUsers = async (roleId) => {
     const response = await axiosInstance.get(`${ROLE_ENDPOINT}/${roleId}/users`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -92,11 +72,7 @@ export const getRolePermissions = async (roleId) => {
     const response = await axiosInstance.get(`${ROLE_ENDPOINT}/${roleId}/permissions`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -106,11 +82,7 @@ export const addRolePermission = async (roleId, { functionId, actionId }) => {
     const response = await axiosInstance.post(`${ROLE_ENDPOINT}/${roleId}/permissions`, { roleId, functionId, actionId });
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -120,11 +92,7 @@ export const removeRolePermission = async (roleId, { functionId, actionId }) => 
     const response = await axiosInstance.delete(`${ROLE_ENDPOINT}/${roleId}/permissions`, { data: { roleId, functionId, actionId } });
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 

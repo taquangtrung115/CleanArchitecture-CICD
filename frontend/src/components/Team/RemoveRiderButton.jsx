@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { transferRider } from '../../api/riders';
+import { getErrorMessage } from '../../utils/errorHandler';
 
 export default function RemoveRiderButton({ riderId, onRemoved }) {
   const [loading, setLoading] = useState(false);
@@ -14,7 +15,7 @@ export default function RemoveRiderButton({ riderId, onRemoved }) {
     if (res.status === 200) {
       onRemoved?.();
     } else {
-      setError(res.error?.message || 'Remove failed');
+      setError(getErrorMessage(res) || 'Remove failed');
     }
   };
 

@@ -23,6 +23,7 @@ import {
   Error as ErrorIcon
 } from '@mui/icons-material';
 import { sendChatMessage, getChatHistory } from '../../api/chat';
+import { getErrorMessage } from '../../utils/errorHandler';
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
@@ -56,6 +57,8 @@ const ChatPage = () => {
           timestamp: new Date(msg.timestamp)
         }));
         setMessages(historyMessages);
+      } else if (result.error) {
+        console.error('Error loading chat history:', getErrorMessage(result));
       }
     } catch (err) {
       console.error('Error loading chat history:', err);
@@ -100,6 +103,14 @@ const ChatPage = () => {
           const filtered = prev.filter((msg) => msg.id !== tempMessage.id);
           return [...filtered, botMessage];
         });
+      } else if (result.error) {
+        // Use getErrorMessage to extract user-friendly message from error object
+        const errorMessage = getErrorMessage(result);
+        setError(errorMessage || 'Có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại.');
+        console.error('Error sending message:', result.error);
+        
+        // Remove temp message on error
+        setMessages((prev) => prev.filter((msg) => msg.id !== tempMessage.id));
       } else {
         throw new Error('Invalid response format');
       }

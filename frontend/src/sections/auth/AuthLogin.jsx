@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from 'api/auth';
+import { getErrorMessage } from '../../utils/errorHandler';
 import Loader from 'components/Loader';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -58,7 +59,7 @@ export default function AuthLogin({ isDemo = false }) {
       localStorage.setItem('refreshTokenExpiryTime', res.data.refreshTokenExpiryTime || '');
       navigate('/');
     } else {
-      setFormError(res.error || 'Login failed');
+      setFormError(getErrorMessage(res) || 'Login failed');
     }
     setSubmitting(false);
     setLoading(false);

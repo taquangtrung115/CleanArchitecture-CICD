@@ -28,6 +28,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 // project imports
 import { createUser } from 'api/user';
+import { getErrorMessage } from '../../utils/errorHandler';
 import { getActivePositions } from 'api/position';
 import { getManagerOptions } from 'api/user';
 
@@ -129,7 +130,7 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
         onSuccess();
         onClose();
       } else {
-        setError(res.error?.message || 'Tạo user thất bại');
+        setError(getErrorMessage(res) || 'Tạo user thất bại');
         setLoading(false);
       }
     } catch (err) {
