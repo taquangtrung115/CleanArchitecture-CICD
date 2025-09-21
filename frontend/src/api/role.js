@@ -127,3 +127,13 @@ export const removeRolePermission = async (roleId, { functionId, actionId }) => 
     };
   }
 };
+
+// 10. Lấy danh sách roles cho dropdown (chỉ lấy những fields cần thiết)
+export const getRolesForDropdown = async () => {
+  try {
+    const response = await axiosInstance.get(`${ROLE_ENDPOINT}?page=1&pageSize=100`);
+    return { data: response.data, status: response.status, error: null };
+  } catch (error) {
+    return handleApiError(error);
+  }
+};

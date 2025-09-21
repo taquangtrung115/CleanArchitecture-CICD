@@ -29,6 +29,8 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IRoleManagementService, RoleManagementService>();
         services.AddTransient<IPermissionManagementService, PermissionManagementService>();
         services.AddTransient<IPositionManagementService, PositionManagementService>();
+        services.AddTransient<IActionManagementService, ActionManagementService>();
+        services.AddTransient<IFunctionManagementService, FunctionManagementService>();
         services.AddTransient<IEmailService, EmailService>();
         
         // Add AI services

@@ -39,6 +39,17 @@ public static class Response
     public record PositionList(IEnumerable<PositionSummary> Positions, int TotalCount, int Page, int PageSize);
     public record PositionSummary(Guid PositionId, string Name, string Code, int Level, bool IsActive);
     
+    // Action Management Responses
+    public record ActionCreated(string Id, string Name);
+    public record ActionUpdated(string Id, string Name);
+    public record ActionDetails(string Id, string Name, int? SortOrder, bool? IsActive);
+    public record ActionList(IEnumerable<ActionSummary> Actions, int TotalCount, int Page, int PageSize);
+    public record ActionSummary(string Id, string Name, int? SortOrder, bool? IsActive);
+    
+    // Function Management Responses for dropdowns
+    public record FunctionList(IEnumerable<FunctionSummary> Functions, int TotalCount, int Page, int PageSize);
+    public record FunctionSummary(string Id, string Name, bool? IsActive);
+    
     // Account Settings Responses
     public record NotificationSettings(bool EmailNotifications, bool PushNotifications, bool SmsNotifications, bool NewsUpdates, bool SecurityAlerts, bool MarketingEmails);
     public record PrivacySettings(string ProfileVisibility, bool ShowEmail, bool ShowPhone, bool AllowSearchByEmail, bool AllowSearchByPhone);
