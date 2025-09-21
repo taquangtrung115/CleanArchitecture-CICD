@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 // material-ui
@@ -16,6 +16,11 @@ import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import CircularProgress from '@mui/material/CircularProgress';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Alert from '@mui/material/Alert';
 
 // material-ui icons
 import CloseIcon from '@mui/icons-material/Close';
@@ -23,6 +28,8 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 // project imports
 import { createUser } from 'api/user';
+import { getActivePositions } from 'api/position';
+import { getManagerOptions } from 'api/user';
 
 // ==============================|| USER FORM MODAL ||============================== //
 
@@ -37,10 +44,48 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
     isDirector: false,
     isHeadOfDepartment: false,
     managerId: '',
-    positionId: ''
+    positionId: '',
+    // Profile fields
+    phone: '',
+    address: '',
+    city: '',
+    country: '',
+    bio: '',
+    website: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [positions, setPositions] = useState([]);
+  const [managers, setManagers] = useState([]);
+  const [loadingOptions, setLoadingOptions] = useState(false);
+
+  // Load positions and managers when modal opens
+  useEffect(() => {
+    if (open) {
+      loadOptions();
+    }
+  }, [open]);
+
+  const loadOptions = async () => {
+    setLoadingOptions(true);
+    try {
+      const [positionsRes, managersRes] = await Promise.all([
+        getActivePositions(),
+        getManagerOptions()
+      ]);
+
+      if (positionsRes.data && positionsRes.data.value) {
+        setPositions(positionsRes.data.value.positions || []);
+      }
+
+      if (managersRes.data && managersRes.data.value) {
+        setManagers(managersRes.data.value.users || []);
+      }
+    } catch (error) {
+      console.error('Error loading options:', error);
+    }
+    setLoadingOptions(false);
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -71,7 +116,14 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
           isDirector: false,
           isHeadOfDepartment: false,
           managerId: '',
-          positionId: ''
+          positionId: '',
+          // Profile fields
+          phone: '',
+          address: '',
+          city: '',
+          country: '',
+          bio: '',
+          website: ''
         });
         setLoading(false);
         onSuccess();
@@ -221,29 +273,42 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <TextField
-                label="Manager ID"
-                name="managerId"
-                value={form.managerId}
-                onChange={handleChange}
-                fullWidth
-                disabled={loading}
-                variant="outlined"
-                size="medium"
-              />
+              <FormControl fullWidth disabled={loading || loadingOptions} variant="outlined" size="medium">
+                <InputLabel>Manager</InputLabel>
+                <Select
+                  name="managerId"
+                  value={form.managerId}
+                  onChange={handleChange}
+                  label="Manager"
+                >
+                  <MenuItem value="">
+                    <em>Không có manager</em>
+                  </MenuItem>
+                  {managers.map((manager) => (
+                    <MenuItem key={manager.userId} value={manager.userId}>
+                      {manager.fullName} ({manager.email})
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <TextField
-                label="Position ID"
-                name="positionId"
-                value={form.positionId}
-                onChange={handleChange}
-                fullWidth
-                disabled={loading}
-                variant="outlined"
-                size="medium"
-              />
+              <FormControl fullWidth disabled={loading || loadingOptions} variant="outlined" size="medium" required>
+                <InputLabel>Position *</InputLabel>
+                <Select
+                  name="positionId"
+                  value={form.positionId}
+                  onChange={handleChange}
+                  label="Position *"
+                >
+                  {positions.map((position) => (
+                    <MenuItem key={position.positionId} value={position.positionId}>
+                      {position.name} (Level {position.level})
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
 
             <Grid item xs={12}>
@@ -272,11 +337,103 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
               </Stack>
             </Grid>
 
+            {/* Profile Information Section */}
+            <Grid item xs={12}>
+              <Divider sx={{ my: 2 }} />
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600 }}>
+                Thông tin cá nhân
+              </Typography>
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Số điện thoại"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                fullWidth
+                disabled={loading}
+                variant="outlined"
+                size="medium"
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Website"
+                name="website"
+                value={form.website}
+                onChange={handleChange}
+                fullWidth
+                disabled={loading}
+                variant="outlined"
+                size="medium"
+                placeholder="https://example.com"
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Thành phố"
+                name="city"
+                value={form.city}
+                onChange={handleChange}
+                fullWidth
+                disabled={loading}
+                variant="outlined"
+                size="medium"
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Quốc gia"
+                name="country"
+                value={form.country}
+                onChange={handleChange}
+                fullWidth
+                disabled={loading}
+                variant="outlined"
+                size="medium"
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                label="Địa chỉ"
+                name="address"
+                value={form.address}
+                onChange={handleChange}
+                fullWidth
+                disabled={loading}
+                variant="outlined"
+                size="medium"
+                multiline
+                rows={2}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                label="Tiểu sử"
+                name="bio"
+                value={form.bio}
+                onChange={handleChange}
+                fullWidth
+                disabled={loading}
+                variant="outlined"
+                size="medium"
+                multiline
+                rows={3}
+                placeholder="Mô tả ngắn về bản thân..."
+              />
+            </Grid>
+
             {error && (
               <Grid item xs={12}>
-                <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+                <Alert severity="error" sx={{ mt: 1 }}>
                   {error}
-                </Typography>
+                </Alert>
               </Grid>
             )}
           </Grid>
