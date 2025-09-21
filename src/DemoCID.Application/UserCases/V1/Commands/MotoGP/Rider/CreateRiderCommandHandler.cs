@@ -35,8 +35,9 @@ public sealed class CreateRiderCommandHandler : ICommandHandler<Command.CreateRi
         }
 
         var country = new Country(request.CountryCode, request.CountryName, request.CountryFlag);
-        
-        var rider = Domain.Entities.MotoGP.TeamRiderManagement.Rider.Create(
+        try
+        {
+            var rider = Domain.Entities.MotoGP.TeamRiderManagement.Rider.Create(
             request.FirstName,
             request.LastName,
             request.RacingNumber,
@@ -46,8 +47,14 @@ public sealed class CreateRiderCommandHandler : ICommandHandler<Command.CreateRi
             request.Weight,
             request.Nickname);
 
-        _riderRepository.Add(rider);
-        await _context.SaveChangesAsync(cancellationToken);
+            _riderRepository.Add(rider);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+
+        }
+        
 
         // Publish domain event (if needed)
         //await _publisher.Publish(new DomainEvent.RiderCreated(rider.Id), cancellationToken);

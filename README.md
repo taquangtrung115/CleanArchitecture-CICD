@@ -77,8 +77,15 @@ https://<PAT>@dev.azure.com/<OrganizationName>/MyTestProject/_git/TestSample
 
 ## Active Senbox
 Active Senbox: https://learn.microsoft.com/en-us/training/modules/create-azure-storage-account/5-exercise-create-a-storage-account
-
-
+## Redis
+# **Cài đặt Redis**
+## **Download ở link**
+- https://drive.google.com/drive/folders/1CdmvxKhCfZax4rLWI6DwzpCta0JudYeB?usp=sharing
+ - **Redis-x64-3.0.504.zip** giải nén mở CMD quyền admin r làm theo các bước dưới
+ - **redis-desktop-manager-0.9.3.817.zip** giao diện quản lý cache
+- **redisBGNTest**: dùng cho link test http://192.168.10.59:7004/
+- - **redisBGNTest**: dùng cho link test http://192.168.10.59:7004/
+ - **Cài đặt**: redis-server --service-install --service-name redisBGNTest --port 1201
 Dapper Ref:
 
 https://www.learndapper.com/saving-data/insert

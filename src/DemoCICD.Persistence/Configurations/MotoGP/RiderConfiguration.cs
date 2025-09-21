@@ -53,7 +53,6 @@ internal sealed class RiderConfiguration : IEntityTypeConfiguration<Rider>
         builder.OwnsOne(r => r.Nationality, nationality =>
         {
             nationality.Property(n => n.Code)
-                .HasMaxLength(3)
                 .IsRequired()
                 .HasColumnName("NationalityCode");
             nationality.Property(n => n.Name)
