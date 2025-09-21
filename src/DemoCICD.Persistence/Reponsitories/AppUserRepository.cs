@@ -1,15 +1,16 @@
 using System.Linq.Expressions;
 using DemoCICD.Domain.Abstractions.Reponsitories;
 using DemoCICD.Domain.Entities.Identity;
+using DemoCICD.Domain.Entities.MotoGP.TeamRiderManagement;
 using Microsoft.EntityFrameworkCore;
 
 namespace DemoCICD.Persistence.Reponsitories;
 
-public class AppUserRepository : IAppUserRepository, IDisposable
+public class AppUserRepository : AuditableRepositoryBase<Bike, Guid>, IAppUserRepository
 {
     private readonly ApplicationDbContext _context;
 
-    public AppUserRepository(ApplicationDbContext context)
+    public AppUserRepository(ApplicationDbContext context) : base(context)
         => _context = context;
 
     public void Dispose()

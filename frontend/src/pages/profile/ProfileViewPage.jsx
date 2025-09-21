@@ -117,9 +117,6 @@ export default function ProfileViewPage() {
         // Use mock data for demo purposes
         useMockData();
       }
-    } catch {
-      // Use mock data when API is not available
-      useMockData();
     } catch (error) {
       setError('Đã xảy ra lỗi khi tải profile');
     } finally {
@@ -166,7 +163,7 @@ export default function ProfileViewPage() {
 
   useEffect(() => {
     fetchProfile();
-    
+
     // Check if edit mode should be activated from URL parameter
     if (searchParams.get('edit') === 'true') {
       setEditMode(true);
@@ -176,7 +173,6 @@ export default function ProfileViewPage() {
   const handleTabChange = useCallback((event, newValue) => {
     setActiveTab(newValue);
   }, []);
-
   const handleNotificationChange = (setting) => (event) => {
     setNotificationSettings((prev) => ({
       ...prev,
@@ -184,31 +180,14 @@ export default function ProfileViewPage() {
     }));
   };
 
+
   const handlePrivacyChange = (setting) => (event) => {
     setPrivacySettings((prev) => ({
       ...prev,
       [setting]: event.target.checked || event.target.value
     }));
   };
-  const handleNotificationChange = useCallback(
-    (setting) => (event) => {
-      setNotificationSettings((prev) => ({
-        ...prev,
-        [setting]: event.target.checked
-      }));
-    },
-    []
-  );
 
-  const handlePrivacyChange = useCallback(
-    (setting) => (event) => {
-      setPrivacySettings((prev) => ({
-        ...prev,
-        [setting]: event.target.checked || event.target.value
-      }));
-    },
-    []
-  );
 
   const handleEditModeToggle = useCallback(() => {
     if (editMode) {
@@ -233,13 +212,14 @@ export default function ProfileViewPage() {
     }
     setEditMode(!editMode);
   }, [editMode, profile]);
-    
+
 
   const handleFormDataChange = (field) => (event) => {
     setEditFormData((prev) => ({
       ...prev,
       [field]: event.target.value
     }));
+  }
   const handleContactEditModeToggle = () => {
     if (contactEditMode) {
       // Reset only contact form data if canceling edit
@@ -253,16 +233,6 @@ export default function ProfileViewPage() {
     }
     setContactEditMode(!contactEditMode);
   };
-
-  const handleFormDataChange = useCallback(
-    (field) => (event) => {
-      setEditFormData((prev) => ({
-        ...prev,
-        [field]: event.target.value
-      }));
-    },
-    []
-  );
 
   const handleSaveProfile = async () => {
     setSaving(true);
@@ -284,14 +254,11 @@ export default function ProfileViewPage() {
         await fetchProfile();
       }
     } catch (error) {
-        setContactEditMode(false);
-        // Refresh profile data
-        await fetchProfile();
-      }
-    } catch (err) {
-      console.error('Error updating profile:', err);
-      setError('Đã xảy ra lỗi khi cập nhật profile');
-    } finally {
+      setContactEditMode(false);
+      // Refresh profile data
+      await fetchProfile();
+    }
+    finally {
       setSaving(false);
     }
   };
@@ -312,7 +279,7 @@ export default function ProfileViewPage() {
         city: editFormData.city,
         country: editFormData.country
       };
-      
+
       const res = await updateCurrentUserProfile(payload);
       if (res.error) {
         setError('Không thể cập nhật thông tin liên hệ: ' + (res.error.message || res.error));
@@ -684,22 +651,22 @@ export default function ProfileViewPage() {
                       <Box mt={2}>
                         {contactEditMode ? (
                           <Stack direction="row" spacing={1}>
-                            <Button 
-                              variant="contained" 
-                              size="small" 
+                            <Button
+                              variant="contained"
+                              size="small"
                               onClick={handleSaveContactInfo}
                               disabled={saving}
                               startIcon={<CheckCircleOutlined />}
-                              sx={{ 
+                              sx={{
                                 backgroundColor: 'primary.main',
                                 '&:hover': { backgroundColor: 'primary.dark' }
                               }}
                             >
                               {saving ? 'Đang lưu...' : 'Lưu thông tin'}
                             </Button>
-                            <Button 
-                              variant="outlined" 
-                              size="small" 
+                            <Button
+                              variant="outlined"
+                              size="small"
                               onClick={handleContactEditModeToggle}
                               disabled={saving}
                             >
@@ -707,9 +674,9 @@ export default function ProfileViewPage() {
                             </Button>
                           </Stack>
                         ) : (
-                          <Button 
-                            variant="outlined" 
-                            size="small" 
+                          <Button
+                            variant="outlined"
+                            size="small"
                             startIcon={<EditOutlined />}
                             onClick={handleContactEditModeToggle}
                             disabled={editMode} // Disable when global edit mode is active
