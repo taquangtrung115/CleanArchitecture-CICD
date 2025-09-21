@@ -13,7 +13,7 @@ class ChatService {
       await this.stopConnection();
     }
 
-    const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5258';
 
     this.connection = new HubConnectionBuilder()
       .withUrl(`${baseURL}/chathub`, {
