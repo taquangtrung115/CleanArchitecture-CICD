@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   Typography,
   Box,
@@ -50,7 +50,6 @@ import IdcardOutlined from '@ant-design/icons/IdcardOutlined';
 import ClockCircleOutlined from '@ant-design/icons/ClockCircleOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import BellOutlined from '@ant-design/icons/BellOutlined';
-import LockOutlined from '@ant-design/icons/LockOutlined';
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import MobileOutlined from '@ant-design/icons/MobileOutlined';
@@ -125,25 +124,31 @@ export default function ProfileViewPage() {
     fetchProfile();
   }, []);
 
-  const handleTabChange = (event, newValue) => {
+  const handleTabChange = useCallback((event, newValue) => {
     setActiveTab(newValue);
-  };
+  }, []);
 
-  const handleNotificationChange = (setting) => (event) => {
-    setNotificationSettings(prev => ({
-      ...prev,
-      [setting]: event.target.checked
-    }));
-  };
+  const handleNotificationChange = useCallback(
+    (setting) => (event) => {
+      setNotificationSettings((prev) => ({
+        ...prev,
+        [setting]: event.target.checked
+      }));
+    },
+    []
+  );
 
-  const handlePrivacyChange = (setting) => (event) => {
-    setPrivacySettings(prev => ({
-      ...prev,
-      [setting]: event.target.checked || event.target.value
-    }));
-  };
+  const handlePrivacyChange = useCallback(
+    (setting) => (event) => {
+      setPrivacySettings((prev) => ({
+        ...prev,
+        [setting]: event.target.checked || event.target.value
+      }));
+    },
+    []
+  );
 
-  const handleEditModeToggle = () => {
+  const handleEditModeToggle = useCallback(() => {
     if (editMode) {
       // Reset form data if canceling edit
       setEditFormData({
@@ -158,14 +163,17 @@ export default function ProfileViewPage() {
       });
     }
     setEditMode(!editMode);
-  };
+  }, [editMode, profile]);
 
-  const handleFormDataChange = (field) => (event) => {
-    setEditFormData(prev => ({
-      ...prev,
-      [field]: event.target.value
-    }));
-  };
+  const handleFormDataChange = useCallback(
+    (field) => (event) => {
+      setEditFormData((prev) => ({
+        ...prev,
+        [field]: event.target.value
+      }));
+    },
+    []
+  );
 
   const handleSaveProfile = async () => {
     setSaving(true);
@@ -174,7 +182,7 @@ export default function ProfileViewPage() {
         userId: profile.userId, // We need the current user ID
         ...editFormData
       };
-      
+
       const res = await updateCurrentUserProfile(payload);
       if (res.error) {
         setError('Không thể cập nhật profile: ' + (res.error.message || res.error));
@@ -183,7 +191,7 @@ export default function ProfileViewPage() {
         // Refresh profile data
         await fetchProfile();
       }
-    } catch (err) {
+    } catch {
       setError('Đã xảy ra lỗi khi cập nhật profile');
     } finally {
       setSaving(false);
@@ -320,7 +328,7 @@ export default function ProfileViewPage() {
             >
               <Button
                 variant="contained"
-                startIcon={editMode ? <></>: <EditOutlined />}
+                startIcon={editMode ? <></> : <EditOutlined />}
                 onClick={editMode ? handleSaveProfile : handleEditModeToggle}
                 disabled={saving}
                 sx={{
@@ -341,7 +349,7 @@ export default function ProfileViewPage() {
                     backgroundColor: 'rgba(255,255,255,0.1)',
                     borderColor: 'rgba(255,255,255,0.3)',
                     color: 'white',
-                    '&:hover': { 
+                    '&:hover': {
                       backgroundColor: 'rgba(255,255,255,0.2)',
                       borderColor: 'rgba(255,255,255,0.5)'
                     }
@@ -474,6 +482,7 @@ export default function ProfileViewPage() {
                           </ListItemIcon>
                           {editMode ? (
                             <TextField
+                              key="phone-edit"
                               fullWidth
                               size="small"
                               label="Số điện thoại"
@@ -482,10 +491,7 @@ export default function ProfileViewPage() {
                               variant="outlined"
                             />
                           ) : (
-                            <ListItemText 
-                              primary="Số điện thoại" 
-                              secondary={profile?.phone || "Chưa cập nhật"} 
-                            />
+                            <ListItemText primary="Số điện thoại" secondary={profile?.phone || 'Chưa cập nhật'} />
                           )}
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
@@ -494,6 +500,7 @@ export default function ProfileViewPage() {
                           </ListItemIcon>
                           {editMode ? (
                             <TextField
+                              key="address-edit"
                               fullWidth
                               size="small"
                               label="Địa chỉ"
@@ -502,10 +509,7 @@ export default function ProfileViewPage() {
                               variant="outlined"
                             />
                           ) : (
-                            <ListItemText 
-                              primary="Địa chỉ" 
-                              secondary={profile?.address || "Chưa cập nhật"} 
-                            />
+                            <ListItemText primary="Địa chỉ" secondary={profile?.address || 'Chưa cập nhật'} />
                           )}
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
@@ -514,6 +518,7 @@ export default function ProfileViewPage() {
                           </ListItemIcon>
                           {editMode ? (
                             <TextField
+                              key="city-edit"
                               fullWidth
                               size="small"
                               label="Thành phố"
@@ -522,10 +527,7 @@ export default function ProfileViewPage() {
                               variant="outlined"
                             />
                           ) : (
-                            <ListItemText 
-                              primary="Thành phố" 
-                              secondary={profile?.city || "Chưa cập nhật"} 
-                            />
+                            <ListItemText primary="Thành phố" secondary={profile?.city || 'Chưa cập nhật'} />
                           )}
                         </ListItem>
                         <ListItem disablePadding sx={{ mb: 1 }}>
@@ -534,6 +536,7 @@ export default function ProfileViewPage() {
                           </ListItemIcon>
                           {editMode ? (
                             <TextField
+                              key="country-edit"
                               fullWidth
                               size="small"
                               label="Quốc gia"
@@ -542,10 +545,7 @@ export default function ProfileViewPage() {
                               variant="outlined"
                             />
                           ) : (
-                            <ListItemText 
-                              primary="Quốc gia" 
-                              secondary={profile?.country || "Việt Nam"} 
-                            />
+                            <ListItemText primary="Quốc gia" secondary={profile?.country || 'Việt Nam'} />
                           )}
                         </ListItem>
                       </List>
@@ -726,9 +726,9 @@ export default function ProfileViewPage() {
                           <Typography variant="body2" color="text.secondary" gutterBottom>
                             Được cập nhật lần cuối: 15/01/2024
                           </Typography>
-                          <Button 
-                            variant="outlined" 
-                            size="small" 
+                          <Button
+                            variant="outlined"
+                            size="small"
                             startIcon={<EditOutlined />}
                             onClick={() => setChangePasswordOpen(true)}
                             sx={{ mt: 1 }}
@@ -781,31 +781,35 @@ export default function ProfileViewPage() {
                       <Stack spacing={2}>
                         <FormControlLabel
                           control={
-                            <Switch 
+                            <Switch
                               checked={notificationSettings.emailNotifications}
                               onChange={handleNotificationChange('emailNotifications')}
                             />
                           }
                           label={
                             <Box>
-                              <Typography variant="body2" fontWeight="medium">Email thông báo</Typography>
+                              <Typography variant="body2" fontWeight="medium">
+                                Email thông báo
+                              </Typography>
                               <Typography variant="caption" color="text.secondary">
                                 Nhận thông báo qua email
                               </Typography>
                             </Box>
                           }
                         />
-                        
+
                         <FormControlLabel
                           control={
-                            <Switch 
+                            <Switch
                               checked={notificationSettings.pushNotifications}
                               onChange={handleNotificationChange('pushNotifications')}
                             />
                           }
                           label={
                             <Box>
-                              <Typography variant="body2" fontWeight="medium">Thông báo đẩy</Typography>
+                              <Typography variant="body2" fontWeight="medium">
+                                Thông báo đẩy
+                              </Typography>
                               <Typography variant="caption" color="text.secondary">
                                 Nhận thông báo trên trình duyệt
                               </Typography>
@@ -815,14 +819,16 @@ export default function ProfileViewPage() {
 
                         <FormControlLabel
                           control={
-                            <Switch 
+                            <Switch
                               checked={notificationSettings.smsNotifications}
                               onChange={handleNotificationChange('smsNotifications')}
                             />
                           }
                           label={
                             <Box>
-                              <Typography variant="body2" fontWeight="medium">SMS thông báo</Typography>
+                              <Typography variant="body2" fontWeight="medium">
+                                SMS thông báo
+                              </Typography>
                               <Typography variant="caption" color="text.secondary">
                                 Nhận thông báo qua tin nhắn
                               </Typography>
@@ -832,34 +838,25 @@ export default function ProfileViewPage() {
 
                         <Divider />
 
-                        <Typography variant="subtitle2" fontWeight="medium">Loại thông báo</Typography>
-                        
+                        <Typography variant="subtitle2" fontWeight="medium">
+                          Loại thông báo
+                        </Typography>
+
                         <FormControlLabel
                           control={
-                            <Switch 
-                              checked={notificationSettings.securityAlerts}
-                              onChange={handleNotificationChange('securityAlerts')}
-                            />
+                            <Switch checked={notificationSettings.securityAlerts} onChange={handleNotificationChange('securityAlerts')} />
                           }
                           label="Cảnh báo bảo mật"
                         />
 
                         <FormControlLabel
-                          control={
-                            <Switch 
-                              checked={notificationSettings.newsUpdates}
-                              onChange={handleNotificationChange('newsUpdates')}
-                            />
-                          }
+                          control={<Switch checked={notificationSettings.newsUpdates} onChange={handleNotificationChange('newsUpdates')} />}
                           label="Cập nhật tin tức"
                         />
 
                         <FormControlLabel
                           control={
-                            <Switch 
-                              checked={notificationSettings.marketingEmails}
-                              onChange={handleNotificationChange('marketingEmails')}
-                            />
+                            <Switch checked={notificationSettings.marketingEmails} onChange={handleNotificationChange('marketingEmails')} />
                           }
                           label="Email marketing"
                         />
@@ -895,41 +892,25 @@ export default function ProfileViewPage() {
                         </Box>
 
                         <FormControlLabel
-                          control={
-                            <Switch 
-                              checked={privacySettings.showEmail}
-                              onChange={handlePrivacyChange('showEmail')}
-                            />
-                          }
+                          control={<Switch checked={privacySettings.showEmail} onChange={handlePrivacyChange('showEmail')} />}
                           label="Hiển thị email công khai"
                         />
 
                         <FormControlLabel
-                          control={
-                            <Switch 
-                              checked={privacySettings.showPhone}
-                              onChange={handlePrivacyChange('showPhone')}
-                            />
-                          }
+                          control={<Switch checked={privacySettings.showPhone} onChange={handlePrivacyChange('showPhone')} />}
                           label="Hiển thị số điện thoại"
                         />
 
                         <FormControlLabel
                           control={
-                            <Switch 
-                              checked={privacySettings.allowSearchByEmail}
-                              onChange={handlePrivacyChange('allowSearchByEmail')}
-                            />
+                            <Switch checked={privacySettings.allowSearchByEmail} onChange={handlePrivacyChange('allowSearchByEmail')} />
                           }
                           label="Cho phép tìm kiếm bằng email"
                         />
 
                         <FormControlLabel
                           control={
-                            <Switch 
-                              checked={privacySettings.allowSearchByPhone}
-                              onChange={handlePrivacyChange('allowSearchByPhone')}
-                            />
+                            <Switch checked={privacySettings.allowSearchByPhone} onChange={handlePrivacyChange('allowSearchByPhone')} />
                           }
                           label="Cho phép tìm kiếm bằng SĐT"
                         />
@@ -981,7 +962,7 @@ export default function ProfileViewPage() {
                             />
                           </ListItemButton>
                         </ListItem>
-                        
+
                         {/* Other Sessions */}
                         <ListItem disablePadding sx={{ mb: 2 }}>
                           <ListItemButton sx={{ borderRadius: 1, border: '1px solid', borderColor: 'divider' }}>
@@ -1074,27 +1055,10 @@ export default function ProfileViewPage() {
           <DialogTitle>Đổi mật khẩu</DialogTitle>
           <DialogContent>
             <Stack spacing={3} sx={{ mt: 1 }}>
-              <TextField
-                label="Mật khẩu hiện tại"
-                type="password"
-                fullWidth
-                size="small"
-              />
-              <TextField
-                label="Mật khẩu mới"
-                type="password"
-                fullWidth
-                size="small"
-              />
-              <TextField
-                label="Xác nhận mật khẩu mới"
-                type="password"
-                fullWidth
-                size="small"
-              />
-              <Alert severity="info">
-                Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.
-              </Alert>
+              <TextField label="Mật khẩu hiện tại" type="password" fullWidth size="small" />
+              <TextField label="Mật khẩu mới" type="password" fullWidth size="small" />
+              <TextField label="Xác nhận mật khẩu mới" type="password" fullWidth size="small" />
+              <Alert severity="info">Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.</Alert>
             </Stack>
           </DialogContent>
           <DialogActions>
