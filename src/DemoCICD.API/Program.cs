@@ -10,6 +10,9 @@ using DemoCICD.Presentation.APIs.Products;
 using Carter;
 using DemoCICD.Infrastructure.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
+using DemoCICD.Persistence;
+using DemoCICD.Persistence.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -98,6 +101,28 @@ app.MapHub<DemoCICD.API.Hubs.ChatHub>("/chathub");
 
 //if (builder.Environment.IsDevelopment() || builder.Environment.IsStaging())
     app.ConfigureSwagger();
+
+// Seed sample data for development/demo
+if (app.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    
+    try
+    {
+        // Ensure database exists and apply any pending migrations
+        await context.Database.MigrateAsync();
+        
+        // Seed sample chat data
+        await ChatSeeder.SeedChatDataAsync(context);
+        
+        Log.Information("Database seeding completed successfully");
+    }
+    catch (Exception ex)
+    {
+        Log.Error(ex, "An error occurred while seeding the database");
+    }
+}
 
 try
 {

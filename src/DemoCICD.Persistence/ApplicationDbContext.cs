@@ -3,6 +3,7 @@ using DemoCICD.Domain.Entities.Identity;
 using DemoCICD.Domain.Entities.MotoGP.RaceManagement;
 using DemoCICD.Domain.Entities.MotoGP.TeamRiderManagement;
 using DemoCICD.Domain.Entities.MotoGP.MediaNews;
+using DemoCICD.Domain.Entities.Chat;
 using DemoCICD.Domain.Abstractions.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -75,4 +76,9 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
     public DbSet<Bike> Bikes { get; set; }
     public DbSet<News> News { get; set; }
     public DbSet<Video> Videos { get; set; }
+
+    // Chat Entities
+    public DbSet<ChatRoom> ChatRooms { get; set; }
+    public DbSet<ChatMessage> ChatMessages { get; set; }
+    public DbSet<ChatRoomMember> ChatRoomMembers { get; set; }
 }
