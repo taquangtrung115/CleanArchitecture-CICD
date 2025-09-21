@@ -80,3 +80,35 @@ export const logout = async () => {
     return handleApiError(error);
   }
 };
+
+// Forgot Password
+export const forgotPassword = async (email) => {
+  try {
+    const response = await axiosInstance.post(`${AUTH_ENDPOINT}/forgot-password`, { email });
+    return {
+      data: response.data,
+      status: response.status,
+      error: null
+    };
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
+
+// Reset Password with Token
+export const resetPasswordWithToken = async (email, token, newPassword) => {
+  try {
+    const response = await axiosInstance.post(`${AUTH_ENDPOINT}/reset-password`, { 
+      email, 
+      token, 
+      newPassword 
+    });
+    return {
+      data: response.data,
+      status: response.status,
+      error: null
+    };
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
