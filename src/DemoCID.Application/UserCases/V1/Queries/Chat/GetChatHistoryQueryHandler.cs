@@ -12,11 +12,11 @@ namespace DemoCICD.Application.UserCases.V1.Queries.Chat;
 public sealed class GetChatHistoryQueryHandler : IQueryHandler<Query.GetChatHistory, Response.ChatHistoryResponse>
 {
     private readonly IRepositoryBase<ChatMessage, Guid> _messageRepository;
-    private readonly IRepositoryBase<AppUser, Guid> _userRepository;
+    private readonly IAppUserRepository _userRepository;
 
     public GetChatHistoryQueryHandler(
         IRepositoryBase<ChatMessage, Guid> messageRepository,
-        IRepositoryBase<AppUser, Guid> userRepository)
+        IAppUserRepository userRepository)
     {
         _messageRepository = messageRepository;
         _userRepository = userRepository;

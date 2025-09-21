@@ -13,13 +13,13 @@ public sealed class CreateChatRoomCommandHandler : ICommandHandler<Command.Creat
 {
     private readonly IRepositoryBase<ChatRoom, Guid> _roomRepository;
     private readonly IRepositoryBase<ChatRoomMember, Guid> _memberRepository;
-    private readonly IRepositoryBase<AppUser, Guid> _userRepository;
+    private readonly IAppUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public CreateChatRoomCommandHandler(
         IRepositoryBase<ChatRoom, Guid> roomRepository,
         IRepositoryBase<ChatRoomMember, Guid> memberRepository,
-        IRepositoryBase<AppUser, Guid> userRepository,
+        IAppUserRepository userRepository,
         IUnitOfWork unitOfWork)
     {
         _roomRepository = roomRepository;
