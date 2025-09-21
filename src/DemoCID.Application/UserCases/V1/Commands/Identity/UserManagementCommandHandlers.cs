@@ -147,14 +147,11 @@ public sealed class DeleteUserCommandHandler : ICommandHandler<Command.DeleteUse
 public sealed class ChangePasswordCommandHandler : ICommandHandler<Command.ChangePassword>
 {
     private readonly IUserManagementService _userManagementService;
-    private readonly ILogger<ChangePasswordCommandHandler> _logger;
 
     public ChangePasswordCommandHandler(
-        IUserManagementService userManagementService,
-        ILogger<ChangePasswordCommandHandler> logger)
+        IUserManagementService userManagementService)
     {
         _userManagementService = userManagementService;
-        _logger = logger;
     }
 
     public async Task<Result> Handle(Command.ChangePassword request, CancellationToken cancellationToken)
@@ -171,12 +168,12 @@ public sealed class ChangePasswordCommandHandler : ICommandHandler<Command.Chang
                 return Result.Failure(new Error("PasswordChange.Failed", "Password change failed"));
             }
 
-            _logger.LogInformation("Password changed successfully for user {UserId}", request.UserId);
+            Log.Information("Password changed successfully for user {UserId}", request.UserId);
             return Result.Success();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during password change for user: {UserId}", request.UserId);
+            Log.Error(ex, "Error during password change for user: {UserId}", request.UserId);
             return Result.Failure(new Error("PasswordChange.Error", "An error occurred during password change"));
         }
     }
@@ -185,14 +182,11 @@ public sealed class ChangePasswordCommandHandler : ICommandHandler<Command.Chang
 public sealed class ResetPasswordCommandHandler : ICommandHandler<Command.ResetPassword>
 {
     private readonly IUserManagementService _userManagementService;
-    private readonly ILogger<ResetPasswordCommandHandler> _logger;
 
     public ResetPasswordCommandHandler(
-        IUserManagementService userManagementService,
-        ILogger<ResetPasswordCommandHandler> logger)
+        IUserManagementService userManagementService)
     {
         _userManagementService = userManagementService;
-        _logger = logger;
     }
 
     public async Task<Result> Handle(Command.ResetPassword request, CancellationToken cancellationToken)
@@ -208,12 +202,12 @@ public sealed class ResetPasswordCommandHandler : ICommandHandler<Command.ResetP
                 return Result.Failure(new Error("PasswordReset.Failed", "Password reset failed"));
             }
 
-            _logger.LogInformation("Password reset successfully for user {UserId}", request.UserId);
+            Log.Information("Password reset successfully for user {UserId}", request.UserId);
             return Result.Success();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during password reset for user: {UserId}", request.UserId);
+            Log.Error(ex, "Error during password reset for user: {UserId}", request.UserId);
             return Result.Failure(new Error("PasswordReset.Error", "An error occurred during password reset"));
         }
     }
@@ -222,14 +216,11 @@ public sealed class ResetPasswordCommandHandler : ICommandHandler<Command.ResetP
 public sealed class LockUserCommandHandler : ICommandHandler<Command.LockUser>
 {
     private readonly IUserManagementService _userManagementService;
-    private readonly ILogger<LockUserCommandHandler> _logger;
 
     public LockUserCommandHandler(
-        IUserManagementService userManagementService,
-        ILogger<LockUserCommandHandler> logger)
+        IUserManagementService userManagementService)
     {
         _userManagementService = userManagementService;
-        _logger = logger;
     }
 
     public async Task<Result> Handle(Command.LockUser request, CancellationToken cancellationToken)
@@ -243,12 +234,12 @@ public sealed class LockUserCommandHandler : ICommandHandler<Command.LockUser>
                 return Result.Failure(new Error("UserLock.Failed", "User lock failed"));
             }
 
-            _logger.LogInformation("User {UserId} locked successfully", request.UserId);
+            Log.Information("User {UserId} locked successfully", request.UserId);
             return Result.Success();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during user lock for user: {UserId}", request.UserId);
+            Log.Error(ex, "Error during user lock for user: {UserId}", request.UserId);
             return Result.Failure(new Error("UserLock.Error", "An error occurred during user lock"));
         }
     }
@@ -257,14 +248,11 @@ public sealed class LockUserCommandHandler : ICommandHandler<Command.LockUser>
 public sealed class UnlockUserCommandHandler : ICommandHandler<Command.UnlockUser>
 {
     private readonly IUserManagementService _userManagementService;
-    private readonly ILogger<UnlockUserCommandHandler> _logger;
 
     public UnlockUserCommandHandler(
-        IUserManagementService userManagementService,
-        ILogger<UnlockUserCommandHandler> logger)
+        IUserManagementService userManagementService)
     {
         _userManagementService = userManagementService;
-        _logger = logger;
     }
 
     public async Task<Result> Handle(Command.UnlockUser request, CancellationToken cancellationToken)
@@ -278,12 +266,12 @@ public sealed class UnlockUserCommandHandler : ICommandHandler<Command.UnlockUse
                 return Result.Failure(new Error("UserUnlock.Failed", "User unlock failed"));
             }
 
-            _logger.LogInformation("User {UserId} unlocked successfully", request.UserId);
+            Log.Information("User {UserId} unlocked successfully", request.UserId);
             return Result.Success();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during user unlock for user: {UserId}", request.UserId);
+            Log.Error(ex, "Error during user unlock for user: {UserId}", request.UserId);
             return Result.Failure(new Error("UserUnlock.Error", "An error occurred during user unlock"));
         }
     }
@@ -292,14 +280,11 @@ public sealed class UnlockUserCommandHandler : ICommandHandler<Command.UnlockUse
 public sealed class AssignUserToRoleCommandHandler : ICommandHandler<Command.AssignUserToRole>
 {
     private readonly IUserManagementService _userManagementService;
-    private readonly ILogger<AssignUserToRoleCommandHandler> _logger;
 
     public AssignUserToRoleCommandHandler(
-        IUserManagementService userManagementService,
-        ILogger<AssignUserToRoleCommandHandler> logger)
+        IUserManagementService userManagementService)
     {
         _userManagementService = userManagementService;
-        _logger = logger;
     }
 
     public async Task<Result> Handle(Command.AssignUserToRole request, CancellationToken cancellationToken)
@@ -313,12 +298,12 @@ public sealed class AssignUserToRoleCommandHandler : ICommandHandler<Command.Ass
                 return Result.Failure(new Error("UserRoleAssignment.Failed", "User role assignment failed"));
             }
 
-            _logger.LogInformation("User {UserId} assigned to role {RoleId} successfully", request.UserId, request.RoleId);
+            Log.Information("User {UserId} assigned to role {RoleId} successfully", request.UserId, request.RoleId);
             return Result.Success();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during user role assignment for user: {UserId}, role: {RoleId}", request.UserId, request.RoleId);
+            Log.Error(ex, "Error during user role assignment for user: {UserId}, role: {RoleId}", request.UserId, request.RoleId);
             return Result.Failure(new Error("UserRoleAssignment.Error", "An error occurred during user role assignment"));
         }
     }
@@ -327,14 +312,11 @@ public sealed class AssignUserToRoleCommandHandler : ICommandHandler<Command.Ass
 public sealed class RemoveUserFromRoleCommandHandler : ICommandHandler<Command.RemoveUserFromRole>
 {
     private readonly IUserManagementService _userManagementService;
-    private readonly ILogger<RemoveUserFromRoleCommandHandler> _logger;
 
     public RemoveUserFromRoleCommandHandler(
-        IUserManagementService userManagementService,
-        ILogger<RemoveUserFromRoleCommandHandler> logger)
+        IUserManagementService userManagementService)
     {
         _userManagementService = userManagementService;
-        _logger = logger;
     }
 
     public async Task<Result> Handle(Command.RemoveUserFromRole request, CancellationToken cancellationToken)
@@ -348,12 +330,12 @@ public sealed class RemoveUserFromRoleCommandHandler : ICommandHandler<Command.R
                 return Result.Failure(new Error("UserRoleRemoval.Failed", "User role removal failed"));
             }
 
-            _logger.LogInformation("User {UserId} removed from role {RoleId} successfully", request.UserId, request.RoleId);
+            Log.Information("User {UserId} removed from role {RoleId} successfully", request.UserId, request.RoleId);
             return Result.Success();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during user role removal for user: {UserId}, role: {RoleId}", request.UserId, request.RoleId);
+            Log.Error(ex, "Error during user role removal for user: {UserId}, role: {RoleId}", request.UserId, request.RoleId);
             return Result.Failure(new Error("UserRoleRemoval.Error", "An error occurred during user role removal"));
         }
     }
@@ -412,14 +394,11 @@ public sealed class UpdateProfileCommandHandler : ICommandHandler<Command.Update
 public sealed class VerifyResetCodeCommandHandler : ICommandHandler<Command.VerifyResetCode, Response.ResetCodeVerified>
 {
     private readonly IUserManagementService _userManagementService;
-    private readonly ILogger<VerifyResetCodeCommandHandler> _logger;
 
     public VerifyResetCodeCommandHandler(
-        IUserManagementService userManagementService,
-        ILogger<VerifyResetCodeCommandHandler> logger)
+        IUserManagementService userManagementService)
     {
         _userManagementService = userManagementService;
-        _logger = logger;
     }
 
     public async Task<Result<Response.ResetCodeVerified>> Handle(Command.VerifyResetCode request, CancellationToken cancellationToken)
@@ -430,11 +409,11 @@ public sealed class VerifyResetCodeCommandHandler : ICommandHandler<Command.Veri
 
             if (isValid)
             {
-                _logger.LogInformation("Reset code verified successfully for email: {Email}", request.Email);
+                Log.Information("Reset code verified successfully for email: {Email}", request.Email);
             }
             else
             {
-                _logger.LogWarning("Invalid reset code provided for email: {Email}", request.Email);
+                Log.Warning("Invalid reset code provided for email: {Email}", request.Email);
             }
 
             var response = new Response.ResetCodeVerified(isValid);
@@ -442,7 +421,7 @@ public sealed class VerifyResetCodeCommandHandler : ICommandHandler<Command.Veri
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during reset code verification for email: {Email}", request.Email);
+            Log.Error(ex, "Error during reset code verification for email: {Email}", request.Email);
             return Result.Failure<Response.ResetCodeVerified>(new Error("VerifyResetCode.Error", "An error occurred during reset code verification"));
         }
     }
@@ -451,14 +430,11 @@ public sealed class VerifyResetCodeCommandHandler : ICommandHandler<Command.Veri
 public sealed class ResetPasswordWithCodeCommandHandler : ICommandHandler<Command.ResetPasswordWithCode>
 {
     private readonly IUserManagementService _userManagementService;
-    private readonly ILogger<ResetPasswordWithCodeCommandHandler> _logger;
 
     public ResetPasswordWithCodeCommandHandler(
-        IUserManagementService userManagementService,
-        ILogger<ResetPasswordWithCodeCommandHandler> logger)
+        IUserManagementService userManagementService)
     {
         _userManagementService = userManagementService;
-        _logger = logger;
     }
 
     public async Task<Result> Handle(Command.ResetPasswordWithCode request, CancellationToken cancellationToken)
@@ -475,12 +451,12 @@ public sealed class ResetPasswordWithCodeCommandHandler : ICommandHandler<Comman
                 return Result.Failure(new Error("ResetPasswordWithCode.Failed", "Password reset failed. Invalid code or expired."));
             }
 
-            _logger.LogInformation("Password reset successfully for email: {Email}", request.Email);
+            Log.Information("Password reset successfully for email: {Email}", request.Email);
             return Result.Success();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during password reset for email: {Email}", request.Email);
+            Log.Error(ex, "Error during password reset for email: {Email}", request.Email);
             return Result.Failure(new Error("ResetPasswordWithCode.Error", "An error occurred during password reset"));
         }
     }
@@ -527,42 +503,3 @@ public sealed class RevokeAllUserSessionsCommandHandler : ICommandHandler<Comman
     }
 }
 
-
-//public sealed class ResetPasswordWithTokenCommandHandler : ICommandHandler<Command.ResetPasswordWithToken>
-//{
-//    private readonly IUserManagementService _userManagementService;
-//    private readonly ILogger<ResetPasswordWithTokenCommandHandler> _logger;
-
-//    public ResetPasswordWithTokenCommandHandler(
-//        IUserManagementService userManagementService,
-//        ILogger<ResetPasswordWithTokenCommandHandler> logger)
-//    {
-//        _userManagementService = userManagementService;
-//        _logger = logger;
-//    }
-
-//    public async Task<Result> Handle(Command.ResetPasswordWithToken request, CancellationToken cancellationToken)
-//    {
-//        try
-//        {
-//            var success = await _userManagementService.ResetPasswordWithTokenAsync(
-//                request.Email,
-//                request.Token,
-//                request.NewPassword);
-
-//            if (!success)
-//            {
-//                _logger.LogWarning("Failed to reset password with token for email: {Email}", request.Email);
-//                return Result.Failure(new Error("ResetPassword.Failed", "Invalid reset token or email"));
-//            }
-
-//            _logger.LogInformation("Password reset successfully for email: {Email}", request.Email);
-//            return Result.Success();
-//        }
-//        catch (Exception ex)
-//        {
-//            _logger.LogError(ex, "Error resetting password with token for email: {Email}", request.Email);
-//            return Result.Failure(new Error("ResetPassword.Error", "An error occurred while resetting your password"));
-//        }
-//    }
-//}
