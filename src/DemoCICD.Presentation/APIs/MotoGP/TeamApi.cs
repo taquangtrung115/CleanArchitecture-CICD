@@ -46,7 +46,7 @@ public class TeamApi : ApiEndpoint, ICarterModule
             .Produces(StatusCodes.Status404NotFound);
     }
 
-    public static async Task<IResult> CreateTeam(ISender sender, Command.CreateTeamCommand command)
+    public static async Task<IResult> CreateTeam(ISender sender, [FromBody] Command.CreateTeamCommand command)
     {
         var result = await sender.Send(command);
 

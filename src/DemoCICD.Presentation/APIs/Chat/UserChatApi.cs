@@ -37,7 +37,7 @@ public class UserChatApi : ApiEndpoint, ICarterModule
 
     public static async Task<IResult> SendMessageV1(
         ISender sender,
-        Command.SendMessage command)
+        [FromBody] Command.SendMessage command)
     {
         var result = await sender.Send(command);
         if (result.IsFailure)
@@ -89,7 +89,7 @@ public class UserChatApi : ApiEndpoint, ICarterModule
 
     public static async Task<IResult> CreateChatRoomV1(
         ISender sender,
-        Command.CreateChatRoom command)
+        [FromBody] Command.CreateChatRoom command)
     {
         var result = await sender.Send(command);
         if (result.IsFailure)

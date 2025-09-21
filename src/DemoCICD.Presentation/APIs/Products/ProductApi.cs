@@ -39,7 +39,7 @@ public static class ProductApi
         return builder;
     }
 
-    public static async Task<IResult> CreateProducts(ISender sender, Command.CreateProductCommand CreateProduct)
+    public static async Task<IResult> CreateProducts(ISender sender, [FromBody] Command.CreateProductCommand CreateProduct)
     {
         var result = await sender.Send(CreateProduct);
 
@@ -107,7 +107,7 @@ public static class ProductApi
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> UpdateProducts(ISender sender, Guid productId, Command.UpdateProductCommand updateProduct)
+    public static async Task<IResult> UpdateProducts(ISender sender, Guid productId, [FromBody] Command.UpdateProductCommand updateProduct)
     {
         var updateProductCommand = new Command.UpdateProductCommand(productId, updateProduct.Name, updateProduct.Price, updateProduct.Description);
         var result = await sender.Send(updateProductCommand);

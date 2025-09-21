@@ -42,7 +42,7 @@ public class AuthApi : ApiEndpoint, ICarterModule
         //group2.MapPut("{productId}", UpdateProductsV2);
     }
 
-    public static async Task<IResult> LoginV1(ISender sender, DemoCICD.Contract.Services.V1.Identity.Query.Login login)
+    public static async Task<IResult> LoginV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Query.Login login)
     {
         var result = await sender.Send(login);
         if (result.IsFailure)
@@ -51,7 +51,7 @@ public class AuthApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> LogoutV1(ISender sender, DemoCICD.Contract.Services.V1.Identity.Command.Logout logout)
+    public static async Task<IResult> LogoutV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.Logout logout)
     {
         var result = await sender.Send(logout);
         if (result.IsFailure)
@@ -60,7 +60,7 @@ public class AuthApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> RefreshTokenV1(ISender sender, DemoCICD.Contract.Services.V1.Identity.Command.RefreshTokenRequest refreshToken)
+    public static async Task<IResult> RefreshTokenV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.RefreshTokenRequest refreshToken)
     {
         var result = await sender.Send(refreshToken);
         if (result.IsFailure)
@@ -69,7 +69,7 @@ public class AuthApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> RegisterV1(ISender sender, DemoCICD.Contract.Services.V1.Identity.Command.Register register)
+    public static async Task<IResult> RegisterV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.Register register)
     {
         var result = await sender.Send(register);
         if (result.IsFailure)
@@ -78,7 +78,7 @@ public class AuthApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> ForgotPasswordV1(ISender sender, DemoCICD.Contract.Services.V1.Identity.Command.ForgotPassword forgotPassword)
+    public static async Task<IResult> ForgotPasswordV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.ForgotPassword forgotPassword)
     {
         var result = await sender.Send(forgotPassword);
         if (result.IsFailure)
@@ -87,7 +87,7 @@ public class AuthApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> VerifyResetCodeV1(ISender sender, DemoCICD.Contract.Services.V1.Identity.Command.VerifyResetCode verifyResetCode)
+    public static async Task<IResult> VerifyResetCodeV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.VerifyResetCode verifyResetCode)
     {
         var result = await sender.Send(verifyResetCode);
         if (result.IsFailure)
@@ -96,7 +96,7 @@ public class AuthApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> ResetPasswordWithCodeV1(ISender sender, DemoCICD.Contract.Services.V1.Identity.Command.ResetPasswordWithCode resetPassword)
+    public static async Task<IResult> ResetPasswordWithCodeV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.ResetPasswordWithCode resetPassword)
     {
         var result = await sender.Send(resetPassword);
         if (result.IsFailure)

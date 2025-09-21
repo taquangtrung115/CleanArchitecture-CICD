@@ -40,7 +40,7 @@ public class RaceApi : ICarterModule
 
     public static async Task<IResult> GetRaces(
         ISender sender,
-        Query.GetRacesQuery query)
+        [FromBody] Query.GetRacesQuery query)
     {
         var result = await sender.Send(query);
 
