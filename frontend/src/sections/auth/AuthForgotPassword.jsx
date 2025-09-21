@@ -28,12 +28,6 @@ import AnimateButton from 'components/@extended/AnimateButton';
 
 export default function AuthForgotPassword({ isDemo = false }) {
   const [loading, setLoading] = React.useState(false);
-  const [success, setSuccess] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState('');
-// ============================|| FORGOT PASSWORD ||============================ //
-
-export default function AuthForgotPassword({ isDemo = false }) {
-  const [loading, setLoading] = React.useState(false);
   const [formError, setFormError] = React.useState('');
   const [success, setSuccess] = React.useState(false);
   const navigate = useNavigate();
