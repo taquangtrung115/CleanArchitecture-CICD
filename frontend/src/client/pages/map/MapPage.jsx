@@ -83,7 +83,9 @@ function Map({ center, zoom, onLocationUpdate }) {
         title: 'Your Location',
         animation: window.google.maps.Animation.DROP,
         icon: {
-          url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+          url:
+            'data:image/svg+xml;charset=UTF-8,' +
+            encodeURIComponent(`
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#1976d2">
               <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
             </svg>
@@ -132,9 +134,7 @@ function LoadingStatus({ status }) {
             <Typography variant="h6" gutterBottom>
               Failed to load Google Maps
             </Typography>
-            <Typography variant="body2">
-              Please check your internet connection and API key configuration.
-            </Typography>
+            <Typography variant="body2">Please check your internet connection and API key configuration.</Typography>
           </Alert>
         </LoadingContainer>
       );
@@ -182,7 +182,7 @@ export default function MapPage() {
         clearTimeout(backupTimeout);
         console.error('Error getting location:', error);
         let errorMessage = 'Unable to retrieve your location.';
-        
+
         switch (error.code) {
           case error.PERMISSION_DENIED:
             errorMessage = 'Location access denied. Please enable location services.';
@@ -197,7 +197,7 @@ export default function MapPage() {
             errorMessage = 'An unknown error occurred.';
             break;
         }
-        
+
         setError(errorMessage);
         // Set default location to Ho Chi Minh City, Vietnam
         setLocation({ lat: 10.8231, lng: 106.6297 });
@@ -267,18 +267,8 @@ export default function MapPage() {
               </Alert>
             </LoadingContainer>
           ) : (
-            <Wrapper
-              apiKey={apiKey}
-              render={LoadingStatus}
-              libraries={['places']}
-            >
-              {location && (
-                <Map
-                  center={location}
-                  zoom={zoom}
-                  onLocationUpdate={handleLocationUpdate}
-                />
-              )}
+            <Wrapper apiKey={apiKey} render={LoadingStatus} libraries={['places']}>
+              {location && <Map center={location} zoom={zoom} onLocationUpdate={handleLocationUpdate} />}
             </Wrapper>
           )}
 

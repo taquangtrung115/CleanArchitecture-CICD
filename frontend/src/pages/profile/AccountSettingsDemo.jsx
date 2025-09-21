@@ -101,14 +101,14 @@ export default function AccountSettingsDemo() {
   };
 
   const handleNotificationChange = (setting) => (event) => {
-    setNotificationSettings(prev => ({
+    setNotificationSettings((prev) => ({
       ...prev,
       [setting]: event.target.checked
     }));
   };
 
   const handlePrivacyChange = (setting) => (event) => {
-    setPrivacySettings(prev => ({
+    setPrivacySettings((prev) => ({
       ...prev,
       [setting]: event.target.checked || event.target.value
     }));
@@ -142,7 +142,7 @@ export default function AccountSettingsDemo() {
       id: 2,
       device: 'iPhone 15',
       browser: 'Safari Mobile',
-      location: 'Ho Chi Minh City, Vietnam', 
+      location: 'Ho Chi Minh City, Vietnam',
       lastActive: '1 hour ago',
       current: false,
       icon: <MobileOutlined />
@@ -387,9 +387,9 @@ export default function AccountSettingsDemo() {
                           <Typography variant="body2" color="text.secondary" gutterBottom>
                             Được cập nhật lần cuối: 15/01/2024
                           </Typography>
-                          <Button 
-                            variant="outlined" 
-                            size="small" 
+                          <Button
+                            variant="outlined"
+                            size="small"
                             startIcon={<EditOutlined />}
                             onClick={() => setChangePasswordOpen(true)}
                             sx={{ mt: 1 }}
@@ -442,31 +442,35 @@ export default function AccountSettingsDemo() {
                       <Stack spacing={2}>
                         <FormControlLabel
                           control={
-                            <Switch 
+                            <Switch
                               checked={notificationSettings.emailNotifications}
                               onChange={handleNotificationChange('emailNotifications')}
                             />
                           }
                           label={
                             <Box>
-                              <Typography variant="body2" fontWeight="medium">Email thông báo</Typography>
+                              <Typography variant="body2" fontWeight="medium">
+                                Email thông báo
+                              </Typography>
                               <Typography variant="caption" color="text.secondary">
                                 Nhận thông báo qua email
                               </Typography>
                             </Box>
                           }
                         />
-                        
+
                         <FormControlLabel
                           control={
-                            <Switch 
+                            <Switch
                               checked={notificationSettings.pushNotifications}
                               onChange={handleNotificationChange('pushNotifications')}
                             />
                           }
                           label={
                             <Box>
-                              <Typography variant="body2" fontWeight="medium">Thông báo đẩy</Typography>
+                              <Typography variant="body2" fontWeight="medium">
+                                Thông báo đẩy
+                              </Typography>
                               <Typography variant="caption" color="text.secondary">
                                 Nhận thông báo trên trình duyệt
                               </Typography>
@@ -476,14 +480,16 @@ export default function AccountSettingsDemo() {
 
                         <FormControlLabel
                           control={
-                            <Switch 
+                            <Switch
                               checked={notificationSettings.smsNotifications}
                               onChange={handleNotificationChange('smsNotifications')}
                             />
                           }
                           label={
                             <Box>
-                              <Typography variant="body2" fontWeight="medium">SMS thông báo</Typography>
+                              <Typography variant="body2" fontWeight="medium">
+                                SMS thông báo
+                              </Typography>
                               <Typography variant="caption" color="text.secondary">
                                 Nhận thông báo qua tin nhắn
                               </Typography>
@@ -493,34 +499,25 @@ export default function AccountSettingsDemo() {
 
                         <Divider />
 
-                        <Typography variant="subtitle2" fontWeight="medium">Loại thông báo</Typography>
-                        
+                        <Typography variant="subtitle2" fontWeight="medium">
+                          Loại thông báo
+                        </Typography>
+
                         <FormControlLabel
                           control={
-                            <Switch 
-                              checked={notificationSettings.securityAlerts}
-                              onChange={handleNotificationChange('securityAlerts')}
-                            />
+                            <Switch checked={notificationSettings.securityAlerts} onChange={handleNotificationChange('securityAlerts')} />
                           }
                           label="Cảnh báo bảo mật"
                         />
 
                         <FormControlLabel
-                          control={
-                            <Switch 
-                              checked={notificationSettings.newsUpdates}
-                              onChange={handleNotificationChange('newsUpdates')}
-                            />
-                          }
+                          control={<Switch checked={notificationSettings.newsUpdates} onChange={handleNotificationChange('newsUpdates')} />}
                           label="Cập nhật tin tức"
                         />
 
                         <FormControlLabel
                           control={
-                            <Switch 
-                              checked={notificationSettings.marketingEmails}
-                              onChange={handleNotificationChange('marketingEmails')}
-                            />
+                            <Switch checked={notificationSettings.marketingEmails} onChange={handleNotificationChange('marketingEmails')} />
                           }
                           label="Email marketing"
                         />
@@ -556,41 +553,25 @@ export default function AccountSettingsDemo() {
                         </Box>
 
                         <FormControlLabel
-                          control={
-                            <Switch 
-                              checked={privacySettings.showEmail}
-                              onChange={handlePrivacyChange('showEmail')}
-                            />
-                          }
+                          control={<Switch checked={privacySettings.showEmail} onChange={handlePrivacyChange('showEmail')} />}
                           label="Hiển thị email công khai"
                         />
 
                         <FormControlLabel
-                          control={
-                            <Switch 
-                              checked={privacySettings.showPhone}
-                              onChange={handlePrivacyChange('showPhone')}
-                            />
-                          }
+                          control={<Switch checked={privacySettings.showPhone} onChange={handlePrivacyChange('showPhone')} />}
                           label="Hiển thị số điện thoại"
                         />
 
                         <FormControlLabel
                           control={
-                            <Switch 
-                              checked={privacySettings.allowSearchByEmail}
-                              onChange={handlePrivacyChange('allowSearchByEmail')}
-                            />
+                            <Switch checked={privacySettings.allowSearchByEmail} onChange={handlePrivacyChange('allowSearchByEmail')} />
                           }
                           label="Cho phép tìm kiếm bằng email"
                         />
 
                         <FormControlLabel
                           control={
-                            <Switch 
-                              checked={privacySettings.allowSearchByPhone}
-                              onChange={handlePrivacyChange('allowSearchByPhone')}
-                            />
+                            <Switch checked={privacySettings.allowSearchByPhone} onChange={handlePrivacyChange('allowSearchByPhone')} />
                           }
                           label="Cho phép tìm kiếm bằng SĐT"
                         />
@@ -616,19 +597,21 @@ export default function AccountSettingsDemo() {
                       <List disablePadding>
                         {activeSessions.map((session, index) => (
                           <ListItem key={session.id} disablePadding sx={{ mb: 2 }}>
-                            <ListItemButton sx={{ borderRadius: 1, border: session.current ? '2px solid' : '1px solid', borderColor: session.current ? 'primary.main' : 'divider' }}>
-                              <ListItemIcon sx={{ minWidth: 40 }}>
-                                {session.icon}
-                              </ListItemIcon>
+                            <ListItemButton
+                              sx={{
+                                borderRadius: 1,
+                                border: session.current ? '2px solid' : '1px solid',
+                                borderColor: session.current ? 'primary.main' : 'divider'
+                              }}
+                            >
+                              <ListItemIcon sx={{ minWidth: 40 }}>{session.icon}</ListItemIcon>
                               <ListItemText
                                 primary={
                                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                     <Typography variant="body1" fontWeight="medium">
                                       {session.device}
                                     </Typography>
-                                    {session.current && (
-                                      <Chip label="Hiện tại" color="primary" size="small" />
-                                    )}
+                                    {session.current && <Chip label="Hiện tại" color="primary" size="small" />}
                                   </Box>
                                 }
                                 secondary={
@@ -714,27 +697,10 @@ export default function AccountSettingsDemo() {
           <DialogTitle>Đổi mật khẩu</DialogTitle>
           <DialogContent>
             <Stack spacing={3} sx={{ mt: 1 }}>
-              <TextField
-                label="Mật khẩu hiện tại"
-                type="password"
-                fullWidth
-                size="small"
-              />
-              <TextField
-                label="Mật khẩu mới"
-                type="password"
-                fullWidth
-                size="small"
-              />
-              <TextField
-                label="Xác nhận mật khẩu mới"
-                type="password"
-                fullWidth
-                size="small"
-              />
-              <Alert severity="info">
-                Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.
-              </Alert>
+              <TextField label="Mật khẩu hiện tại" type="password" fullWidth size="small" />
+              <TextField label="Mật khẩu mới" type="password" fullWidth size="small" />
+              <TextField label="Xác nhận mật khẩu mới" type="password" fullWidth size="small" />
+              <Alert severity="info">Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.</Alert>
             </Stack>
           </DialogContent>
           <DialogActions>

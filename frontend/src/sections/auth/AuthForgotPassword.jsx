@@ -91,10 +91,14 @@ export default function AuthForgotPassword({ isDemo = false }) {
       </Grid>
     );
   }
+  const [success, setSuccess] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState('');
+  const navigate = useNavigate();
+
+  if (loading) return <Loader />;
 
   return (
     <>
-      {loading && <Loader />}
       <Formik
         initialValues={{
           email: '',
@@ -103,7 +107,35 @@ export default function AuthForgotPassword({ isDemo = false }) {
         validationSchema={Yup.object().shape({
           email: Yup.string().email('Must be a valid email').max(255).required('Email is required')
         })}
-        onSubmit={handleSubmit}
+        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+          setLoading(true);
+          setErrorMessage('');
+
+          if (isDemo) {
+            setTimeout(() => {
+              setStatus({ success: true });
+              setLoading(false);
+              setSuccess(true);
+              setSubmitting(false);
+            }, 500);
+          } else {
+            try {
+              const result = await forgotPassword(values.email);
+              if (result.error) {
+                setErrorMessage(result.error.message || 'Failed to send reset email');
+                setErrors({ submit: result.error.message || 'Failed to send reset email' });
+              } else {
+                setStatus({ success: true });
+                setSuccess(true);
+              }
+            } catch (err) {
+              setErrorMessage('An error occurred while sending reset email');
+              setErrors({ submit: 'An error occurred while sending reset email' });
+            }
+            setLoading(false);
+            setSubmitting(false);
+          }
+        }}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
@@ -152,6 +184,16 @@ export default function AuthForgotPassword({ isDemo = false }) {
                     color="primary"
                   >
                     Send Password Reset Email
+              </Grid>
+              {errors.submit && (
+                <Grid size={12}>
+                  <FormHelperText error>{errors.submit}</FormHelperText>
+                </Grid>
+              )}
+              <Grid size={12} sx={{ mb: -2 }}>
+                <AnimateButton>
+                  <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
+                    Send Reset Email
                   </Button>
                 </AnimateButton>
               </Grid>
@@ -159,6 +201,11 @@ export default function AuthForgotPassword({ isDemo = false }) {
           </form>
         )}
       </Formik>
+      {success && (
+        <Stack spacing={1} sx={{ mt: 3 }}>
+          <Alert severity="success">Check your email for reset instructions</Alert>
+        </Stack>
+      )}
     </>
   );
 }
