@@ -32,7 +32,7 @@ public class UserManagementApiTests
             false,
             false,
             null,
-            Guid.NewGuid());
+            Guid.NewGuid().ToString());
 
         var expectedResponse = Result.Success(new Response.UserCreated(
             Guid.NewGuid(),
@@ -63,7 +63,7 @@ public class UserManagementApiTests
             false,
             false,
             null,
-            Guid.NewGuid());
+            Guid.NewGuid().ToString());
 
         var errorResponse = Result.Failure<Response.UserCreated>(new Error("USER.INVALID_DATA", "Invalid user data"));
         _sender.Send(command).Returns(errorResponse);
@@ -177,7 +177,7 @@ public class UserManagementApiTests
             false,
             true,
             null,
-            Guid.NewGuid());
+            Guid.NewGuid().ToString());
 
         var expectedResponse = Result.Success(new Response.UserUpdated(
             userId,
@@ -209,7 +209,7 @@ public class UserManagementApiTests
             false,
             true,
             null,
-            Guid.NewGuid());
+            Guid.NewGuid().ToString());
 
         // Act
         var result = await UserManagementApi.UpdateUserV1(_sender, userId, command);
