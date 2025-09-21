@@ -23,7 +23,7 @@ public class Team : AuditableEntity<Guid>
     public virtual IReadOnlyList<Bike> Bikes => _bikes.AsReadOnly();
 
     // EF Core requires a parameterless constructor
-    private Team() { }
+    protected Team() { }
 
     public Team(Guid id, string name, string shortName, Country country, DateTime foundedYear, string? description = null)
     {

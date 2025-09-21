@@ -31,7 +31,7 @@ public class Race : AuditableEntity<Guid>
     public virtual IReadOnlyList<RaceEntry> RaceEntries => _raceEntries.AsReadOnly();
 
     // EF Core requires a parameterless constructor
-    private Race() { }
+    protected Race() { }
 
     public Race(Guid id, Guid seasonId, string name, string circuitName, Country country, 
                DateTime raceDate, RaceSchedule schedule, int roundNumber, decimal circuitLength, 

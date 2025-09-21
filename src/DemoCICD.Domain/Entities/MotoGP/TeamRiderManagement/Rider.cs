@@ -24,7 +24,7 @@ public class Rider : AuditableEntity<Guid>
     public virtual IReadOnlyList<RiderTeamHistory> TeamHistory => _teamHistory.AsReadOnly();
 
     // EF Core requires a parameterless constructor
-    private Rider() { }
+    protected Rider() { }
 
     public Rider(Guid id, string firstName, string lastName, int racingNumber, Country nationality, 
                 DateTime dateOfBirth, decimal height, decimal weight, string? nickname = null)
