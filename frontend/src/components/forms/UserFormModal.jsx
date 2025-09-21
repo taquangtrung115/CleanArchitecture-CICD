@@ -73,12 +73,26 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
     try {
       const [positionsRes, managersRes] = await Promise.all([getActivePositions(), getManagerOptions()]);
 
+      // Debug: Log the actual response structure
+      console.log('Positions response:', positionsRes);
+      console.log('Managers response:', managersRes);
+
       // Check for API errors
       if (positionsRes.error) {
         console.error('Error loading positions:', positionsRes.error);
         setOptionsError('Không thể tải danh sách vị trí. Vui lòng thử lại.');
-      } else if (positionsRes.data && positionsRes.data.value) {
-        setPositions(positionsRes.data.value.positions || []);
+      } else if (positionsRes.data) {
+        // Try multiple possible response structures
+        let positions = [];
+        if (positionsRes.data.value && positionsRes.data.value.positions) {
+          positions = positionsRes.data.value.positions;
+        } else if (positionsRes.data.positions) {
+          positions = positionsRes.data.positions;
+        } else if (Array.isArray(positionsRes.data)) {
+          positions = positionsRes.data;
+        }
+        setPositions(positions || []);
+        console.log('Loaded positions:', positions);
       }
 
       if (managersRes.error) {
@@ -86,8 +100,18 @@ export default function UserFormModal({ open, onClose, onSuccess }) {
         setOptionsError((prev) =>
           prev ? `${prev} Không thể tải danh sách manager.` : 'Không thể tải danh sách manager. Vui lòng thử lại.'
         );
-      } else if (managersRes.data && managersRes.data.value) {
-        setManagers(managersRes.data.value.users || []);
+      } else if (managersRes.data) {
+        // Try multiple possible response structures
+        let managers = [];
+        if (managersRes.data.value && managersRes.data.value.users) {
+          managers = managersRes.data.value.users;
+        } else if (managersRes.data.users) {
+          managers = managersRes.data.users;
+        } else if (Array.isArray(managersRes.data)) {
+          managers = managersRes.data;
+        }
+        setManagers(managers || []);
+        console.log('Loaded managers:', managers);
       }
     } catch (error) {
       console.error('Error loading options:', error);
