@@ -342,4 +342,50 @@ public class UserManagementService : IUserManagementService
             return Enumerable.Empty<AppRole>();
         }
     }
+
+    public async Task<AppUser?> GetUserByEmailAsync(string email)
+    {
+        try
+        {
+            return await _userManager.FindByEmailAsync(email);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error getting user by email: {Email}", email);
+            return null;
+        }
+    }
+
+    public async Task<string> GeneratePasswordResetTokenAsync(AppUser user)
+    {
+        try
+        {
+            return await _userManager.GeneratePasswordResetTokenAsync(user);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error generating password reset token for user: {UserId}", user.Id);
+            throw;
+        }
+    }
+
+    public async Task<bool> ResetPasswordWithTokenAsync(string email, string token, string newPassword)
+    {
+        try
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return false;
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+            return result.Succeeded;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error resetting password with token for email: {Email}", email);
+            return false;
+        }
+    }
 }

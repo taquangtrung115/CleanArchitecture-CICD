@@ -24,6 +24,8 @@ public class AuthApi : ApiEndpoint, ICarterModule
 
         group1.MapPost("login", LoginV1).AllowAnonymous();
         group1.MapPost("register", RegisterV1).AllowAnonymous();
+        group1.MapPost("forgot-password", ForgotPasswordV1).AllowAnonymous();
+        group1.MapPost("reset-password", ResetPasswordWithTokenV1).AllowAnonymous();
         group1.MapPost("logout", LogoutV1).RequireAuthorization();
         group1.MapPost("refresh-token", RefreshTokenV1).AllowAnonymous();
 
@@ -67,6 +69,24 @@ public class AuthApi : ApiEndpoint, ICarterModule
     public static async Task<IResult> RegisterV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.Register register)
     {
         var result = await sender.Send(register);
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Results.Ok(result);
+    }
+
+    public static async Task<IResult> ForgotPasswordV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.ForgotPassword forgotPassword)
+    {
+        var result = await sender.Send(forgotPassword);
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Results.Ok(result);
+    }
+
+    public static async Task<IResult> ResetPasswordWithTokenV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.ResetPasswordWithToken resetPassword)
+    {
+        var result = await sender.Send(resetPassword);
         if (result.IsFailure)
             return HandlerFailure(result);
 

@@ -24,6 +24,9 @@ public interface IUserManagementService
     Task<bool> DeleteUserAsync(Guid userId);
     Task<bool> ChangePasswordAsync(Guid userId, string currentPassword, string newPassword);
     Task<bool> ResetPasswordAsync(Guid userId, string newPassword);
+    Task<AppUser?> GetUserByEmailAsync(string email);
+    Task<string> GeneratePasswordResetTokenAsync(AppUser user);
+    Task<bool> ResetPasswordWithTokenAsync(string email, string token, string newPassword);
     Task<bool> LockUserAsync(Guid userId);
     Task<bool> UnlockUserAsync(Guid userId);
     Task<bool> AssignUserToRoleAsync(Guid userId, Guid roleId);
