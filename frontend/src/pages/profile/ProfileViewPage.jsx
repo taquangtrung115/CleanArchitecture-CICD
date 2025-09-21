@@ -50,7 +50,6 @@ import IdcardOutlined from '@ant-design/icons/IdcardOutlined';
 import ClockCircleOutlined from '@ant-design/icons/ClockCircleOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import BellOutlined from '@ant-design/icons/BellOutlined';
-import LockOutlined from '@ant-design/icons/LockOutlined';
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import MobileOutlined from '@ant-design/icons/MobileOutlined';
@@ -65,6 +64,7 @@ export default function ProfileViewPage() {
   const [activeTab, setActiveTab] = useState(0);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [contactEditMode, setContactEditMode] = useState(false);
   const [saving, setSaving] = useState(false);
   const [editFormData, setEditFormData] = useState({
     firstName: '',
@@ -158,6 +158,24 @@ export default function ProfileViewPage() {
       });
     }
     setEditMode(!editMode);
+    // If global edit mode is turned off, also turn off contact edit mode
+    if (editMode) {
+      setContactEditMode(false);
+    }
+  };
+
+  const handleContactEditModeToggle = () => {
+    if (contactEditMode) {
+      // Reset only contact form data if canceling edit
+      setEditFormData(prev => ({
+        ...prev,
+        phone: profile?.phone || '',
+        address: profile?.address || '',
+        city: profile?.city || '',
+        country: profile?.country || ''
+      }));
+    }
+    setContactEditMode(!contactEditMode);
   };
 
   const handleFormDataChange = (field) => (event) => {
@@ -180,11 +198,46 @@ export default function ProfileViewPage() {
         setError('Không thể cập nhật profile: ' + (res.error.message || res.error));
       } else {
         setEditMode(false);
+        setContactEditMode(false);
         // Refresh profile data
         await fetchProfile();
       }
     } catch (err) {
+      console.error('Error updating profile:', err);
       setError('Đã xảy ra lỗi khi cập nhật profile');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSaveContactInfo = async () => {
+    setSaving(true);
+    try {
+      // Only send contact-related fields along with the userId
+      const payload = {
+        userId: profile.userId,
+        firstName: profile.firstName, // Keep existing values
+        lastName: profile.lastName,
+        bio: profile.bio,
+        website: profile.website,
+        // Only update contact fields
+        phone: editFormData.phone,
+        address: editFormData.address,
+        city: editFormData.city,
+        country: editFormData.country
+      };
+      
+      const res = await updateCurrentUserProfile(payload);
+      if (res.error) {
+        setError('Không thể cập nhật thông tin liên hệ: ' + (res.error.message || res.error));
+      } else {
+        setContactEditMode(false);
+        // Refresh profile data
+        await fetchProfile();
+      }
+    } catch (err) {
+      console.error('Error updating contact info:', err);
+      setError('Đã xảy ra lỗi khi cập nhật thông tin liên hệ');
     } finally {
       setSaving(false);
     }
@@ -472,7 +525,7 @@ export default function ProfileViewPage() {
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <PhoneOutlined />
                           </ListItemIcon>
-                          {editMode ? (
+                          {editMode || contactEditMode ? (
                             <TextField
                               fullWidth
                               size="small"
@@ -492,7 +545,7 @@ export default function ProfileViewPage() {
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <EnvironmentOutlined />
                           </ListItemIcon>
-                          {editMode ? (
+                          {editMode || contactEditMode ? (
                             <TextField
                               fullWidth
                               size="small"
@@ -512,7 +565,7 @@ export default function ProfileViewPage() {
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <EnvironmentOutlined />
                           </ListItemIcon>
-                          {editMode ? (
+                          {editMode || contactEditMode ? (
                             <TextField
                               fullWidth
                               size="small"
@@ -532,7 +585,7 @@ export default function ProfileViewPage() {
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <EnvironmentOutlined />
                           </ListItemIcon>
-                          {editMode ? (
+                          {editMode || contactEditMode ? (
                             <TextField
                               fullWidth
                               size="small"
@@ -551,9 +604,41 @@ export default function ProfileViewPage() {
                       </List>
 
                       <Box mt={2}>
-                        <Button variant="outlined" size="small" startIcon={<EditOutlined />}>
-                          Cập nhật thông tin liên hệ
-                        </Button>
+                        {contactEditMode ? (
+                          <Stack direction="row" spacing={1}>
+                            <Button 
+                              variant="contained" 
+                              size="small" 
+                              onClick={handleSaveContactInfo}
+                              disabled={saving}
+                              startIcon={<CheckCircleOutlined />}
+                              sx={{ 
+                                backgroundColor: 'primary.main',
+                                '&:hover': { backgroundColor: 'primary.dark' }
+                              }}
+                            >
+                              {saving ? 'Đang lưu...' : 'Lưu thông tin'}
+                            </Button>
+                            <Button 
+                              variant="outlined" 
+                              size="small" 
+                              onClick={handleContactEditModeToggle}
+                              disabled={saving}
+                            >
+                              Hủy
+                            </Button>
+                          </Stack>
+                        ) : (
+                          <Button 
+                            variant="outlined" 
+                            size="small" 
+                            startIcon={<EditOutlined />}
+                            onClick={handleContactEditModeToggle}
+                            disabled={editMode} // Disable when global edit mode is active
+                          >
+                            Cập nhật thông tin liên hệ
+                          </Button>
+                        )}
                       </Box>
                     </CardContent>
                   </Card>
