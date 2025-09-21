@@ -8,6 +8,7 @@ namespace DemoCICD.Application.Abstractions;
 
 public interface IEmailService
 {
-    Task<bool> SendPasswordResetCodeAsync(string email, string resetCode, string userName);
-    Task<bool> SendEmailAsync(string to, string subject, string body);
+    Task<bool> SendPasswordResetEmailAsync(string toEmail, string resetToken, string userName);
+    Task<bool> SendEmailAsync(string toEmail, string subject, string body);
+
 }

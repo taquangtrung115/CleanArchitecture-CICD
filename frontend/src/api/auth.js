@@ -95,6 +95,14 @@ export const forgotPassword = async (email) => {
   }
 };
 
+// Reset Password with Token
+export const resetPasswordWithToken = async (email, token, newPassword) => {
+  try {
+    const response = await axiosInstance.post(`${AUTH_ENDPOINT}/reset-password`, { 
+      email, 
+      token, 
+      newPassword 
+    });
 
 export const verifyResetCode = async (email, resetCode) => {
   try {

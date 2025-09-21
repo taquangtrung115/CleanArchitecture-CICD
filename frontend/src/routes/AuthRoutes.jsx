@@ -30,12 +30,6 @@ const AuthRoutes = [
     element: <ForgotPasswordPage />
   },
   {
-    path: '/auth/check-mail',
-    element: <CheckMailPage />
-    path: '/auth/forgot-password',
-    element: <ForgotPasswordPage />
-  },
-  {
     path: '/auth/verify-code',
     element: <CodeVerificationPage />
   },

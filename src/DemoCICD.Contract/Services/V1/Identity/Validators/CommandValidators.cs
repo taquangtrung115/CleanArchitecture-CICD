@@ -185,3 +185,37 @@ public class UpdateRoleValidator : AbstractValidator<Command.UpdateRole>
             .WithMessage("Role code cannot exceed 50 characters");
     }
 }
+
+public class ForgotPasswordValidator : AbstractValidator<Command.ForgotPassword>
+{
+    public ForgotPasswordValidator()
+    {
+        RuleFor(x => x.Email)
+            .NotEmpty()
+            .WithMessage("Email is required")
+            .EmailAddress()
+            .WithMessage("Invalid email format");
+    }
+}
+
+public class ResetPasswordWithTokenValidator : AbstractValidator<Command.ResetPasswordWithToken>
+{
+    public ResetPasswordWithTokenValidator()
+    {
+        RuleFor(x => x.Email)
+            .NotEmpty()
+            .WithMessage("Email is required")
+            .EmailAddress()
+            .WithMessage("Invalid email format");
+
+        RuleFor(x => x.Token)
+            .NotEmpty()
+            .WithMessage("Reset token is required");
+
+        RuleFor(x => x.NewPassword)
+            .NotEmpty()
+            .WithMessage("New password is required")
+            .MinimumLength(6)
+            .WithMessage("New password must be at least 6 characters");
+    }
+}
