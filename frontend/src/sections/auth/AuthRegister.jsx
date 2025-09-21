@@ -13,6 +13,7 @@ import AnimateButton from 'components/@extended/AnimateButton';
 import { useEffect, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { register } from 'api/auth';
+import { getErrorMessage } from '../../utils/errorHandler';
 import Loader from 'components/Loader';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -67,7 +68,7 @@ export default function AuthRegister() {
       setFormSuccess('Đăng ký thành công! Vui lòng đăng nhập.');
       setTimeout(() => navigate('/login'), 1500);
     } else {
-      setFormError(res.error?.message || 'Đăng ký thất bại');
+      setFormError(getErrorMessage(res) || 'Đăng ký thất bại');
     }
     setSubmitting(false);
     setLoading(false);

@@ -1,5 +1,6 @@
 // src/api/product.js
 import axiosInstance from './axios';
+import { handleApiError } from '../utils/errorHandler';
 
 const PRODUCT_ENDPOINT = '/api/v1/products';
 
@@ -9,11 +10,7 @@ export const createProduct = async (payload) => {
     const response = await axiosInstance.post(PRODUCT_ENDPOINT, payload);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -31,11 +28,7 @@ export const getProducts = async (page = 1, pageSize = 10, searchTerm = '', sort
     const response = await axiosInstance.get(`${PRODUCT_ENDPOINT}?${params.toString()}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -45,11 +38,7 @@ export const getProductById = async (productId) => {
     const response = await axiosInstance.get(`${PRODUCT_ENDPOINT}/${productId}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -59,11 +48,7 @@ export const updateProduct = async (productId, payload) => {
     const response = await axiosInstance.put(`${PRODUCT_ENDPOINT}/${productId}`, payload);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };
 
@@ -73,10 +58,6 @@ export const deleteProduct = async (productId) => {
     const response = await axiosInstance.delete(`${PRODUCT_ENDPOINT}/${productId}`);
     return { data: response.data, status: response.status, error: null };
   } catch (error) {
-    return {
-      data: null,
-      status: error.response ? error.response.status : 500,
-      error: error.response ? error.response.data : error.message
-    };
+    return handleApiError(error);
   }
 };

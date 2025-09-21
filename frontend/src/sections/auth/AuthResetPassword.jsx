@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { resetPasswordWithToken } from 'api/auth';
+import { getErrorMessage } from '../../utils/errorHandler';
 import { Link as RouterLink } from 'react-router-dom';
 
 // material-ui
@@ -65,7 +66,7 @@ export default function AuthResetPassword({ email, token }) {
     const res = await resetPasswordWithToken(email, token, values.password);
 
     if (res.error) {
-      setErrorMessage(res.error.detail || 'Failed to reset password. Please try again.');
+      setErrorMessage(getErrorMessage(res) || 'Failed to reset password. Please try again.');
     } else {
       setSuccess(true);
     }
