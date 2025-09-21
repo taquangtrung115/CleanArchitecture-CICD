@@ -1,14 +1,25 @@
 using DemoCICD.Contract.Abstractions.Message;
 using DemoCICD.Contract.Abstractions.Shared;
 using DemoCICD.Contract.Services.V1.Chat;
+using DemoCICD.Domain.Abstractions.Reponsitories;
+using DemoCICD.Domain.Entities.Chat;
+using DemoCICD.Domain.Entities.Identity;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace DemoCICD.Application.UserCases.V1.Queries.Chat;
 
 public sealed class GetChatHistoryQueryHandler : IQueryHandler<Query.GetChatHistory, Response.ChatHistoryResponse>
 {
-    public GetChatHistoryQueryHandler()
+    private readonly IRepositoryBase<ChatMessage, Guid> _messageRepository;
+    private readonly IRepositoryBase<AppUser, Guid> _userRepository;
+
+    public GetChatHistoryQueryHandler(
+        IRepositoryBase<ChatMessage, Guid> messageRepository,
+        IRepositoryBase<AppUser, Guid> userRepository)
     {
+        _messageRepository = messageRepository;
+        _userRepository = userRepository;
     }
 
     public async Task<Result<Response.ChatHistoryResponse>> Handle(Query.GetChatHistory request, CancellationToken cancellationToken)
@@ -18,65 +29,78 @@ public sealed class GetChatHistoryQueryHandler : IQueryHandler<Query.GetChatHist
             Log.Information("Getting chat history for user {UserId} with {OtherUserId} in room {RoomId}", 
                 request.UserId, request.OtherUserId, request.RoomId);
 
-            // Simulate loading from database
-            await Task.Delay(200, cancellationToken);
+            IQueryable<ChatMessage> messagesQuery;
 
-            // Mock chat history data
-            var messages = new List<Response.ChatMessageResponse>();
-
-            // Add some sample messages for demo
-            if (request.OtherUserId.HasValue || request.RoomId.HasValue)
+            if (request.RoomId.HasValue)
             {
-                var baseTime = DateTime.UtcNow.AddHours(-2);
-                
-                messages.AddRange(new[]
+                // Get room messages
+                messagesQuery = _messageRepository.FindAll(m => m.RoomId == request.RoomId);
+            }
+            else if (request.OtherUserId.HasValue)
+            {
+                // Get direct messages between two users
+                messagesQuery = _messageRepository.FindAll(m => 
+                    (m.SenderId == request.UserId && m.ReceiverId == request.OtherUserId) ||
+                    (m.SenderId == request.OtherUserId && m.ReceiverId == request.UserId));
+            }
+            else
+            {
+                // Get all messages for the user (both sent and received)
+                messagesQuery = _messageRepository.FindAll(m => 
+                    m.SenderId == request.UserId || m.ReceiverId == request.UserId);
+            }
+
+            // Get total count before pagination
+            var totalCount = await messagesQuery.CountAsync(cancellationToken);
+
+            // Apply pagination and ordering
+            var messages = await messagesQuery
+                .OrderByDescending(m => m.CreatedAt)
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .ToListAsync(cancellationToken);
+
+            // Get sender information for each message
+            var messageResponses = new List<Response.ChatMessageResponse>();
+            var userCache = new Dictionary<Guid, AppUser>();
+
+            foreach (var message in messages.OrderBy(m => m.CreatedAt)) // Re-order for display
+            {
+                // Get sender info from cache or database
+                if (!userCache.TryGetValue(message.SenderId, out var sender))
                 {
-                    new Response.ChatMessageResponse
+                    sender = await _userRepository.FindByIdAsync(message.SenderId, cancellationToken);
+                    if (sender != null)
                     {
-                        Id = Guid.NewGuid(),
-                        SenderId = request.UserId,
-                        ReceiverId = request.OtherUserId,
-                        RoomId = request.RoomId,
-                        Content = "Hello! How are you doing?",
-                        Type = "Text",
-                        IsRead = true,
-                        CreatedDate = baseTime.AddMinutes(10),
-                        SenderName = "You"
-                    },
-                    new Response.ChatMessageResponse
-                    {
-                        Id = Guid.NewGuid(),
-                        SenderId = request.OtherUserId ?? Guid.NewGuid(),
-                        ReceiverId = request.UserId,
-                        RoomId = request.RoomId,
-                        Content = "Hi there! I'm doing great, thanks for asking. What about you?",
-                        Type = "Text",
-                        IsRead = true,
-                        CreatedDate = baseTime.AddMinutes(15),
-                        SenderName = "Demo User"
-                    },
-                    new Response.ChatMessageResponse
-                    {
-                        Id = Guid.NewGuid(),
-                        SenderId = request.UserId,
-                        ReceiverId = request.OtherUserId,
-                        RoomId = request.RoomId,
-                        Content = "I'm doing well too! Working on the new chat feature.",
-                        Type = "Text",
-                        IsRead = true,
-                        CreatedDate = baseTime.AddMinutes(20),
-                        SenderName = "You"
+                        userCache[message.SenderId] = sender;
                     }
+                }
+
+                var senderName = sender != null 
+                    ? (sender.UserName ?? $"{sender.FirstName} {sender.LastName}".Trim())
+                    : "Unknown User";
+
+                messageResponses.Add(new Response.ChatMessageResponse
+                {
+                    Id = message.Id,
+                    SenderId = message.SenderId,
+                    ReceiverId = message.ReceiverId,
+                    RoomId = message.RoomId,
+                    Content = message.Content,
+                    Type = message.Type.ToString(),
+                    IsRead = message.IsRead,
+                    CreatedDate = message.CreatedAt,
+                    SenderName = senderName
                 });
             }
 
             var response = new Response.ChatHistoryResponse
             {
-                Messages = messages,
-                TotalCount = messages.Count,
+                Messages = messageResponses,
+                TotalCount = totalCount,
                 Page = request.Page,
                 PageSize = request.PageSize,
-                HasNext = false
+                HasNext = (request.Page * request.PageSize) < totalCount
             };
 
             return Result.Success(response);
