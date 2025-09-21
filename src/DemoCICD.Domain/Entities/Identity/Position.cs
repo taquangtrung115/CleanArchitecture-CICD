@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using DemoCICD.Domain.Abstractions.Entities;
 
 namespace DemoCICD.Domain.Entities.Identity;
 
-public class Position
+public class Position : DomainEntity<Guid>
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public override Guid Id { get; set; } = Guid.NewGuid();
     
     [Required]
     [MaxLength(200)]
@@ -35,4 +36,29 @@ public class Position
     
     // Navigation properties
     public virtual ICollection<AppUser> Users { get; set; } = new List<AppUser>();
+
+    // Domain methods
+    public bool HasAssignedUsers() => Users?.Any() == true;
+    
+    public void Activate()
+    {
+        IsActive = true;
+        UpdatedAt = DateTime.UtcNow;
+    }
+    
+    public void Deactivate()
+    {
+        IsActive = false;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public bool IsHigherLevelThan(Position other)
+    {
+        return other != null && Level > other.Level;
+    }
+
+    public bool IsAtSameLevelAs(Position other)
+    {
+        return other != null && Level == other.Level;
+    }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DemoCICD.Application.Abstractions;
 using DemoCICD.Domain.Entities.Identity;
+using DemoCICD.Domain.Services.Identity;
 using DemoCICD.Infrastructure.Authentication;
 using DemoCICD.Infrastructure.Caching;
 using DemoCICD.Infrastructure.AI;
@@ -21,6 +22,10 @@ public static class ServiceCollectionExtensions
     public static void AddInfrastructure(this IServiceCollection services)
     {
         services.AddScoped<SignInManager<AppUser>>();
+        
+        // Add domain services (DDD pattern)
+        services.AddScoped<IPositionDomainService, PositionDomainService>();
+        
         // Add infrastructure services here
         services.AddTransient<IJwtTokenService, JwtTokenService>();
         services.AddTransient<ITokenCacheService, TokenCacheService>();
