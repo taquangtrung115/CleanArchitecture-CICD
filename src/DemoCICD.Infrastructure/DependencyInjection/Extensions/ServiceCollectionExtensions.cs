@@ -25,6 +25,7 @@ public static class ServiceCollectionExtensions
         
         // Add domain services (DDD pattern)
         services.AddScoped<IPositionDomainService, PositionDomainService>();
+        services.AddScoped<IRoleDomainService, RoleDomainService>();
         
         // Add infrastructure services here
         services.AddTransient<IJwtTokenService, JwtTokenService>();
