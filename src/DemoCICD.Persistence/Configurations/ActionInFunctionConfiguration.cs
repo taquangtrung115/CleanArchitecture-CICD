@@ -14,5 +14,15 @@ internal sealed class ActionInFunctionConfiguration : IEntityTypeConfiguration<A
         builder.ToTable(TableNames.ActionInFunctions);
 
         builder.HasKey(x => new { x.ActionId, x.FunctionId });
+
+        builder.HasOne(af => af.Action)
+            .WithMany(a => a.ActionInFunctions)
+            .HasForeignKey(af => af.ActionId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(af => af.Function)
+            .WithMany(f => f.ActionInFunctions)
+            .HasForeignKey(af => af.FunctionId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

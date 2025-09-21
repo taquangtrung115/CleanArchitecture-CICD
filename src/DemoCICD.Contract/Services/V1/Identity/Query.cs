@@ -47,6 +47,10 @@ public static class Query
     // Function Management Queries for dropdowns
     public record GetActiveFunctions() : IQuery<Response.FunctionList>;
     
+    // ActionInFunction Management Queries
+    public record GetActionInFunctions(int Page = 1, int PageSize = 10, string? SearchTerm = null) : IQuery<Response.ActionInFunctionList>;
+    public record GetActionInFunction(string ActionId, string FunctionId) : IQuery<Response.ActionInFunctionDetails>;
+    
     // Account Settings Queries
     public record GetNotificationSettings(Guid UserId) : IQuery<Response.NotificationSettings>;
     public record GetPrivacySettings(Guid UserId) : IQuery<Response.PrivacySettings>;

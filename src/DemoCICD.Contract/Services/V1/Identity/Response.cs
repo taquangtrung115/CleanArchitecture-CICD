@@ -50,6 +50,12 @@ public static class Response
     public record FunctionList(IEnumerable<FunctionSummary> Functions, int TotalCount, int Page, int PageSize);
     public record FunctionSummary(string Id, string Name, bool? IsActive);
     
+    // ActionInFunction Management Responses
+    public record ActionInFunctionCreated(string ActionId, string FunctionId);
+    public record ActionInFunctionDetails(string ActionId, string FunctionId, string ActionName, string FunctionName);
+    public record ActionInFunctionList(IEnumerable<ActionInFunctionSummary> ActionInFunctions, int TotalCount, int Page, int PageSize);
+    public record ActionInFunctionSummary(string ActionId, string FunctionId, string ActionName, string FunctionName);
+    
     // Account Settings Responses
     public record NotificationSettings(bool EmailNotifications, bool PushNotifications, bool SmsNotifications, bool NewsUpdates, bool SecurityAlerts, bool MarketingEmails);
     public record PrivacySettings(string ProfileVisibility, bool ShowEmail, bool ShowPhone, bool AllowSearchByEmail, bool AllowSearchByPhone);
