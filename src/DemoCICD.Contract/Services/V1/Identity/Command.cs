@@ -15,7 +15,6 @@ public static class Command
     public record RefreshTokenRequest(string AccessToken, string RefreshToken) : ICommand<Response.Authenticated>;
     public record Register(string UserName, string Email, string Password, string FirstName, string LastName, DateTime? DayOfBirth) : ICommand<Response.UserCreated>;
     public record ForgotPassword(string Email) : ICommand;
-    public record ResetPasswordWithToken(string Email, string Token, string NewPassword) : ICommand;
     
     // User Management Commands
     public record CreateUser(string UserName, string Email, string Password, string FirstName, string LastName, DateTime? DayOfBirth, bool? IsDirector, bool? IsHeadOfDepartment, Guid? ManagerId, Guid PositionId) : ICommand<Response.UserCreated>;
@@ -24,6 +23,11 @@ public static class Command
     public record DeleteUser(Guid UserId) : ICommand;
     public record ChangePassword(Guid UserId, string CurrentPassword, string NewPassword) : ICommand;
     public record ResetPassword(Guid UserId, string NewPassword) : ICommand;
+    
+    // Password Reset Commands
+    public record ForgotPassword(string Email) : ICommand;
+    public record VerifyResetCode(string Email, string ResetCode) : ICommand<Response.ResetCodeVerified>;
+    public record ResetPasswordWithCode(string Email, string ResetCode, string NewPassword) : ICommand;
     public record LockUser(Guid UserId) : ICommand;
     public record UnlockUser(Guid UserId) : ICommand;
     public record AssignUserToRole(Guid UserId, Guid RoleId) : ICommand;

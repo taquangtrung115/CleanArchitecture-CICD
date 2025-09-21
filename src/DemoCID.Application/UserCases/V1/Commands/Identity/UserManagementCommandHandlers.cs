@@ -408,6 +408,127 @@ public sealed class UpdateProfileCommandHandler : ICommandHandler<Command.Update
     }
 }
 
+// Password Reset Command Handlers
+public sealed class ForgotPasswordCommandHandler : ICommandHandler<Command.ForgotPassword>
+{
+    private readonly IUserManagementService _userManagementService;
+    private readonly IEmailService _emailService;
+    private readonly ILogger<ForgotPasswordCommandHandler> _logger;
+
+    public ForgotPasswordCommandHandler(
+        IUserManagementService userManagementService,
+        IEmailService emailService,
+        ILogger<ForgotPasswordCommandHandler> logger)
+    {
+        _userManagementService = userManagementService;
+        _emailService = emailService;
+        _logger = logger;
+    }
+
+    public async Task<Result> Handle(Command.ForgotPassword request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var success = await _userManagementService.InitiatePasswordResetAsync(request.Email);
+
+            if (!success)
+            {
+                // For security reasons, we don't reveal if email exists or not
+                _logger.LogWarning("Password reset requested for non-existent email: {Email}", request.Email);
+            }
+            else
+            {
+                _logger.LogInformation("Password reset initiated for email: {Email}", request.Email);
+            }
+
+            // Always return success to avoid email enumeration attacks
+            return Result.Success();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error during password reset initiation for email: {Email}", request.Email);
+            return Result.Failure(new Error("ForgotPassword.Error", "An error occurred during password reset initiation"));
+        }
+    }
+}
+
+public sealed class VerifyResetCodeCommandHandler : ICommandHandler<Command.VerifyResetCode, Response.ResetCodeVerified>
+{
+    private readonly IUserManagementService _userManagementService;
+    private readonly ILogger<VerifyResetCodeCommandHandler> _logger;
+
+    public VerifyResetCodeCommandHandler(
+        IUserManagementService userManagementService,
+        ILogger<VerifyResetCodeCommandHandler> logger)
+    {
+        _userManagementService = userManagementService;
+        _logger = logger;
+    }
+
+    public async Task<Result<Response.ResetCodeVerified>> Handle(Command.VerifyResetCode request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var isValid = await _userManagementService.VerifyResetCodeAsync(request.Email, request.ResetCode);
+
+            if (isValid)
+            {
+                _logger.LogInformation("Reset code verified successfully for email: {Email}", request.Email);
+            }
+            else
+            {
+                _logger.LogWarning("Invalid reset code provided for email: {Email}", request.Email);
+            }
+
+            var response = new Response.ResetCodeVerified(isValid);
+            return Result.Success(response);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error during reset code verification for email: {Email}", request.Email);
+            return Result.Failure<Response.ResetCodeVerified>(new Error("VerifyResetCode.Error", "An error occurred during reset code verification"));
+        }
+    }
+}
+
+public sealed class ResetPasswordWithCodeCommandHandler : ICommandHandler<Command.ResetPasswordWithCode>
+{
+    private readonly IUserManagementService _userManagementService;
+    private readonly ILogger<ResetPasswordWithCodeCommandHandler> _logger;
+
+    public ResetPasswordWithCodeCommandHandler(
+        IUserManagementService userManagementService,
+        ILogger<ResetPasswordWithCodeCommandHandler> logger)
+    {
+        _userManagementService = userManagementService;
+        _logger = logger;
+    }
+
+    public async Task<Result> Handle(Command.ResetPasswordWithCode request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var success = await _userManagementService.ResetPasswordWithCodeAsync(
+                request.Email,
+                request.ResetCode,
+                request.NewPassword);
+
+            if (!success)
+            {
+                return Result.Failure(new Error("ResetPasswordWithCode.Failed", "Password reset failed. Invalid code or expired."));
+            }
+
+            _logger.LogInformation("Password reset successfully for email: {Email}", request.Email);
+            return Result.Success();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error during password reset for email: {Email}", request.Email);
+            return Result.Failure(new Error("ResetPasswordWithCode.Error", "An error occurred during password reset"));
+        }
+    }
+}
+
 // Account Settings Command Handlers
 public sealed class UpdateNotificationSettingsCommandHandler : ICommandHandler<Command.UpdateNotificationSettings>
 {

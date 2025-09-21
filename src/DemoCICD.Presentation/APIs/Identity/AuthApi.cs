@@ -28,6 +28,11 @@ public class AuthApi : ApiEndpoint, ICarterModule
         group1.MapPost("reset-password", ResetPasswordWithTokenV1).AllowAnonymous();
         group1.MapPost("logout", LogoutV1).RequireAuthorization();
         group1.MapPost("refresh-token", RefreshTokenV1).AllowAnonymous();
+        
+        // Password Reset endpoints
+        group1.MapPost("forgot-password", ForgotPasswordV1).AllowAnonymous();
+        group1.MapPost("verify-reset-code", VerifyResetCodeV1).AllowAnonymous();
+        group1.MapPost("reset-password", ResetPasswordWithCodeV1).AllowAnonymous();
 
         //var group2 = app.NewVersionedApi("auth-cater-name-show-on-swagger")
         //    .MapGroup(BaseUrl).HasApiVersion(2);
@@ -84,7 +89,16 @@ public class AuthApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    public static async Task<IResult> ResetPasswordWithTokenV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.ResetPasswordWithToken resetPassword)
+    public static async Task<IResult> VerifyResetCodeV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.VerifyResetCode verifyResetCode)
+    {
+        var result = await sender.Send(verifyResetCode);
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Results.Ok(result);
+    }
+
+    public static async Task<IResult> ResetPasswordWithCodeV1(ISender sender, [FromBody] DemoCICD.Contract.Services.V1.Identity.Command.ResetPasswordWithCode resetPassword)
     {
         var result = await sender.Send(resetPassword);
         if (result.IsFailure)

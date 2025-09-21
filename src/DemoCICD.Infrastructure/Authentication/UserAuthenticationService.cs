@@ -122,4 +122,35 @@ public class UserAuthenticationService : IUserAuthenticationService
             return UserAuthResult.Failure("An error occurred during registration");
         }
     }
+
+    public async Task<bool> SendForgotPasswordEmailAsync(string email)
+    {
+        try
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                // For security reasons, don't reveal if email exists
+                Log.Warning("Forgot password attempt for non-existent email: {Email}", email);
+                return false;
+            }
+
+            // Generate password reset token
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            
+            // In a real application, you would send an email here
+            // For now, we'll just log it and assume the email was sent
+            Log.Information("Password reset token generated for user {UserId}. Token: {Token}", user.Id, resetToken);
+            
+            // TODO: Implement actual email sending service
+            // await _emailService.SendPasswordResetEmailAsync(user.Email, resetToken);
+            
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error sending forgot password email for: {Email}", email);
+            return false;
+        }
+    }
 }

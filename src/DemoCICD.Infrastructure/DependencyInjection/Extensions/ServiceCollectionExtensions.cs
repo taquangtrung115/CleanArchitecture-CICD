@@ -9,6 +9,7 @@ using DemoCICD.Infrastructure.Authentication;
 using DemoCICD.Infrastructure.Caching;
 using DemoCICD.Infrastructure.AI;
 using DemoCICD.Infrastructure.Email;
+using DemoCICD.Infrastructure.Services;
 using DemoCICD.Infrastructure.DependencyInjection.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;

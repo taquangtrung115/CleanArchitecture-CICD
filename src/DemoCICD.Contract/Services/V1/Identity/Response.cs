@@ -37,4 +37,7 @@ public static class Response
     public record PrivacySettings(string ProfileVisibility, bool ShowEmail, bool ShowPhone, bool AllowSearchByEmail, bool AllowSearchByPhone);
     public record UserSession(string SessionId, string DeviceType, string Browser, string Location, DateTime LastActive, bool IsCurrent);
     public record UserSessionList(IEnumerable<UserSession> Sessions);
+    
+    // Password Reset Responses
+    public record ResetCodeVerified(bool IsValid);
 }

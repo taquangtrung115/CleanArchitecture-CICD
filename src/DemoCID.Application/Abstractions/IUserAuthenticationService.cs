@@ -12,6 +12,7 @@ public interface IUserAuthenticationService
     Task<UserAuthResult> ValidateUserAsync(string userName, string password);
     Task<IEnumerable<string>> GetUserRolesAsync(string userId);
     Task<UserAuthResult> RegisterUserAsync(string userName, string email, string password, string firstName, string lastName, DateTime? dayOfBirth);
+    Task<bool> SendForgotPasswordEmailAsync(string email);
 }
 
 public interface IUserManagementService
@@ -27,6 +28,11 @@ public interface IUserManagementService
     Task<AppUser?> GetUserByEmailAsync(string email);
     Task<string> GeneratePasswordResetTokenAsync(AppUser user);
     Task<bool> ResetPasswordWithTokenAsync(string email, string token, string newPassword);
+    // Password Reset Methods
+    Task<bool> InitiatePasswordResetAsync(string email);
+    Task<bool> VerifyResetCodeAsync(string email, string resetCode);
+    Task<bool> ResetPasswordWithCodeAsync(string email, string resetCode, string newPassword);
+    
     Task<bool> LockUserAsync(Guid userId);
     Task<bool> UnlockUserAsync(Guid userId);
     Task<bool> AssignUserToRoleAsync(Guid userId, Guid roleId);
