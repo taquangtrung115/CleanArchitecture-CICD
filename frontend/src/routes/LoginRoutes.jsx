@@ -7,6 +7,7 @@ import Loadable from 'components/Loadable';
 const LoginPage = Loadable(lazy(() => import('pages/auth/Login')));
 const RegisterPage = Loadable(lazy(() => import('pages/auth/Register')));
 const ForgotPasswordPage = Loadable(lazy(() => import('pages/auth/ForgotPassword')));
+const CheckMailPage = Loadable(lazy(() => import('pages/auth/CheckMail')));
 const CodeVerificationPage = Loadable(lazy(() => import('pages/auth/CodeVerification')));
 const ResetPasswordPage = Loadable(lazy(() => import('pages/auth/ResetPassword')));
 
@@ -27,6 +28,12 @@ const LoginRoutes = {
           element: <RegisterPage />
         },
         {
+          path: '/forgot-password',
+          element: <ForgotPasswordPage />
+        },
+        {
+          path: '/auth/check-mail',
+          element: <CheckMailPage />
           path: '/auth/forgot-password',
           element: <ForgotPasswordPage />
         },

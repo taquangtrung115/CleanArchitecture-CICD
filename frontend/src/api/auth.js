@@ -81,7 +81,7 @@ export const logout = async () => {
   }
 };
 
-// Password Reset APIs
+
 export const forgotPassword = async (email) => {
   try {
     const response = await axiosInstance.post(`${AUTH_ENDPOINT}/forgot-password`, { email });
@@ -94,6 +94,7 @@ export const forgotPassword = async (email) => {
     return handleApiError(error);
   }
 };
+
 
 export const verifyResetCode = async (email, resetCode) => {
   try {
@@ -120,3 +121,4 @@ export const resetPasswordWithCode = async (email, resetCode, newPassword) => {
     return handleApiError(error);
   }
 };
+
