@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { useEffect, useState, useCallback } from 'react';
 import {
   Typography,
   Box,
@@ -50,7 +51,6 @@ import IdcardOutlined from '@ant-design/icons/IdcardOutlined';
 import ClockCircleOutlined from '@ant-design/icons/ClockCircleOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import BellOutlined from '@ant-design/icons/BellOutlined';
-import LockOutlined from '@ant-design/icons/LockOutlined';
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import MobileOutlined from '@ant-design/icons/MobileOutlined';
@@ -59,12 +59,14 @@ import GlobalOutlined from '@ant-design/icons/GlobalOutlined';
 import avatar1 from 'assets/images/users/avatar-1.png';
 
 export default function ProfileViewPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [contactEditMode, setContactEditMode] = useState(false);
   const [saving, setSaving] = useState(false);
   const [editFormData, setEditFormData] = useState({
     firstName: '',
@@ -118,6 +120,8 @@ export default function ProfileViewPage() {
     } catch {
       // Use mock data when API is not available
       useMockData();
+    } catch (error) {
+      setError('Đã xảy ra lỗi khi tải profile');
     } finally {
       setLoading(false);
     }
@@ -162,11 +166,16 @@ export default function ProfileViewPage() {
 
   useEffect(() => {
     fetchProfile();
-  }, []);
+    
+    // Check if edit mode should be activated from URL parameter
+    if (searchParams.get('edit') === 'true') {
+      setEditMode(true);
+    }
+  }, [searchParams]);
 
-  const handleTabChange = (event, newValue) => {
+  const handleTabChange = useCallback((event, newValue) => {
     setActiveTab(newValue);
-  };
+  }, []);
 
   const handleNotificationChange = (setting) => (event) => {
     setNotificationSettings((prev) => ({
@@ -181,8 +190,27 @@ export default function ProfileViewPage() {
       [setting]: event.target.checked || event.target.value
     }));
   };
+  const handleNotificationChange = useCallback(
+    (setting) => (event) => {
+      setNotificationSettings((prev) => ({
+        ...prev,
+        [setting]: event.target.checked
+      }));
+    },
+    []
+  );
 
-  const handleEditModeToggle = () => {
+  const handlePrivacyChange = useCallback(
+    (setting) => (event) => {
+      setPrivacySettings((prev) => ({
+        ...prev,
+        [setting]: event.target.checked || event.target.value
+      }));
+    },
+    []
+  );
+
+  const handleEditModeToggle = useCallback(() => {
     if (editMode) {
       // Reset form data if canceling edit
       setEditFormData({
@@ -195,16 +223,46 @@ export default function ProfileViewPage() {
         bio: profile?.bio || '',
         website: profile?.website || ''
       });
+      // Remove edit parameter from URL
+      searchParams.delete('edit');
+      setSearchParams(searchParams);
+    } else {
+      // Add edit parameter to URL
+      searchParams.set('edit', 'true');
+      setSearchParams(searchParams);
     }
     setEditMode(!editMode);
-  };
+  }, [editMode, profile]);
+    
 
   const handleFormDataChange = (field) => (event) => {
     setEditFormData((prev) => ({
       ...prev,
       [field]: event.target.value
     }));
+  const handleContactEditModeToggle = () => {
+    if (contactEditMode) {
+      // Reset only contact form data if canceling edit
+      setEditFormData(prev => ({
+        ...prev,
+        phone: profile?.phone || '',
+        address: profile?.address || '',
+        city: profile?.city || '',
+        country: profile?.country || ''
+      }));
+    }
+    setContactEditMode(!contactEditMode);
   };
+
+  const handleFormDataChange = useCallback(
+    (field) => (event) => {
+      setEditFormData((prev) => ({
+        ...prev,
+        [field]: event.target.value
+      }));
+    },
+    []
+  );
 
   const handleSaveProfile = async () => {
     setSaving(true);
@@ -219,11 +277,53 @@ export default function ProfileViewPage() {
         setError('Không thể cập nhật profile: ' + (res.error.message || res.error));
       } else {
         setEditMode(false);
+        // Remove edit parameter from URL
+        searchParams.delete('edit');
+        setSearchParams(searchParams);
+        // Refresh profile data
+        await fetchProfile();
+      }
+    } catch (error) {
+        setContactEditMode(false);
         // Refresh profile data
         await fetchProfile();
       }
     } catch (err) {
+      console.error('Error updating profile:', err);
       setError('Đã xảy ra lỗi khi cập nhật profile');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSaveContactInfo = async () => {
+    setSaving(true);
+    try {
+      // Only send contact-related fields along with the userId
+      const payload = {
+        userId: profile.userId,
+        firstName: profile.firstName, // Keep existing values
+        lastName: profile.lastName,
+        bio: profile.bio,
+        website: profile.website,
+        // Only update contact fields
+        phone: editFormData.phone,
+        address: editFormData.address,
+        city: editFormData.city,
+        country: editFormData.country
+      };
+      
+      const res = await updateCurrentUserProfile(payload);
+      if (res.error) {
+        setError('Không thể cập nhật thông tin liên hệ: ' + (res.error.message || res.error));
+      } else {
+        setContactEditMode(false);
+        // Refresh profile data
+        await fetchProfile();
+      }
+    } catch (err) {
+      console.error('Error updating contact info:', err);
+      setError('Đã xảy ra lỗi khi cập nhật thông tin liên hệ');
     } finally {
       setSaving(false);
     }
@@ -511,8 +611,9 @@ export default function ProfileViewPage() {
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <PhoneOutlined />
                           </ListItemIcon>
-                          {editMode ? (
+                          {editMode || contactEditMode ? (
                             <TextField
+                              key="phone-edit"
                               fullWidth
                               size="small"
                               label="Số điện thoại"
@@ -528,8 +629,9 @@ export default function ProfileViewPage() {
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <EnvironmentOutlined />
                           </ListItemIcon>
-                          {editMode ? (
+                          {editMode || contactEditMode ? (
                             <TextField
+                              key="address-edit"
                               fullWidth
                               size="small"
                               label="Địa chỉ"
@@ -545,8 +647,9 @@ export default function ProfileViewPage() {
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <EnvironmentOutlined />
                           </ListItemIcon>
-                          {editMode ? (
+                          {editMode || contactEditMode ? (
                             <TextField
+                              key="city-edit"
                               fullWidth
                               size="small"
                               label="Thành phố"
@@ -562,8 +665,9 @@ export default function ProfileViewPage() {
                           <ListItemIcon sx={{ minWidth: 40 }}>
                             <EnvironmentOutlined />
                           </ListItemIcon>
-                          {editMode ? (
+                          {editMode || contactEditMode ? (
                             <TextField
+                              key="country-edit"
                               fullWidth
                               size="small"
                               label="Quốc gia"
@@ -578,9 +682,41 @@ export default function ProfileViewPage() {
                       </List>
 
                       <Box mt={2}>
-                        <Button variant="outlined" size="small" startIcon={<EditOutlined />}>
-                          Cập nhật thông tin liên hệ
-                        </Button>
+                        {contactEditMode ? (
+                          <Stack direction="row" spacing={1}>
+                            <Button 
+                              variant="contained" 
+                              size="small" 
+                              onClick={handleSaveContactInfo}
+                              disabled={saving}
+                              startIcon={<CheckCircleOutlined />}
+                              sx={{ 
+                                backgroundColor: 'primary.main',
+                                '&:hover': { backgroundColor: 'primary.dark' }
+                              }}
+                            >
+                              {saving ? 'Đang lưu...' : 'Lưu thông tin'}
+                            </Button>
+                            <Button 
+                              variant="outlined" 
+                              size="small" 
+                              onClick={handleContactEditModeToggle}
+                              disabled={saving}
+                            >
+                              Hủy
+                            </Button>
+                          </Stack>
+                        ) : (
+                          <Button 
+                            variant="outlined" 
+                            size="small" 
+                            startIcon={<EditOutlined />}
+                            onClick={handleContactEditModeToggle}
+                            disabled={editMode} // Disable when global edit mode is active
+                          >
+                            Cập nhật thông tin liên hệ
+                          </Button>
+                        )}
                       </Box>
                     </CardContent>
                   </Card>
