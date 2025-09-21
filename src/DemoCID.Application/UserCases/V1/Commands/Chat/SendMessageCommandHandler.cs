@@ -12,12 +12,12 @@ namespace DemoCICD.Application.UserCases.V1.Commands.Chat;
 public sealed class SendMessageCommandHandler : ICommandHandler<Command.SendMessage, Response.ChatMessageResponse>
 {
     private readonly IRepositoryBase<ChatMessage, Guid> _messageRepository;
-    private readonly IRepositoryBase<AppUser, Guid> _userRepository;
+    private readonly IAppUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public SendMessageCommandHandler(
         IRepositoryBase<ChatMessage, Guid> messageRepository,
-        IRepositoryBase<AppUser, Guid> userRepository,
+        IAppUserRepository userRepository,
         IUnitOfWork unitOfWork)
     {
         _messageRepository = messageRepository;

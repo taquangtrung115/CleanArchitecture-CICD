@@ -88,6 +88,9 @@ public static class ServiceCollectionExtensions
         services.AddTransient(typeof(IUnitOfWork), typeof(EFUnitOfWork));
         services.AddTransient(typeof(IRepositoryBase<,>), typeof(RepositoryBase<,>));
 
+        // Add specific repository for AppUser (Identity entity)
+        services.AddTransient<IAppUserRepository, AppUserRepository>();
+
         // Add MotoGP repositories
         services.AddTransient<ISeasonRepository, SeasonRepository>();
         services.AddTransient<IRaceRepository, RaceRepository>();
