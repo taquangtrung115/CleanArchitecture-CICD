@@ -45,11 +45,11 @@ export default function PositionPage() {
     try {
       const res = await getPositions(page, pagination.pageSize, searchTerm);
       if (res.data && res.data.value) {
-        setPositions(res.data.value.positions || []);
+        setPositions(res.data.value.Positions || []);
         setPagination(prev => ({
           ...prev,
-          page: res.data.value.page || 1,
-          totalCount: res.data.value.totalCount || 0
+          page: res.data.value.Page || 1,
+          totalCount: res.data.value.TotalCount || 0
         }));
       } else {
         setPositions([]);
@@ -85,7 +85,7 @@ export default function PositionPage() {
     if (!positionToDelete) return;
     
     try {
-      const res = await deletePosition(positionToDelete.positionId);
+      const res = await deletePosition(positionToDelete.PositionId);
       if (res.error) {
         alert('Không thể xóa position: ' + (res.error.message || 'Có lỗi xảy ra'));
       } else {
@@ -174,25 +174,25 @@ export default function PositionPage() {
               </TableRow>
             ) : (
               positions.map((position) => (
-                <TableRow key={position.positionId} hover>
-                  <TableCell>{position.name}</TableCell>
+                <TableRow key={position.PositionId} hover>
+                  <TableCell>{position.Name}</TableCell>
                   <TableCell>
                     <Chip 
-                      label={position.code} 
+                      label={position.Code} 
                       size="small" 
                       variant="outlined" 
                     />
                   </TableCell>
-                  <TableCell>{position.level}</TableCell>
+                  <TableCell>{position.Level}</TableCell>
                   <TableCell sx={{ maxWidth: 200 }}>
                     <Typography variant="body2" noWrap>
-                      {position.description || '-'}
+                      -
                     </Typography>
                   </TableCell>
                   <TableCell>
                     <Chip
-                      label={position.isActive ? 'Hoạt động' : 'Không hoạt động'}
-                      color={position.isActive ? 'success' : 'default'}
+                      label={position.IsActive ? 'Hoạt động' : 'Không hoạt động'}
+                      color={position.IsActive ? 'success' : 'default'}
                       size="small"
                     />
                   </TableCell>
@@ -237,7 +237,7 @@ export default function PositionPage() {
         <DialogTitle>Xác nhận xóa Position</DialogTitle>
         <DialogContent>
           <Typography>
-            Bạn có chắc chắn muốn xóa position "{positionToDelete?.name}"? 
+            Bạn có chắc chắn muốn xóa position "{positionToDelete?.Name}"? 
             Hành động này không thể hoàn tác.
           </Typography>
         </DialogContent>

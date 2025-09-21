@@ -42,11 +42,11 @@ export default function PositionFormModal({ open, onClose, onSuccess, editPositi
   useEffect(() => {
     if (editPosition) {
       setForm({
-        name: editPosition.name || '',
-        description: editPosition.description || '',
-        code: editPosition.code || '',
-        level: editPosition.level || 1,
-        isActive: editPosition.isActive ?? true
+        name: editPosition.Name || '',
+        description: editPosition.Description || '',
+        code: editPosition.Code || '',
+        level: editPosition.Level || 1,
+        isActive: editPosition.IsActive ?? true
       });
     } else {
       setForm({
