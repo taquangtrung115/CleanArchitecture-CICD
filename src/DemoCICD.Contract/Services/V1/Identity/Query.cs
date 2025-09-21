@@ -39,6 +39,14 @@ public static class Query
     // User Management Helper Queries  
     public record GetUsersForManagerSelection() : IQuery<Response.UserList>;
     
+    // Action Management Queries
+    public record GetActions(int Page = 1, int PageSize = 10, string? SearchTerm = null) : IQuery<Response.ActionList>;
+    public record GetActionById(string Id) : IQuery<Response.ActionDetails>;
+    public record GetActiveActions() : IQuery<Response.ActionList>;
+    
+    // Function Management Queries for dropdowns
+    public record GetActiveFunctions() : IQuery<Response.FunctionList>;
+    
     // Account Settings Queries
     public record GetNotificationSettings(Guid UserId) : IQuery<Response.NotificationSettings>;
     public record GetPrivacySettings(Guid UserId) : IQuery<Response.PrivacySettings>;
