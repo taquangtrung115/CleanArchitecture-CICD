@@ -32,6 +32,13 @@ public static class Response
     public record PermissionList(IEnumerable<PermissionSummary> Permissions, int TotalCount, int Page, int PageSize);
     public record PermissionSummary(Guid RoleId, string FunctionId, string ActionId, string RoleName, string FunctionName, string ActionName);
     
+    // Position Management Responses
+    public record PositionCreated(Guid PositionId, string Name, string Code);
+    public record PositionUpdated(Guid PositionId, string Name, string Code);
+    public record PositionDetails(Guid PositionId, string Name, string Description, string Code, int Level, bool IsActive, DateTime CreatedAt, DateTime? UpdatedAt);
+    public record PositionList(IEnumerable<PositionSummary> Positions, int TotalCount, int Page, int PageSize);
+    public record PositionSummary(Guid PositionId, string Name, string Code, int Level, bool IsActive);
+    
     // Account Settings Responses
     public record NotificationSettings(bool EmailNotifications, bool PushNotifications, bool SmsNotifications, bool NewsUpdates, bool SecurityAlerts, bool MarketingEmails);
     public record PrivacySettings(string ProfileVisibility, bool ShowEmail, bool ShowPhone, bool AllowSearchByEmail, bool AllowSearchByPhone);

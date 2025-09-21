@@ -91,9 +91,6 @@ export default function AuthForgotPassword({ isDemo = false }) {
       </Grid>
     );
   }
-  const [success, setSuccess] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState('');
-  const navigate = useNavigate();
 
   if (loading) return <Loader />;
 
@@ -184,19 +181,14 @@ export default function AuthForgotPassword({ isDemo = false }) {
                     color="primary"
                   >
                     Send Password Reset Email
+                  </Button>
+                </AnimateButton>
               </Grid>
               {errors.submit && (
                 <Grid size={12}>
                   <FormHelperText error>{errors.submit}</FormHelperText>
                 </Grid>
               )}
-              <Grid size={12} sx={{ mb: -2 }}>
-                <AnimateButton>
-                  <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
-                    Send Reset Email
-                  </Button>
-                </AnimateButton>
-              </Grid>
             </Grid>
           </form>
         )}

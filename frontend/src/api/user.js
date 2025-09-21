@@ -197,3 +197,17 @@ export const removeUserFromRole = async (userId, roleId) => {
     };
   }
 };
+
+// 13. Lấy danh sách users để chọn manager (Directors và Heads of Department)
+export const getManagerOptions = async () => {
+  try {
+    const response = await axiosInstance.get(`${USER_ENDPOINT}/managers`);
+    return { data: response.data, status: response.status, error: null };
+  } catch (error) {
+    return {
+      data: null,
+      status: error.response ? error.response.status : 500,
+      error: error.response ? error.response.data : error.message
+    };
+  }
+};

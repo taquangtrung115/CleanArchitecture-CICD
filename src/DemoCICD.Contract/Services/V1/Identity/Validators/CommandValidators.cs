@@ -219,3 +219,74 @@ public class ForgotPasswordValidator : AbstractValidator<Command.ForgotPassword>
 //            .WithMessage("New password must be at least 6 characters");
 //    }
 //}
+
+// Position Management Validators
+public class CreatePositionValidator : AbstractValidator<Command.CreatePosition>
+{
+    public CreatePositionValidator()
+    {
+        RuleFor(x => x.Name)
+            .NotEmpty()
+            .WithMessage("Position name is required")
+            .MaximumLength(200)
+            .WithMessage("Position name cannot exceed 200 characters");
+
+        RuleFor(x => x.Code)
+            .NotEmpty()
+            .WithMessage("Position code is required")
+            .MaximumLength(100)
+            .WithMessage("Position code cannot exceed 100 characters")
+            .Matches("^[A-Z0-9_]+$")
+            .WithMessage("Position code must contain only uppercase letters, numbers, and underscores");
+
+        RuleFor(x => x.Description)
+            .MaximumLength(1000)
+            .WithMessage("Description cannot exceed 1000 characters");
+
+        RuleFor(x => x.Level)
+            .GreaterThan(0)
+            .WithMessage("Level must be greater than 0");
+    }
+}
+
+public class UpdatePositionValidator : AbstractValidator<Command.UpdatePosition>
+{
+    public UpdatePositionValidator()
+    {
+        RuleFor(x => x.PositionId)
+            .NotEmpty()
+            .WithMessage("Position ID is required");
+
+        RuleFor(x => x.Name)
+            .NotEmpty()
+            .WithMessage("Position name is required")
+            .MaximumLength(200)
+            .WithMessage("Position name cannot exceed 200 characters");
+
+        RuleFor(x => x.Code)
+            .NotEmpty()
+            .WithMessage("Position code is required")
+            .MaximumLength(100)
+            .WithMessage("Position code cannot exceed 100 characters")
+            .Matches("^[A-Z0-9_]+$")
+            .WithMessage("Position code must contain only uppercase letters, numbers, and underscores");
+
+        RuleFor(x => x.Description)
+            .MaximumLength(1000)
+            .WithMessage("Description cannot exceed 1000 characters");
+
+        RuleFor(x => x.Level)
+            .GreaterThan(0)
+            .WithMessage("Level must be greater than 0");
+    }
+}
+
+public class DeletePositionValidator : AbstractValidator<Command.DeletePosition>
+{
+    public DeletePositionValidator()
+    {
+        RuleFor(x => x.PositionId)
+            .NotEmpty()
+            .WithMessage("Position ID is required");
+    }
+}
