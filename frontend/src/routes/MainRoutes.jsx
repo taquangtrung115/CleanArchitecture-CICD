@@ -18,6 +18,7 @@ const UserPage = Loadable(lazy(() => import('pages/user/UserPage')));
 const RolePage = Loadable(lazy(() => import('pages/role/RolePage')));
 const PermissionPage = Loadable(lazy(() => import('pages/permission/PermissionPage')));
 const ActionPage = Loadable(lazy(() => import('pages/action/ActionPage')));
+const ActionInFunctionPage = Loadable(lazy(() => import('pages/action-in-function/ActionInFunctionPage')));
 const ChatPage = Loadable(lazy(() => import('pages/chat/ChatPage')));
 const UserChatPage = Loadable(lazy(() => import('pages/chat/UserChatPage')));
 const ProfileViewPage = Loadable(lazy(() => import('pages/profile/ProfileViewPage')));
@@ -89,6 +90,10 @@ const MainRoutes = [
       {
         path: 'actions',
         element: <ActionPage />
+      },
+      {
+        path: 'action-in-functions',
+        element: <ActionInFunctionPage />
       },
       {
         path: 'chat',

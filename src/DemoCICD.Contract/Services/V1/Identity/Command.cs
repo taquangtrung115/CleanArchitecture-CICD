@@ -58,4 +58,8 @@ public static class Command
     public record CreateAction(string Id, string Name, int? SortOrder = null, bool? IsActive = true) : ICommand<Response.ActionCreated>;
     public record UpdateAction(string Id, string Name, int? SortOrder = null, bool? IsActive = true) : ICommand<Response.ActionUpdated>;
     public record DeleteAction(string Id) : ICommand;
+    
+    // ActionInFunction Management Commands
+    public record CreateActionInFunction(string ActionId, string FunctionId) : ICommand<Response.ActionInFunctionCreated>;
+    public record DeleteActionInFunction(string ActionId, string FunctionId) : ICommand;
 }

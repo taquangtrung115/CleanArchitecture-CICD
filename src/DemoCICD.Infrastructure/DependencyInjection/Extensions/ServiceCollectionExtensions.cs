@@ -31,6 +31,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IPositionManagementService, PositionManagementService>();
         services.AddTransient<IActionManagementService, ActionManagementService>();
         services.AddTransient<IFunctionManagementService, FunctionManagementService>();
+        services.AddTransient<IActionInFunctionManagementService, ActionInFunctionManagementService>();
         services.AddTransient<IEmailService, EmailService>();
         
         // Add AI services - Sử dụng OpenAI làm default implementation
