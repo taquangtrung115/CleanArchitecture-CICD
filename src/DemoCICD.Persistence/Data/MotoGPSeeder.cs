@@ -39,11 +39,14 @@ public static class MotoGPSeeder
             Season.Create(2017, "2017 MotoGP World Championship", new DateTime(2017, 3, 1), new DateTime(2017, 11, 30), "The 69th FIM Road Racing World Championship Grand Prix season")
         };
 
-        // Set 2024 as current season
+        // Set 2024 as current season and start it
         seasons[0].SetAsCurrentSeason();
-        // Set completed status for past seasons
+        seasons[0].StartSeason();
+        
+        // Set completed status for past seasons (start them first)
         for (int i = 1; i < seasons.Count; i++)
         {
+            seasons[i].StartSeason();
             seasons[i].CompleteSeason();
         }
 
@@ -360,6 +363,7 @@ public static class MotoGPSeeder
         // Set them as published and add some audit info
         foreach (var video in videos)
         {
+            video.StartProcessing();
             video.Publish();
             video.SetCreatedAudit("System");
         }
