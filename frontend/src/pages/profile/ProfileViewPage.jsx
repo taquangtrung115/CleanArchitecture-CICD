@@ -1,3 +1,4 @@
+import { useSearchParams } from 'react-router-dom';
 import { useEffect, useState, useCallback } from 'react';
 import {
   Typography,
@@ -58,6 +59,7 @@ import GlobalOutlined from '@ant-design/icons/GlobalOutlined';
 import avatar1 from 'assets/images/users/avatar-1.png';
 
 export default function ProfileViewPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -114,7 +116,7 @@ export default function ProfileViewPage() {
       } else {
         setError('Không thể tải thông tin profile');
       }
-    } catch {
+    } catch (error) {
       setError('Đã xảy ra lỗi khi tải profile');
     } finally {
       setLoading(false);
@@ -123,7 +125,12 @@ export default function ProfileViewPage() {
 
   useEffect(() => {
     fetchProfile();
-  }, []);
+    
+    // Check if edit mode should be activated from URL parameter
+    if (searchParams.get('edit') === 'true') {
+      setEditMode(true);
+    }
+  }, [searchParams]);
 
   const handleTabChange = useCallback((event, newValue) => {
     setActiveTab(newValue);
@@ -162,6 +169,13 @@ export default function ProfileViewPage() {
         bio: profile?.bio || '',
         website: profile?.website || ''
       });
+      // Remove edit parameter from URL
+      searchParams.delete('edit');
+      setSearchParams(searchParams);
+    } else {
+      // Add edit parameter to URL
+      searchParams.set('edit', 'true');
+      setSearchParams(searchParams);
     }
     setEditMode(!editMode);
   }, [editMode, profile]);
@@ -204,6 +218,13 @@ export default function ProfileViewPage() {
         setError('Không thể cập nhật profile: ' + (res.error.message || res.error));
       } else {
         setEditMode(false);
+        // Remove edit parameter from URL
+        searchParams.delete('edit');
+        setSearchParams(searchParams);
+        // Refresh profile data
+        await fetchProfile();
+      }
+    } catch (error) {
         setContactEditMode(false);
         // Refresh profile data
         await fetchProfile();

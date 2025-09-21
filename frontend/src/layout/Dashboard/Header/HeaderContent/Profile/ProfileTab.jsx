@@ -22,9 +22,13 @@ export default function ProfileTab() {
     navigate('/admin/profile');
   };
 
+  const handleEditProfile = () => {
+    navigate('/admin/profile?edit=true');
+  };
+
   return (
     <List component="nav" sx={{ p: 0, '& .MuiListItemIcon-root': { minWidth: 32 } }}>
-      <ListItemButton>
+      <ListItemButton onClick={handleEditProfile}>
         <ListItemIcon>
           <EditOutlined />
         </ListItemIcon>
