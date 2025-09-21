@@ -100,8 +100,8 @@ public class ActionInFunctionManagementService : IActionInFunctionManagementServ
                 .Where(af => af.ActionId == actionId && af.FunctionId == functionId)
                 .Select(af => new
                 {
-                    ActionId = af.ActionId,
-                    FunctionId = af.FunctionId,
+                    af.ActionId,
+                    af.FunctionId,
                     ActionName = af.Action.Name,
                     FunctionName = af.Function.Name
                 })
@@ -143,8 +143,8 @@ public class ActionInFunctionManagementService : IActionInFunctionManagementServ
                 .Take(pageSize)
                 .Select(af => new
                 {
-                    ActionId = af.ActionId,
-                    FunctionId = af.FunctionId,
+                    af.ActionId,
+                    af.FunctionId,
                     ActionName = af.Action.Name,
                     FunctionName = af.Function.Name
                 })
