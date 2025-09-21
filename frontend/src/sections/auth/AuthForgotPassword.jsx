@@ -28,6 +28,69 @@ import AnimateButton from 'components/@extended/AnimateButton';
 
 export default function AuthForgotPassword({ isDemo = false }) {
   const [loading, setLoading] = React.useState(false);
+  const [formError, setFormError] = React.useState('');
+  const [success, setSuccess] = React.useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (values, { setSubmitting }) => {
+    if (loading) return;
+    
+    setLoading(true);
+    setFormError('');
+
+    try {
+      const result = await forgotPassword(values.email);
+      if (result.data) {
+        setSuccess(true);
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
+      } else {
+        setFormError(result.error?.detail || 'Failed to send reset email');
+      }
+    } catch (err) {
+      setFormError('An error occurred while sending reset email');
+    }
+    setLoading(false);
+  };
+
+  if (success) {
+    return (
+      <Grid container spacing={3}>
+        <Grid size={12}>
+          <Alert severity="success" sx={{ mb: 2 }}>
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              Reset Instructions Sent
+            </Typography>
+            <Typography variant="body2">
+              We've sent password reset instructions to your email address. Please check your inbox and follow the instructions to reset your password.
+            </Typography>
+          </Alert>
+        </Grid>
+        <Grid size={12}>
+          <Stack spacing={2}>
+            <AnimateButton>
+              <Button
+                component={RouterLink}
+                to="/login"
+                variant="contained"
+                fullWidth
+              >
+                Back to Login
+              </Button>
+            </AnimateButton>
+            <Button
+              variant="outlined"
+              onClick={() => setSuccess(false)}
+              fullWidth
+            >
+              Send Again
+            </Button>
+          </Stack>
+        </Grid>
+      </Grid>
+    );
+  }
   const [success, setSuccess] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
   const navigate = useNavigate();
@@ -99,6 +162,29 @@ export default function AuthForgotPassword({ isDemo = false }) {
                   )}
                 </Stack>
               </Grid>
+              {formError && (
+                <Grid size={12}>
+                  <FormHelperText error>{formError}</FormHelperText>
+                </Grid>
+              )}
+              <Grid size={12} sx={{ mb: -1 }}>
+                <Typography variant="body2">
+                  Do not forgot to check SPAM box.
+                </Typography>
+              </Grid>
+              <Grid size={12}>
+                <AnimateButton>
+                  <Button
+                    disableElevation
+                    disabled={isSubmitting || loading}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                  >
+                    Send Password Reset Email
+              </Grid>
               {errors.submit && (
                 <Grid size={12}>
                   <FormHelperText error>{errors.submit}</FormHelperText>
@@ -124,4 +210,6 @@ export default function AuthForgotPassword({ isDemo = false }) {
   );
 }
 
-AuthForgotPassword.propTypes = { isDemo: PropTypes.bool };
+AuthForgotPassword.propTypes = {
+  isDemo: PropTypes.bool
+};
