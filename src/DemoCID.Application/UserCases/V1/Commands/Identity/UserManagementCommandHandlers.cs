@@ -21,6 +21,20 @@ public sealed class CreateUserCommandHandler : ICommandHandler<Command.CreateUse
     {
         try
         {
+            // Convert string parameters to appropriate types
+            Guid? managerId = null;
+            if (!string.IsNullOrEmpty(request.ManagerId) && Guid.TryParse(request.ManagerId, out var managerGuid))
+            {
+                managerId = managerGuid;
+            }
+
+            // PositionId is required, but frontend might send empty string
+            Guid positionId = Guid.Empty;
+            if (!string.IsNullOrEmpty(request.PositionId) && Guid.TryParse(request.PositionId, out var positionGuid))
+            {
+                positionId = positionGuid;
+            }
+
             var result = await _userManagementService.CreateUserAsync(
                 request.UserName,
                 request.Email,
@@ -30,8 +44,8 @@ public sealed class CreateUserCommandHandler : ICommandHandler<Command.CreateUse
                 request.DayOfBirth,
                 request.IsDirector,
                 request.IsHeadOfDepartment,
-                request.ManagerId,
-                request.PositionId);
+                managerId,
+                positionId);
 
             if (!result.IsSuccess)
             {
@@ -71,6 +85,20 @@ public sealed class UpdateUserCommandHandler : ICommandHandler<Command.UpdateUse
     {
         try
         {
+            // Convert string parameters to appropriate types
+            Guid? managerId = null;
+            if (!string.IsNullOrEmpty(request.ManagerId) && Guid.TryParse(request.ManagerId, out var managerGuid))
+            {
+                managerId = managerGuid;
+            }
+
+            // PositionId is required, but frontend might send empty string
+            Guid positionId = Guid.Empty;
+            if (!string.IsNullOrEmpty(request.PositionId) && Guid.TryParse(request.PositionId, out var positionGuid))
+            {
+                positionId = positionGuid;
+            }
+
             var success = await _userManagementService.UpdateUserAsync(
                 request.UserId,
                 request.Email,
@@ -79,8 +107,8 @@ public sealed class UpdateUserCommandHandler : ICommandHandler<Command.UpdateUse
                 request.DayOfBirth,
                 request.IsDirector,
                 request.IsHeadOfDepartment,
-                request.ManagerId,
-                request.PositionId,
+                managerId,
+                positionId,
                 request.Phone,
                 request.Address,
                 request.City,

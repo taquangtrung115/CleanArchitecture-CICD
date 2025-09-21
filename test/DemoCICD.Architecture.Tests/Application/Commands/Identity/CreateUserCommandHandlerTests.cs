@@ -33,7 +33,7 @@ public class CreateUserCommandHandlerTests
             false,
             false,
             null,
-            Guid.NewGuid());
+            Guid.NewGuid().ToString());
 
         var userId = Guid.NewGuid();
         var userAuthResult = UserAuthResult.Success(
@@ -51,8 +51,8 @@ public class CreateUserCommandHandlerTests
             command.DayOfBirth,
             command.IsDirector,
             command.IsHeadOfDepartment,
-            command.ManagerId,
-            command.PositionId)
+            Arg.Any<Guid?>(),
+            Arg.Any<Guid>())
             .Returns(userAuthResult);
 
         // Act
@@ -75,8 +75,8 @@ public class CreateUserCommandHandlerTests
             command.DayOfBirth,
             command.IsDirector,
             command.IsHeadOfDepartment,
-            command.ManagerId,
-            command.PositionId);
+            Arg.Any<Guid?>(),
+            Arg.Any<Guid>());
     }
 
     [Fact]
@@ -93,7 +93,7 @@ public class CreateUserCommandHandlerTests
             false,
             false,
             null,
-            Guid.NewGuid());
+            Guid.NewGuid().ToString());
 
         var userAuthResult = UserAuthResult.Failure("Email already exists");
 
@@ -106,8 +106,8 @@ public class CreateUserCommandHandlerTests
             command.DayOfBirth,
             command.IsDirector,
             command.IsHeadOfDepartment,
-            command.ManagerId,
-            command.PositionId)
+            Arg.Any<Guid?>(),
+            Arg.Any<Guid>())
             .Returns(userAuthResult);
 
         // Act
@@ -128,8 +128,8 @@ public class CreateUserCommandHandlerTests
             command.DayOfBirth,
             command.IsDirector,
             command.IsHeadOfDepartment,
-            command.ManagerId,
-            command.PositionId);
+            Arg.Any<Guid?>(),
+            Arg.Any<Guid>());
     }
 
     [Fact]
@@ -146,7 +146,7 @@ public class CreateUserCommandHandlerTests
             false,
             false,
             null,
-            Guid.NewGuid());
+            Guid.NewGuid().ToString());
 
         _userManagementService.When(x => x.CreateUserAsync(
             Arg.Any<string>(),
