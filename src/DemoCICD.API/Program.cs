@@ -113,8 +113,26 @@ if (app.Environment.IsDevelopment())
         // Ensure database exists and apply any pending migrations
         await context.Database.MigrateAsync();
         
-        // Seed sample chat data
+        // Seed identity data (actions, functions, roles, permissions, etc.)
+        await IdentitySeeder.SeedIdentityDataAsync(context);
+        
+        // Seed additional positions
+        await PositionSeeder.SeedAdditionalPositionsAsync(context);
+        
+        // Seed products
+        await ProductSeeder.SeedProductsAsync(context);
+        
+        // Seed MotoGP data (seasons, teams, riders, bikes, races, videos, etc.)
+        await MotoGPSeeder.SeedMotoGPDataAsync(context);
+        
+        // Seed news data
+        await NewsSeeder.SeedNewsAsync(context);
+        
+        // Seed chat data
         await ChatSeeder.SeedChatDataAsync(context);
+        
+        // Seed chat room members
+        await ChatRoomMemberSeeder.SeedChatRoomMembersAsync(context);
         
         Log.Information("Database seeding completed successfully");
     }
