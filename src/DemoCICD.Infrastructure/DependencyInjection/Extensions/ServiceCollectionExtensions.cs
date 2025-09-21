@@ -33,9 +33,9 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IFunctionManagementService, FunctionManagementService>();
         services.AddTransient<IEmailService, EmailService>();
         
-        // Add AI services
+        // Add AI services - Sử dụng OpenAI làm default implementation
         services.AddScoped<IAiChatService, OpenAiChatService>();
-        services.AddScoped<IAiChatService, OllamaChatService>();
+        // services.AddScoped<IAiChatService, OllamaChatService>(); // Alternative implementation
         services.AddTransient<IIdentityManagementService, IdentityManagementService>();
     }
 
