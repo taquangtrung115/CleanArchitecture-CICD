@@ -17,6 +17,7 @@ const NewsPage = Loadable(lazy(() => import('client/pages/news/NewsPage')));
 const MediaPage = Loadable(lazy(() => import('client/pages/media/MediaPage')));
 const VideoPage = Loadable(lazy(() => import('client/pages/video/VideoPage')));
 const SearchPage = Loadable(lazy(() => import('client/pages/search/SearchPage')));
+const MapPage = Loadable(lazy(() => import('client/pages/map/MapPage')));
 const AccountSettingsDemo = Loadable(lazy(() => import('pages/profile/AccountSettingsDemo')));
 
 // ==============================|| CLIENT ROUTING ||============================== //
@@ -73,6 +74,10 @@ const ClientRoutes = [
       {
         path: 'search',
         element: <SearchPage />
+      },
+      {
+        path: 'map',
+        element: <MapPage />
       },
       {
         path: 'account-settings-demo',
