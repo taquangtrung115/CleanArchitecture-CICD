@@ -62,6 +62,7 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
     public DbSet<Function> Functions { get; set; }
     public DbSet<ActionInFunction> ActionInFunctions { get; set; }
     public DbSet<Permission> Permissions { get; set; }
+    public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
     public DbSet<Product> Products { get; set; }
 
     // MotoGP Entities

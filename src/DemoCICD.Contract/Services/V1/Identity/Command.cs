@@ -23,6 +23,11 @@ public static class Command
     public record DeleteUser(Guid UserId) : ICommand;
     public record ChangePassword(Guid UserId, string CurrentPassword, string NewPassword) : ICommand;
     public record ResetPassword(Guid UserId, string NewPassword) : ICommand;
+    
+    // Password Reset Commands
+    public record ForgotPassword(string Email) : ICommand;
+    public record VerifyResetCode(string Email, string ResetCode) : ICommand<Response.ResetCodeVerified>;
+    public record ResetPasswordWithCode(string Email, string ResetCode, string NewPassword) : ICommand;
     public record LockUser(Guid UserId) : ICommand;
     public record UnlockUser(Guid UserId) : ICommand;
     public record AssignUserToRole(Guid UserId, Guid RoleId) : ICommand;

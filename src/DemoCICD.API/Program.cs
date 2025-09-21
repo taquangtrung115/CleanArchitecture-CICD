@@ -47,6 +47,9 @@ builder.Services.AddConfigureAutoMapper();
 
 builder.Services.AddCarter();
 
+// Cấu hình SignalR cho real-time chat
+builder.Services.AddSignalR();
+
 // Cấu hình Dapper
 builder.Services.AddInfrastructureDapper();
 //test webhook CICD 2
@@ -69,9 +72,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
         policy => policy
-            .AllowAnyOrigin()
+            .SetIsOriginAllowed(_ => true)
             .AllowAnyHeader()
             .AllowAnyMethod()
+            .AllowCredentials()
     );
 });
 
@@ -88,6 +92,9 @@ app.UseAuthorization();
 
 app.MapCarter();
 //app.MapControllers();
+
+// Map SignalR ChatHub
+app.MapHub<DemoCICD.API.Hubs.ChatHub>("/chathub");
 
 //if (builder.Environment.IsDevelopment() || builder.Environment.IsStaging())
     app.ConfigureSwagger();

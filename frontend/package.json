@@ -25,6 +25,7 @@
     "@fontsource/poppins": "5.2.6",
     "@fontsource/public-sans": "5.2.6",
     "@fontsource/roboto": "5.2.6",
+    "@microsoft/signalr": "^9.0.6",
     "@googlemaps/js-api-loader": "^1.16.10",
     "@googlemaps/react-wrapper": "^1.2.0",
     "@mui/base": "5.0.0-beta.70",

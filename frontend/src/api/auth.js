@@ -81,6 +81,7 @@ export const logout = async () => {
   }
 };
 
+
 export const forgotPassword = async (email) => {
   try {
     const response = await axiosInstance.post(`${AUTH_ENDPOINT}/forgot-password`, { email });
@@ -93,3 +94,31 @@ export const forgotPassword = async (email) => {
     return handleApiError(error);
   }
 };
+
+
+export const verifyResetCode = async (email, resetCode) => {
+  try {
+    const response = await axiosInstance.post(`${AUTH_ENDPOINT}/verify-reset-code`, { email, resetCode });
+    return {
+      data: response.data,
+      status: response.status,
+      error: null
+    };
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
+
+export const resetPasswordWithCode = async (email, resetCode, newPassword) => {
+  try {
+    const response = await axiosInstance.post(`${AUTH_ENDPOINT}/reset-password`, { email, resetCode, newPassword });
+    return {
+      data: response.data,
+      status: response.status,
+      error: null
+    };
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
+
