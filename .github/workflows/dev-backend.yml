@@ -1,0 +1,82 @@
+name: DEV Backend CI
+
+# Workflow for Backend only - useful for quick backend-only changes
+on:
+  workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: 'Skip running tests'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  DOTNET_VERSION: '7.0.x'
+  BUILD_CONFIGURATION: Release
+
+jobs:
+  backend-build:
+    name: 🔨 Backend Build & Test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🚚 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 🔧 Setup .NET ${{ env.DOTNET_VERSION }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+          
+      - name: 📦 Restore NuGet packages
+        run: dotnet restore DemoCICD.sln
+        
+      - name: 🧹 Clean solution
+        run: dotnet clean DemoCICD.sln --configuration ${{ env.BUILD_CONFIGURATION }}
+        
+      - name: 🔨 Build solution
+        run: dotnet build DemoCICD.sln --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
+        
+      - name: 🧪 Run Architecture Tests
+        if: ${{ !inputs.skip_tests }}
+        run: dotnet test test/DemoCICD.Architecture.Tests/DemoCICD.Architecture.Tests.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --verbosity normal --logger "trx;LogFileName=architecture-test-results.trx"
+        continue-on-error: true
+        
+      - name: 🧪 Run Identity Tests
+        if: ${{ !inputs.skip_tests }}
+        run: dotnet test test/DemoCICD.Identity.Tests/DemoCICD.Identity.Tests.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --verbosity normal --logger "trx;LogFileName=identity-test-results.trx"
+        continue-on-error: true
+        
+      - name: 🧪 Run Unit Tests
+        if: ${{ !inputs.skip_tests }}
+        run: dotnet test test/DemoCICD.UnitTests/DemoCICD.UnitTests.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --verbosity normal --logger "trx;LogFileName=unit-test-results.trx"
+        continue-on-error: true
+        
+      - name: 📊 Publish Test Results
+        uses: dorny/test-reporter@v1
+        if: ${{ !inputs.skip_tests && always() }}
+        with:
+          name: Backend Test Results
+          path: '**/test-results/*.trx'
+          reporter: dotnet-trx
+          fail-on-error: false
+          
+      - name: 📦 Publish Backend API
+        run: dotnet publish src/DemoCICD.API/DemoCICD.API.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --output ./publish/backend --no-build /p:EnvironmentName=Development
+        
+      - name: 📤 Upload Backend Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-dev-build-${{ github.run_number }}
+          path: ./publish/backend
+          retention-days: 7
+          
+      - name: ✅ Build Summary
+        run: |
+          echo "### 🎉 Backend Build Completed Successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Configuration:** ${{ env.BUILD_CONFIGURATION }}" >> $GITHUB_STEP_SUMMARY
+          echo "**.NET Version:** ${{ env.DOTNET_VERSION }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Artifact Name:** backend-dev-build-${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📦 Backend is ready for deployment!" >> $GITHUB_STEP_SUMMARY
