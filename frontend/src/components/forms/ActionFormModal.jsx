@@ -161,7 +161,7 @@ export default function ActionFormModal({ open, onClose, onSuccess, editingActio
                 variant="outlined"
                 size="medium"
                 placeholder="Nhập ID action (vd: CREATE, UPDATE, DELETE)"
-                helperText={isEditing ? "ID không thể thay đổi khi cập nhật" : "ID duy nhất cho action"}
+                helperText={isEditing ? 'ID không thể thay đổi khi cập nhật' : 'ID duy nhất cho action'}
               />
             </Grid>
 
@@ -198,15 +198,7 @@ export default function ActionFormModal({ open, onClose, onSuccess, editingActio
 
             <Grid item xs={12}>
               <FormControlLabel
-                control={
-                  <Switch
-                    checked={form.isActive}
-                    onChange={handleChange}
-                    name="isActive"
-                    disabled={loading}
-                    color="primary"
-                  />
-                }
+                control={<Switch checked={form.isActive} onChange={handleChange} name="isActive" disabled={loading} color="primary" />}
                 label="Kích hoạt action"
               />
               <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
@@ -238,7 +230,7 @@ export default function ActionFormModal({ open, onClose, onSuccess, editingActio
             color="primary"
             sx={{ minWidth: 130 }}
           >
-            {loading ? (isEditing ? 'Đang cập nhật...' : 'Đang tạo...') : (isEditing ? 'Cập nhật' : 'Tạo Action')}
+            {loading ? (isEditing ? 'Đang cập nhật...' : 'Đang tạo...') : isEditing ? 'Cập nhật' : 'Tạo Action'}
           </Button>
         </DialogActions>
       </form>

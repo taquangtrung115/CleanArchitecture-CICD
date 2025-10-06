@@ -50,10 +50,7 @@ export default function ActionInFunctionFormModal({ open, onClose, onSuccess }) 
   const loadDropdownData = async () => {
     setLoadingDropdowns(true);
     try {
-      const [actionsResult, functionsResult] = await Promise.all([
-        getActiveActions(),
-        getActiveFunctions()
-      ]);
+      const [actionsResult, functionsResult] = await Promise.all([getActiveActions(), getActiveFunctions()]);
 
       if (actionsResult.error) {
         console.error('Error loading actions:', actionsResult.error);
@@ -85,7 +82,7 @@ export default function ActionInFunctionFormModal({ open, onClose, onSuccess }) 
   }, [open]);
 
   const handleInputChange = (field) => (event) => {
-    setForm(prev => ({
+    setForm((prev) => ({
       ...prev,
       [field]: event.target.value
     }));
@@ -94,7 +91,7 @@ export default function ActionInFunctionFormModal({ open, onClose, onSuccess }) 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!form.actionId?.trim() || !form.functionId?.trim()) {
       setError('Vui lòng chọn Action và Function');
       return;
@@ -131,8 +128,8 @@ export default function ActionInFunctionFormModal({ open, onClose, onSuccess }) 
   };
 
   return (
-    <Dialog 
-      open={open} 
+    <Dialog
+      open={open}
       onClose={handleClose}
       maxWidth="sm"
       fullWidth
@@ -146,18 +143,14 @@ export default function ActionInFunctionFormModal({ open, onClose, onSuccess }) 
             <LinkIcon color="primary" />
             <Typography variant="h6">Tạo ActionInFunction</Typography>
           </Stack>
-          <IconButton 
-            onClick={handleClose}
-            disabled={loading}
-            size="small"
-          >
+          <IconButton onClick={handleClose} disabled={loading} size="small">
             <CloseIcon />
           </IconButton>
         </Stack>
       </DialogTitle>
-      
+
       <Divider />
-      
+
       <form onSubmit={handleSubmit}>
         <DialogContent sx={{ pt: 3 }}>
           <Grid container spacing={3}>
@@ -165,11 +158,7 @@ export default function ActionInFunctionFormModal({ open, onClose, onSuccess }) 
             <Grid item xs={12}>
               <FormControl fullWidth disabled={loadingDropdowns}>
                 <InputLabel>Action *</InputLabel>
-                <Select
-                  value={form.actionId}
-                  onChange={handleInputChange('actionId')}
-                  label="Action *"
-                >
+                <Select value={form.actionId} onChange={handleInputChange('actionId')} label="Action *">
                   {actions.map((action) => (
                     <MenuItem key={action.id} value={action.id}>
                       {action.name} ({action.id})
@@ -183,11 +172,7 @@ export default function ActionInFunctionFormModal({ open, onClose, onSuccess }) 
             <Grid item xs={12}>
               <FormControl fullWidth disabled={loadingDropdowns}>
                 <InputLabel>Function *</InputLabel>
-                <Select
-                  value={form.functionId}
-                  onChange={handleInputChange('functionId')}
-                  label="Function *"
-                >
+                <Select value={form.functionId} onChange={handleInputChange('functionId')} label="Function *">
                   {functions.map((func) => (
                     <MenuItem key={func.id} value={func.id}>
                       {func.name} ({func.id})
@@ -221,14 +206,10 @@ export default function ActionInFunctionFormModal({ open, onClose, onSuccess }) 
         </DialogContent>
 
         <DialogActions sx={{ px: 3, pb: 3 }}>
-          <Button 
-            onClick={handleClose}
-            disabled={loading}
-            color="inherit"
-          >
+          <Button onClick={handleClose} disabled={loading} color="inherit">
             Hủy
           </Button>
-          <Button 
+          <Button
             type="submit"
             variant="contained"
             disabled={loading || loadingDropdowns}
@@ -246,5 +227,5 @@ export default function ActionInFunctionFormModal({ open, onClose, onSuccess }) 
 ActionInFunctionFormModal.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onSuccess: PropTypes.func,
+  onSuccess: PropTypes.func
 };

@@ -1,5 +1,15 @@
 // assets
-import { UserOutlined, TeamOutlined, SafetyOutlined, RobotOutlined, IdcardOutlined, MessageOutlined, TrophyOutlined, SettingOutlined, LinkOutlined } from '@ant-design/icons';
+import {
+  UserOutlined,
+  TeamOutlined,
+  SafetyOutlined,
+  RobotOutlined,
+  IdcardOutlined,
+  MessageOutlined,
+  TrophyOutlined,
+  SettingOutlined,
+  LinkOutlined
+} from '@ant-design/icons';
 
 const icons = {
   UserOutlined,

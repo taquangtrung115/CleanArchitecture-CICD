@@ -173,21 +173,25 @@ export default function ProfileViewPage() {
   const handleTabChange = useCallback((event, newValue) => {
     setActiveTab(newValue);
   }, []);
-  const handleNotificationChange = useCallback((setting) => (event) => {
-    setNotificationSettings((prev) => ({
-      ...prev,
-      [setting]: event.target.checked
-    }));
-  }, []);
+  const handleNotificationChange = useCallback(
+    (setting) => (event) => {
+      setNotificationSettings((prev) => ({
+        ...prev,
+        [setting]: event.target.checked
+      }));
+    },
+    []
+  );
 
-
-  const handlePrivacyChange = useCallback((setting) => (event) => {
-    setPrivacySettings((prev) => ({
-      ...prev,
-      [setting]: event.target.checked || event.target.value
-    }));
-  }, []);
-
+  const handlePrivacyChange = useCallback(
+    (setting) => (event) => {
+      setPrivacySettings((prev) => ({
+        ...prev,
+        [setting]: event.target.checked || event.target.value
+      }));
+    },
+    []
+  );
 
   const handleEditModeToggle = useCallback(() => {
     if (editMode) {
@@ -213,17 +217,19 @@ export default function ProfileViewPage() {
     setEditMode(!editMode);
   }, [editMode, profile]);
 
-
-  const handleFormDataChange = useCallback((field) => (event) => {
-    setEditFormData((prev) => ({
-      ...prev,
-      [field]: event.target.value
-    }));
-  }, []);
+  const handleFormDataChange = useCallback(
+    (field) => (event) => {
+      setEditFormData((prev) => ({
+        ...prev,
+        [field]: event.target.value
+      }));
+    },
+    []
+  );
   const handleContactEditModeToggle = useCallback(() => {
     if (contactEditMode) {
       // Reset only contact form data if canceling edit
-      setEditFormData(prev => ({
+      setEditFormData((prev) => ({
         ...prev,
         phone: profile?.phone || '',
         address: profile?.address || '',
@@ -257,8 +263,7 @@ export default function ProfileViewPage() {
       setContactEditMode(false);
       // Refresh profile data
       await fetchProfile();
-    }
-    finally {
+    } finally {
       setSaving(false);
     }
   };
@@ -718,12 +723,7 @@ export default function ProfileViewPage() {
                             >
                               {saving ? 'Đang lưu...' : 'Lưu thông tin'}
                             </Button>
-                            <Button
-                              variant="outlined"
-                              size="small"
-                              onClick={handleContactEditModeToggle}
-                              disabled={saving}
-                            >
+                            <Button variant="outlined" size="small" onClick={handleContactEditModeToggle} disabled={saving}>
                               Hủy
                             </Button>
                           </Stack>

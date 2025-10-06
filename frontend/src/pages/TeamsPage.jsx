@@ -60,9 +60,9 @@ const TeamsPage = ({ token }) => {
         </Box>
       }
       secondary={
-        <Button 
-          variant="contained" 
-          startIcon={<AddIcon />} 
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
           onClick={() => setShowFormModal(true)}
           color="primary"
           size="medium"
@@ -96,19 +96,9 @@ const TeamsPage = ({ token }) => {
         <Grid item xs={12} lg={selected ? 8 : 12}>
           <Card sx={{ minHeight: 400 }}>
             <CardContent>
-              <TeamList 
-                key={refresh} 
-                token={token} 
-                filters={filters} 
-                onSelect={setSelected} 
-              />
+              <TeamList key={refresh} token={token} filters={filters} onSelect={setSelected} />
               <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
-                <Pagination 
-                  page={filters.pageIndex} 
-                  pageSize={filters.pageSize} 
-                  total={100} 
-                  onChange={handlePage} 
-                />
+                <Pagination page={filters.pageIndex} pageSize={filters.pageSize} total={100} onChange={handlePage} />
               </Box>
             </CardContent>
           </Card>
@@ -131,12 +121,7 @@ const TeamsPage = ({ token }) => {
       </Grid>
 
       {/* Team Form Modal */}
-      <TeamFormModal 
-        open={showFormModal} 
-        onClose={() => setShowFormModal(false)} 
-        onSuccess={handleFormSuccess}
-        token={token}
-      />
+      <TeamFormModal open={showFormModal} onClose={() => setShowFormModal(false)} onSuccess={handleFormSuccess} token={token} />
     </MainCard>
   );
 };

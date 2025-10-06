@@ -53,12 +53,7 @@ const TeamDetail = ({ team }) => {
             <Typography variant="body1" sx={{ fontWeight: 500 }}>
               {team.countryName}
             </Typography>
-            <Chip 
-              label={team.countryCode} 
-              size="small" 
-              variant="outlined"
-              icon={<FlagIcon />}
-            />
+            <Chip label={team.countryCode} size="small" variant="outlined" icon={<FlagIcon />} />
           </Stack>
         </Box>
 
@@ -69,9 +64,7 @@ const TeamDetail = ({ team }) => {
           </Typography>
           <Stack direction="row" alignItems="center" spacing={1}>
             <CalendarTodayIcon color="action" fontSize="small" />
-            <Typography variant="body1">
-              {team.foundedYear ? new Date(team.foundedYear).getFullYear() : 'Không có thông tin'}
-            </Typography>
+            <Typography variant="body1">{team.foundedYear ? new Date(team.foundedYear).getFullYear() : 'Không có thông tin'}</Typography>
           </Stack>
         </Box>
 
@@ -95,9 +88,7 @@ const TeamDetail = ({ team }) => {
           </Typography>
           <Stack direction="row" alignItems="center" spacing={1}>
             <PeopleIcon color="action" fontSize="small" />
-            <Typography variant="body1">
-              {team.capacity || 2} riders
-            </Typography>
+            <Typography variant="body1">{team.capacity || 2} riders</Typography>
           </Stack>
         </Box>
 

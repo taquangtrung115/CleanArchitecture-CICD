@@ -24,7 +24,7 @@ const RiderFormDemo = () => {
   const handleSubmit = async (data) => {
     setLoading(true);
     setMessage(null);
-    
+
     // Simulate API call
     setTimeout(() => {
       setLoading(false);
@@ -49,14 +49,8 @@ const RiderFormDemo = () => {
         <Typography variant="h6" color="text.secondary" sx={{ mb: 3 }}>
           Giao diện đã được cải thiện với Material-UI components
         </Typography>
-        
-        <Button 
-          variant="contained" 
-          size="large"
-          startIcon={<VisibilityIcon />}
-          onClick={() => setShowForm(true)}
-          sx={{ minWidth: 200 }}
-        >
+
+        <Button variant="contained" size="large" startIcon={<VisibilityIcon />} onClick={() => setShowForm(true)} sx={{ minWidth: 200 }}>
           Xem Form Mới
         </Button>
       </Paper>
@@ -66,38 +60,38 @@ const RiderFormDemo = () => {
         <Typography variant="h5" fontWeight="bold" sx={{ mb: 3 }}>
           Cải tiến đã thực hiện:
         </Typography>
-        
+
         <Stack spacing={2}>
           <Alert severity="info">
             <Typography variant="body1">
               ✅ <strong>Form Modal:</strong> Thay thế form inline bằng modal dialog chuyên nghiệp
             </Typography>
           </Alert>
-          
+
           <Alert severity="info">
             <Typography variant="body1">
               ✅ <strong>Material-UI Components:</strong> Sử dụng TextField, Dialog, Grid layout
             </Typography>
           </Alert>
-          
+
           <Alert severity="info">
             <Typography variant="body1">
               ✅ <strong>Vietnamese Labels:</strong> Giao diện tiếng Việt thân thiện
             </Typography>
           </Alert>
-          
+
           <Alert severity="info">
             <Typography variant="body1">
               ✅ <strong>Responsive Design:</strong> Tự động điều chỉnh theo kích thước màn hình
             </Typography>
           </Alert>
-          
+
           <Alert severity="info">
             <Typography variant="body1">
               ✅ <strong>Better UX:</strong> Loading states, error handling, success feedback
             </Typography>
           </Alert>
-          
+
           <Alert severity="info">
             <Typography variant="body1">
               ✅ <strong>Improved Layout:</strong> RidersPage với Grid layout và Paper containers
@@ -116,12 +110,7 @@ const RiderFormDemo = () => {
       )}
 
       {/* Form Modal */}
-      <RiderFormModal 
-        open={showForm} 
-        onClose={() => setShowForm(false)}
-        onSubmit={handleSubmit} 
-        loading={loading} 
-      />
+      <RiderFormModal open={showForm} onClose={() => setShowForm(false)} onSubmit={handleSubmit} loading={loading} />
     </Container>
   );
 };

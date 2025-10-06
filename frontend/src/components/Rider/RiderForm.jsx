@@ -56,10 +56,10 @@ const RiderFormModal = ({ open, onClose, onSubmit, initial = initialState, loadi
   };
 
   return (
-    <Dialog 
-      open={open} 
-      onClose={handleClose} 
-      maxWidth="md" 
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      maxWidth="md"
       fullWidth
       PaperProps={{
         sx: { borderRadius: 2 }
@@ -95,7 +95,7 @@ const RiderFormModal = ({ open, onClose, onSubmit, initial = initialState, loadi
               {error}
             </Alert>
           )}
-          
+
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -198,7 +198,7 @@ const RiderFormModal = ({ open, onClose, onSubmit, initial = initialState, loadi
                 variant="outlined"
                 size="medium"
                 InputLabelProps={{
-                  shrink: true,
+                  shrink: true
                 }}
               />
             </Grid>
@@ -254,12 +254,7 @@ const RiderFormModal = ({ open, onClose, onSubmit, initial = initialState, loadi
         <Divider />
 
         <DialogActions sx={{ p: 3 }}>
-          <Button 
-            onClick={handleClose} 
-            disabled={loading} 
-            color="inherit" 
-            variant="outlined"
-          >
+          <Button onClick={handleClose} disabled={loading} color="inherit" variant="outlined">
             Hủy
           </Button>
           <Button

@@ -112,9 +112,7 @@ export default function PositionFormModal({ open, onClose, onSuccess, editPositi
       <DialogTitle sx={{ m: 0, p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Stack direction="row" spacing={1} alignItems="center">
           <WorkIcon color="primary" />
-          <Typography variant="h6">
-            {editPosition ? 'Chỉnh sửa Position' : 'Thêm Position Mới'}
-          </Typography>
+          <Typography variant="h6">{editPosition ? 'Chỉnh sửa Position' : 'Thêm Position Mới'}</Typography>
         </Stack>
         <IconButton onClick={onClose} size="small">
           <CloseIcon />
@@ -179,15 +177,7 @@ export default function PositionFormModal({ open, onClose, onSuccess, editPositi
 
             <Grid item xs={12} sm={6}>
               <FormControlLabel
-                control={
-                  <Checkbox 
-                    checked={form.isActive} 
-                    onChange={handleChange} 
-                    name="isActive" 
-                    disabled={loading} 
-                    color="primary" 
-                  />
-                }
+                control={<Checkbox checked={form.isActive} onChange={handleChange} name="isActive" disabled={loading} color="primary" />}
                 label="Trạng thái hoạt động"
                 sx={{ mt: 2 }}
               />
@@ -214,11 +204,7 @@ export default function PositionFormModal({ open, onClose, onSuccess, editPositi
         <Divider />
 
         <DialogActions sx={{ p: 2, justifyContent: 'space-between' }}>
-          <Button 
-            onClick={onClose} 
-            disabled={loading}
-            color="inherit"
-          >
+          <Button onClick={onClose} disabled={loading} color="inherit">
             Hủy
           </Button>
           <Button
@@ -228,10 +214,7 @@ export default function PositionFormModal({ open, onClose, onSuccess, editPositi
             startIcon={loading ? <CircularProgress size={16} color="inherit" /> : <WorkIcon />}
             color="primary"
           >
-            {loading 
-              ? (editPosition ? 'Đang cập nhật...' : 'Đang tạo...') 
-              : (editPosition ? 'Cập nhật Position' : 'Tạo Position')
-            }
+            {loading ? (editPosition ? 'Đang cập nhật...' : 'Đang tạo...') : editPosition ? 'Cập nhật Position' : 'Tạo Position'}
           </Button>
         </DialogActions>
       </form>
