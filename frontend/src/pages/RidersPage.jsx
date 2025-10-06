@@ -59,7 +59,7 @@ const RidersPage = ({ token }) => {
     setError(null);
     setSuccess(null);
     setLoading(true);
-    
+
     try {
       await createRider(data, token);
       setShowForm(false);
@@ -74,10 +74,10 @@ const RidersPage = ({ token }) => {
 
   const handleDelete = async () => {
     if (!selected) return;
-    
+
     setError(null);
     setSuccess(null);
-    
+
     try {
       await deleteRider(selected.id, token);
       setConfirmDelete(false);
@@ -128,21 +128,11 @@ const RidersPage = ({ token }) => {
             <SearchBar onSearch={handleSearch} />
           </Grid>
           <Grid item xs={12} md={4}>
-            <FilterPanel 
-              filters={filters} 
-              onChange={handleFilter} 
-              options={countryOptions} 
-            />
+            <FilterPanel filters={filters} onChange={handleFilter} options={countryOptions} />
           </Grid>
           <Grid item xs={12} md={4}>
             <Stack direction="row" justifyContent="flex-end">
-              <Button 
-                variant="contained" 
-                startIcon={<AddIcon />}
-                onClick={() => setShowForm(true)}
-                size="large"
-                sx={{ minWidth: 150 }}
-              >
+              <Button variant="contained" startIcon={<AddIcon />} onClick={() => setShowForm(true)} size="large" sx={{ minWidth: 150 }}>
                 Thêm Rider
               </Button>
             </Stack>
@@ -155,19 +145,9 @@ const RidersPage = ({ token }) => {
         {/* Rider List */}
         <Grid item xs={12} lg={selected ? 8 : 12}>
           <Paper sx={{ p: 3 }}>
-            <RiderList 
-              key={refresh} 
-              token={token} 
-              filters={filters} 
-              onSelect={setSelected} 
-            />
+            <RiderList key={refresh} token={token} filters={filters} onSelect={setSelected} />
             <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
-              <Pagination 
-                page={filters.pageIndex} 
-                pageSize={filters.pageSize} 
-                total={100} 
-                onChange={handlePage} 
-              />
+              <Pagination page={filters.pageIndex} pageSize={filters.pageSize} total={100} onChange={handlePage} />
             </Box>
           </Paper>
         </Grid>
@@ -178,12 +158,7 @@ const RidersPage = ({ token }) => {
             <Paper sx={{ p: 3 }}>
               <RiderDetail rider={selected} />
               <Box sx={{ mt: 3 }}>
-                <Button 
-                  variant="outlined" 
-                  color="error" 
-                  fullWidth
-                  onClick={() => setConfirmDelete(true)}
-                >
+                <Button variant="outlined" color="error" fullWidth onClick={() => setConfirmDelete(true)}>
                   Xóa Rider
                 </Button>
               </Box>
@@ -193,13 +168,7 @@ const RidersPage = ({ token }) => {
       </Grid>
 
       {/* Form Modal */}
-      <RiderFormModal 
-        open={showForm} 
-        onClose={() => setShowForm(false)}
-        onSubmit={handleCreate} 
-        loading={loading} 
-        error={error} 
-      />
+      <RiderFormModal open={showForm} onClose={() => setShowForm(false)} onSubmit={handleCreate} loading={loading} error={error} />
 
       {/* Confirm Delete Dialog */}
       <ConfirmDialog

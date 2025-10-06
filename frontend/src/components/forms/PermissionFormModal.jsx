@@ -37,7 +37,7 @@ export default function PermissionFormModal({ open, onClose, onSuccess }) {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   // Dropdown data
   const [roles, setRoles] = useState([]);
   const [functions, setFunctions] = useState([]);
@@ -54,11 +54,7 @@ export default function PermissionFormModal({ open, onClose, onSuccess }) {
   const loadOptions = async () => {
     setLoadingOptions(true);
     try {
-      const [rolesRes, functionsRes, actionsRes] = await Promise.all([
-        getRolesForDropdown(),
-        getActiveFunctions(),
-        getActiveActions()
-      ]);
+      const [rolesRes, functionsRes, actionsRes] = await Promise.all([getRolesForDropdown(), getActiveFunctions(), getActiveActions()]);
 
       if (rolesRes.data && rolesRes.data.value) {
         setRoles(rolesRes.data.value.roles || []);
@@ -160,13 +156,7 @@ export default function PermissionFormModal({ open, onClose, onSuccess }) {
             <Grid item xs={12}>
               <FormControl fullWidth required disabled={loading || loadingOptions}>
                 <InputLabel id="role-select-label">Role *</InputLabel>
-                <Select
-                  labelId="role-select-label"
-                  name="roleId"
-                  value={form.roleId}
-                  onChange={handleChange}
-                  label="Role *"
-                >
+                <Select labelId="role-select-label" name="roleId" value={form.roleId} onChange={handleChange} label="Role *">
                   {roles.map((role) => (
                     <MenuItem key={role.roleId} value={role.roleId}>
                       {role.name} ({role.roleCode})
@@ -198,13 +188,7 @@ export default function PermissionFormModal({ open, onClose, onSuccess }) {
             <Grid item xs={12}>
               <FormControl fullWidth required disabled={loading || loadingOptions}>
                 <InputLabel id="action-select-label">Action *</InputLabel>
-                <Select
-                  labelId="action-select-label"
-                  name="actionId"
-                  value={form.actionId}
-                  onChange={handleChange}
-                  label="Action *"
-                >
+                <Select labelId="action-select-label" name="actionId" value={form.actionId} onChange={handleChange} label="Action *">
                   {actions.map((action) => (
                     <MenuItem key={action.id} value={action.id}>
                       {action.name}

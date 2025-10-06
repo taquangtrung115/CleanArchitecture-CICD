@@ -108,7 +108,7 @@ const ChatPage = () => {
         const errorMessage = getErrorMessage(result);
         setError(errorMessage || 'Có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại.');
         console.error('Error sending message:', result.error);
-        
+
         // Remove temp message on error
         setMessages((prev) => prev.filter((msg) => msg.id !== tempMessage.id));
       } else {

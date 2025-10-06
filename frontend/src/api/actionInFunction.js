@@ -19,7 +19,7 @@ export const getActionInFunctions = async (page = 1, pageSize = 20, searchTerm =
   try {
     const params = { page, pageSize };
     if (searchTerm) params.searchTerm = searchTerm;
-    
+
     const response = await axiosInstance.get(ACTION_IN_FUNCTION_ENDPOINT, { params });
     return { data: response.data, status: response.status, error: null };
   } catch (error) {

@@ -219,7 +219,7 @@ export default function TeamFormModal({ open, onClose, onSuccess, token }) {
                 size="medium"
                 type="date"
                 InputLabelProps={{
-                  shrink: true,
+                  shrink: true
                 }}
               />
             </Grid>
@@ -259,7 +259,9 @@ export default function TeamFormModal({ open, onClose, onSuccess, token }) {
           <Button
             type="submit"
             variant="contained"
-            disabled={loading || !form.name || !form.shortName || !form.countryCode || !form.countryName || !form.countryFlag || !form.foundedYear}
+            disabled={
+              loading || !form.name || !form.shortName || !form.countryCode || !form.countryName || !form.countryFlag || !form.foundedYear
+            }
             startIcon={loading ? <CircularProgress size={16} /> : <GroupsIcon />}
             color="primary"
             sx={{ minWidth: 120 }}

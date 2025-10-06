@@ -46,7 +46,7 @@ export default function PositionPage() {
       const res = await getPositions(page, pagination.pageSize, searchTerm);
       if (res.data && res.data.value) {
         setPositions(res.data.value.Positions || []);
-        setPagination(prev => ({
+        setPagination((prev) => ({
           ...prev,
           page: res.data.value.Page || 1,
           totalCount: res.data.value.TotalCount || 0
@@ -83,7 +83,7 @@ export default function PositionPage() {
 
   const handleDeleteConfirm = async () => {
     if (!positionToDelete) return;
-    
+
     try {
       const res = await deletePosition(positionToDelete.PositionId);
       if (res.error) {
@@ -94,7 +94,7 @@ export default function PositionPage() {
     } catch (error) {
       alert('Có lỗi xảy ra khi xóa position');
     }
-    
+
     setDeleteDialogOpen(false);
     setPositionToDelete(null);
   };
@@ -107,13 +107,7 @@ export default function PositionPage() {
     <MainCard
       title="Position Management"
       secondary={
-        <Button 
-          variant="contained" 
-          startIcon={<AddIcon />} 
-          onClick={() => setModalOpen(true)} 
-          color="primary" 
-          size="medium"
-        >
+        <Button variant="contained" startIcon={<AddIcon />} onClick={() => setModalOpen(true)} color="primary" size="medium">
           Thêm Position Mới
         </Button>
       }
@@ -127,7 +121,7 @@ export default function PositionPage() {
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           Quản lý các vị trí công việc trong hệ thống
         </Typography>
-        
+
         <TextField
           placeholder="Tìm kiếm position..."
           variant="outlined"
@@ -177,11 +171,7 @@ export default function PositionPage() {
                 <TableRow key={position.PositionId} hover>
                   <TableCell>{position.Name}</TableCell>
                   <TableCell>
-                    <Chip 
-                      label={position.Code} 
-                      size="small" 
-                      variant="outlined" 
-                    />
+                    <Chip label={position.Code} size="small" variant="outlined" />
                   </TableCell>
                   <TableCell>{position.Level}</TableCell>
                   <TableCell sx={{ maxWidth: 200 }}>
@@ -198,18 +188,10 @@ export default function PositionPage() {
                   </TableCell>
                   <TableCell>
                     <Stack direction="row" spacing={1}>
-                      <IconButton
-                        size="small"
-                        onClick={() => handleEditPosition(position)}
-                        color="primary"
-                      >
+                      <IconButton size="small" onClick={() => handleEditPosition(position)} color="primary">
                         <EditIcon fontSize="small" />
                       </IconButton>
-                      <IconButton
-                        size="small"
-                        onClick={() => handleDeleteClick(position)}
-                        color="error"
-                      >
+                      <IconButton size="small" onClick={() => handleDeleteClick(position)} color="error">
                         <DeleteIcon fontSize="small" />
                       </IconButton>
                     </Stack>
@@ -236,10 +218,7 @@ export default function PositionPage() {
       <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
         <DialogTitle>Xác nhận xóa Position</DialogTitle>
         <DialogContent>
-          <Typography>
-            Bạn có chắc chắn muốn xóa position "{positionToDelete?.Name}"? 
-            Hành động này không thể hoàn tác.
-          </Typography>
+          <Typography>Bạn có chắc chắn muốn xóa position "{positionToDelete?.Name}"? Hành động này không thể hoàn tác.</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDeleteDialogOpen(false)}>Hủy</Button>

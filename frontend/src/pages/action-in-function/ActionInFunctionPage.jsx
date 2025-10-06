@@ -44,27 +44,30 @@ export default function ActionInFunctionPage() {
   const pageSize = 20;
 
   // Load ActionInFunctions
-  const loadActionInFunctions = useCallback(async (page = 1, search = searchTerm) => {
-    setLoading(true);
-    try {
-      const result = await getActionInFunctions(page, pageSize, search || null);
-      
-      if (result.error) {
-        showNotification('error', 'Có lỗi xảy ra khi tải danh sách ActionInFunction');
-        console.error('Load ActionInFunctions error:', result.error);
-        return;
-      }
+  const loadActionInFunctions = useCallback(
+    async (page = 1, search = searchTerm) => {
+      setLoading(true);
+      try {
+        const result = await getActionInFunctions(page, pageSize, search || null);
 
-      setActionInFunctions(result.data?.actionInFunctions || []);
-      setTotalCount(result.data?.totalCount || 0);
-      setCurrentPage(page);
-    } catch (error) {
-      showNotification('error', 'Có lỗi xảy ra khi tải danh sách ActionInFunction');
-      console.error('Load ActionInFunctions error:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [searchTerm]);
+        if (result.error) {
+          showNotification('error', 'Có lỗi xảy ra khi tải danh sách ActionInFunction');
+          console.error('Load ActionInFunctions error:', result.error);
+          return;
+        }
+
+        setActionInFunctions(result.data?.actionInFunctions || []);
+        setTotalCount(result.data?.totalCount || 0);
+        setCurrentPage(page);
+      } catch (error) {
+        showNotification('error', 'Có lỗi xảy ra khi tải danh sách ActionInFunction');
+        console.error('Load ActionInFunctions error:', error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [searchTerm]
+  );
 
   // Initial load
   useEffect(() => {
@@ -75,7 +78,7 @@ export default function ActionInFunctionPage() {
   const handleSearch = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
-    
+
     // Debounce search
     const timeoutId = setTimeout(() => {
       loadActionInFunctions(1, value);
@@ -102,7 +105,7 @@ export default function ActionInFunctionPage() {
 
     try {
       const result = await deleteActionInFunction(actionId, functionId);
-      
+
       if (result.error) {
         showNotification('error', 'Có lỗi xảy ra khi xóa ActionInFunction');
         console.error('Delete ActionInFunction error:', result.error);
@@ -137,12 +140,7 @@ export default function ActionInFunctionPage() {
             Quản lý mối quan hệ giữa Action và Function trong hệ thống
           </Typography>
         </Box>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={handleAdd}
-          sx={{ minWidth: 180 }}
-        >
+        <Button variant="contained" startIcon={<AddIcon />} onClick={handleAdd} sx={{ minWidth: 180 }}>
           Thêm ActionInFunction
         </Button>
       </Box>
@@ -160,7 +158,7 @@ export default function ActionInFunctionPage() {
               <InputAdornment position="start">
                 <SearchIcon />
               </InputAdornment>
-            ),
+            )
           }}
           sx={{ width: 300 }}
         />
@@ -206,11 +204,7 @@ export default function ActionInFunctionPage() {
                   <TableCell>{item.functionName}</TableCell>
                   <TableCell sx={{ textAlign: 'center' }}>
                     <Tooltip title="Xóa">
-                      <IconButton
-                        onClick={() => handleDelete(item.actionId, item.functionId)}
-                        color="error"
-                        size="small"
-                      >
+                      <IconButton onClick={() => handleDelete(item.actionId, item.functionId)} color="error" size="small">
                         <DeleteIcon fontSize="small" />
                       </IconButton>
                     </Tooltip>
@@ -225,14 +219,7 @@ export default function ActionInFunctionPage() {
       {/* Pagination */}
       {totalPages > 1 && (
         <Stack direction="row" justifyContent="center" sx={{ mt: 3 }}>
-          <Pagination
-            count={totalPages}
-            page={currentPage}
-            onChange={handlePageChange}
-            color="primary"
-            showFirstButton
-            showLastButton
-          />
+          <Pagination count={totalPages} page={currentPage} onChange={handlePageChange} color="primary" showFirstButton showLastButton />
         </Stack>
       )}
 
@@ -244,11 +231,7 @@ export default function ActionInFunctionPage() {
       )}
 
       {/* ActionInFunction Form Modal */}
-      <ActionInFunctionFormModal
-        open={showForm}
-        onClose={() => setShowForm(false)}
-        onSuccess={handleFormSuccess}
-      />
+      <ActionInFunctionFormModal open={showForm} onClose={() => setShowForm(false)} onSuccess={handleFormSuccess} />
     </MainCard>
   );
 }

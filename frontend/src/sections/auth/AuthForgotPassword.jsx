@@ -35,7 +35,7 @@ export default function AuthForgotPassword({ isDemo = false }) {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     if (loading) return;
-    
+
     setLoading(true);
     setFormError('');
 
@@ -64,27 +64,19 @@ export default function AuthForgotPassword({ isDemo = false }) {
               Reset Instructions Sent
             </Typography>
             <Typography variant="body2">
-              We've sent password reset instructions to your email address. Please check your inbox and follow the instructions to reset your password.
+              We've sent password reset instructions to your email address. Please check your inbox and follow the instructions to reset
+              your password.
             </Typography>
           </Alert>
         </Grid>
         <Grid size={12}>
           <Stack spacing={2}>
             <AnimateButton>
-              <Button
-                component={RouterLink}
-                to="/login"
-                variant="contained"
-                fullWidth
-              >
+              <Button component={RouterLink} to="/login" variant="contained" fullWidth>
                 Back to Login
               </Button>
             </AnimateButton>
-            <Button
-              variant="outlined"
-              onClick={() => setSuccess(false)}
-              fullWidth
-            >
+            <Button variant="outlined" onClick={() => setSuccess(false)} fullWidth>
               Send Again
             </Button>
           </Stack>
@@ -167,9 +159,7 @@ export default function AuthForgotPassword({ isDemo = false }) {
                 </Grid>
               )}
               <Grid size={12} sx={{ mb: -1 }}>
-                <Typography variant="body2">
-                  Do not forgot to check SPAM box.
-                </Typography>
+                <Typography variant="body2">Do not forgot to check SPAM box.</Typography>
               </Grid>
               <Grid size={12}>
                 <AnimateButton>

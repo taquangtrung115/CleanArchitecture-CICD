@@ -27,7 +27,7 @@ public class ActionInFunctionManagementServiceTests
 
         // Seed test data
         context.Actions.Add(new Action { Id = "READ", Name = "Read Action", IsActive = true });
-        context.Functions.Add(new Function { Id = "USER", Name = "User Management", Url = "/users", IsActive = true });
+        context.Functions.Add(new Function { Id = "USER", Name = "User Management", Url = "/users", ParrentId = string.Empty, CssClass = string.Empty, IsActive = true });
         await context.SaveChangesAsync();
 
         // Act
@@ -51,9 +51,11 @@ public class ActionInFunctionManagementServiceTests
         using var context = GetInMemoryDbContext();
         var service = new ActionInFunctionManagementService(context);
 
-        // Seed test data
+        // Seed test data - save related entities first
         context.Actions.Add(new Action { Id = "READ", Name = "Read Action", IsActive = true });
-        context.Functions.Add(new Function { Id = "USER", Name = "User Management", Url = "/users", IsActive = true });
+        context.Functions.Add(new Function { Id = "USER", Name = "User Management", Url = "/users", ParrentId = string.Empty, CssClass = string.Empty, IsActive = true });
+        await context.SaveChangesAsync();
+        
         context.ActionInFunctions.Add(new ActionInFunction { ActionId = "READ", FunctionId = "USER" });
         await context.SaveChangesAsync();
 
@@ -71,15 +73,17 @@ public class ActionInFunctionManagementServiceTests
         using var context = GetInMemoryDbContext();
         var service = new ActionInFunctionManagementService(context);
 
-        // Seed test data
+        // Seed test data - save related entities first
         context.Actions.AddRange(
             new Action { Id = "READ", Name = "Read Action", IsActive = true },
             new Action { Id = "WRITE", Name = "Write Action", IsActive = true }
         );
         context.Functions.AddRange(
-            new Function { Id = "USER", Name = "User Management", Url = "/users", IsActive = true },
-            new Function { Id = "ROLE", Name = "Role Management", Url = "/roles", IsActive = true }
+            new Function { Id = "USER", Name = "User Management", Url = "/users", ParrentId = string.Empty, CssClass = string.Empty, IsActive = true },
+            new Function { Id = "ROLE", Name = "Role Management", Url = "/roles", ParrentId = string.Empty, CssClass = string.Empty, IsActive = true }
         );
+        await context.SaveChangesAsync();
+        
         context.ActionInFunctions.AddRange(
             new ActionInFunction { ActionId = "READ", FunctionId = "USER" },
             new ActionInFunction { ActionId = "WRITE", FunctionId = "USER" },
@@ -102,9 +106,11 @@ public class ActionInFunctionManagementServiceTests
         using var context = GetInMemoryDbContext();
         var service = new ActionInFunctionManagementService(context);
 
-        // Seed test data
+        // Seed test data - save related entities first
         context.Actions.Add(new Action { Id = "READ", Name = "Read Action", IsActive = true });
-        context.Functions.Add(new Function { Id = "USER", Name = "User Management", Url = "/users", IsActive = true });
+        context.Functions.Add(new Function { Id = "USER", Name = "User Management", Url = "/users", ParrentId = string.Empty, CssClass = string.Empty, IsActive = true });
+        await context.SaveChangesAsync();
+        
         context.ActionInFunctions.Add(new ActionInFunction { ActionId = "READ", FunctionId = "USER" });
         await context.SaveChangesAsync();
 
@@ -141,7 +147,11 @@ public class ActionInFunctionManagementServiceTests
         using var context = GetInMemoryDbContext();
         var service = new ActionInFunctionManagementService(context);
 
-        // Seed test data
+        // Seed test data - must add related entities first
+        context.Actions.Add(new Action { Id = "READ", Name = "Read Action", IsActive = true });
+        context.Functions.Add(new Function { Id = "USER", Name = "User Management", Url = "/users", ParrentId = string.Empty, CssClass = string.Empty, IsActive = true });
+        await context.SaveChangesAsync();
+        
         context.ActionInFunctions.Add(new ActionInFunction { ActionId = "READ", FunctionId = "USER" });
         await context.SaveChangesAsync();
 

@@ -109,12 +109,7 @@ export default function ActionPage() {
             Quản lý các hành động trong hệ thống
           </Typography>
         </Box>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={handleAdd}
-          sx={{ minWidth: 150 }}
-        >
+        <Button variant="contained" startIcon={<AddIcon />} onClick={handleAdd} sx={{ minWidth: 150 }}>
           Thêm Action
         </Button>
       </Box>
@@ -132,7 +127,7 @@ export default function ActionPage() {
               <InputAdornment position="start">
                 <SearchIcon />
               </InputAdornment>
-            ),
+            )
           }}
           sx={{ width: 300 }}
         />
@@ -211,20 +206,10 @@ export default function ActionPage() {
                   </TableCell>
                   <TableCell align="center">
                     <Stack direction="row" spacing={1} justifyContent="center">
-                      <IconButton 
-                        size="small" 
-                        color="primary"
-                        onClick={() => handleEdit(action)}
-                        title="Chỉnh sửa"
-                      >
+                      <IconButton size="small" color="primary" onClick={() => handleEdit(action)} title="Chỉnh sửa">
                         <EditIcon fontSize="small" />
                       </IconButton>
-                      <IconButton 
-                        size="small" 
-                        color="error"
-                        onClick={() => handleDelete(action.id)}
-                        title="Xóa"
-                      >
+                      <IconButton size="small" color="error" onClick={() => handleDelete(action.id)} title="Xóa">
                         <DeleteIcon fontSize="small" />
                       </IconButton>
                     </Stack>
@@ -239,13 +224,7 @@ export default function ActionPage() {
       {/* Pagination */}
       {totalPages > 1 && (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-          <Pagination
-            count={totalPages}
-            page={page}
-            onChange={handlePageChange}
-            color="primary"
-            size="medium"
-          />
+          <Pagination count={totalPages} page={page} onChange={handlePageChange} color="primary" size="medium" />
         </Box>
       )}
 
@@ -257,12 +236,7 @@ export default function ActionPage() {
       )}
 
       {/* Action Form Modal */}
-      <ActionFormModal
-        open={showForm}
-        onClose={() => setShowForm(false)}
-        onSuccess={handleFormSuccess}
-        editingAction={editingAction}
-      />
+      <ActionFormModal open={showForm} onClose={() => setShowForm(false)} onSuccess={handleFormSuccess} editingAction={editingAction} />
     </MainCard>
   );
 }
