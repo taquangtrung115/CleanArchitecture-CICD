@@ -91,4 +91,77 @@ Dapper Ref:
 https://www.learndapper.com/saving-data/insert
 https://github.com/CodeMazeBlog/CodeMazeGuides/tree/main/csharp-design-patterns
 
+---
+
+# GitHub Actions CI/CD
+
+## 🚀 Automated Deployment for DEV Branch
+
+This repository is configured with GitHub Actions for automated CI/CD pipeline.
+
+### Quick Start
+
+1. **Push to DEV branch** → Automatic build and test
+2. **Check Actions tab** → Monitor workflow progress
+3. **Download artifacts** → Get built files for deployment
+
+### Available Workflows
+
+| Workflow | Trigger | Purpose |
+|----------|---------|---------|
+| **DEV CI/CD** | Auto (push to DEV) | Full pipeline: BE + FE + DB |
+| **Backend CI** | Manual | Backend only build & test |
+| **Frontend CI** | Manual | Frontend only build |
+
+### What Gets Built?
+
+- ✅ **Backend**: .NET 7.0 API with all tests
+- ✅ **Frontend**: React application with Vite
+- ✅ **Database**: Migration scripts generated
+
+### Getting Your Build Artifacts
+
+1. Go to **Actions** tab in GitHub
+2. Click on the latest workflow run
+3. Scroll down to **Artifacts** section
+4. Download:
+   - `backend-artifacts` - Backend application
+   - `frontend-artifacts` - Frontend dist files
+   - `migration-script` - Database migration SQL
+
+### Manual Deployment
+
+After downloading artifacts:
+
+**Database:**
+```bash
+# Run migration script on your SQL Server
+sqlcmd -S your-server -d DemoCICDDatabase -i migration-script.sql
+```
+
+**Backend (IIS):**
+```bash
+# Stop IIS
+iisreset /stop
+
+# Copy files
+xcopy backend-artifacts\* C:\WWW\DemoCICD\BE\DEV\ /e /y /i /r
+
+# Start IIS
+iisreset /start
+```
+
+**Frontend:**
+```bash
+# Copy to web server
+xcopy frontend-artifacts\* C:\WWW\DemoCICD\FE\DEV\ /e /y /i /r
+```
+
+### 📚 Detailed Documentation
+
+For complete setup guide, see [GitHub Actions Setup Guide](.github/GITHUB_ACTIONS_SETUP.md)
+
+For workflow details, see [Workflows README](.github/workflows/README.md)
+
+---
 

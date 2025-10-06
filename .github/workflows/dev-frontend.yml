@@ -1,0 +1,76 @@
+name: DEV Frontend CI
+
+# Workflow for Frontend only - useful for quick frontend-only changes
+on:
+  workflow_dispatch:
+    inputs:
+      skip_lint:
+        description: 'Skip linting'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  frontend-build:
+    name: 🎨 Frontend Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    
+    steps:
+      - name: 🚚 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 🔧 Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+          cache-dependency-path: './frontend/yarn.lock'
+          
+      - name: 📦 Enable Corepack
+        run: corepack enable
+        
+      - name: 📦 Set Yarn Version
+        run: yarn set version 4.9.1
+        
+      - name: 📦 Install Dependencies
+        run: yarn install --immutable
+        
+      - name: 🔍 Lint Code
+        if: ${{ !inputs.skip_lint }}
+        run: yarn lint
+        continue-on-error: true
+        
+      - name: 🔨 Build Frontend
+        run: yarn build
+        env:
+          NODE_ENV: production
+          VITE_APP_BASE_NAME: '/'
+          
+      - name: 📊 Build Info
+        run: |
+          echo "Build completed successfully!"
+          echo "Output directory: dist/"
+          ls -lah dist/ || echo "No dist directory found"
+          
+      - name: 📤 Upload Frontend Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dev-build-${{ github.run_number }}
+          path: ./frontend/dist
+          retention-days: 7
+          
+      - name: ✅ Build Summary
+        run: |
+          echo "### 🎉 Frontend Build Completed Successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Node Version:** ${{ env.NODE_VERSION }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Build Tool:** Vite" >> $GITHUB_STEP_SUMMARY
+          echo "**Artifact Name:** frontend-dev-build-${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📦 Frontend is ready for deployment!" >> $GITHUB_STEP_SUMMARY
