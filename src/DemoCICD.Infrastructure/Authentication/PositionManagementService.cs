@@ -176,7 +176,7 @@ public class PositionManagementService : IPositionManagementService
     {
         try
         {
-            var query = _context.Positions.AsQueryable();
+            var query = _context.Positions.AsQueryable().AsNoTracking();
 
             // Apply search filter
             if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -215,7 +215,7 @@ public class PositionManagementService : IPositionManagementService
     {
         try
         {
-            var positions = await _context.Positions
+            var positions = await _context.Positions.AsNoTracking()
                 .Where(p => p.IsActive)
                 .OrderBy(p => p.Level)
                 .ThenBy(p => p.Name)
@@ -240,7 +240,7 @@ public class PositionManagementService : IPositionManagementService
     {
         try
         {
-            return await _context.Positions
+            return await _context.Positions.AsNoTracking()
                 .AnyAsync(p => p.Id == positionId, cancellationToken);
         }
         catch (Exception ex)
@@ -254,7 +254,7 @@ public class PositionManagementService : IPositionManagementService
     {
         try
         {
-            var query = _context.Positions.Where(p => p.Code == code);
+            var query = _context.Positions.AsNoTracking().Where(p => p.Code == code);
             
             if (excludePositionId.HasValue)
             {

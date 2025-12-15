@@ -16,21 +16,30 @@ public static class ChatSeeder
         var users = await context.Users.Take(5).ToListAsync();
         if (users.Count < 2)
         {
+            var positons = await context.Positions.ToListAsync();
             // Create some sample users if none exist
-            users = await CreateSampleUsersAsync(context);
+            users = await CreateSampleUsersAsync(context, positons);
         }
 
         // Create sample chat rooms
         var rooms = await CreateSampleRoomsAsync(context, users);
-        
+
         // Create sample chat messages
         await CreateSampleMessagesAsync(context, users, rooms);
 
         await context.SaveChangesAsync();
     }
 
-    private static async Task<List<AppUser>> CreateSampleUsersAsync(ApplicationDbContext context)
+    private static async Task<List<AppUser>> CreateSampleUsersAsync(ApplicationDbContext context, List<Position> positions)
     {
+        var positionLead = positions.FirstOrDefault(s => s.Code == "LEAD_DEV")?.Id ?? Guid.NewGuid();
+        var positionUIUX = positions.FirstOrDefault(s => s.Code == "UIUX")?.Id ?? Guid.NewGuid();
+        var positionJR_DEV = positions.FirstOrDefault(s => s.Code == "JR_DEV")?.Id ?? Guid.NewGuid();
+        var positionPO = positions.FirstOrDefault(s => s.Code == "PO")?.Id ?? Guid.NewGuid();
+        var positionBA = positions.FirstOrDefault(s => s.Code == "BA")?.Id ?? Guid.NewGuid();
+        var positionDEVOPS = positions.FirstOrDefault(s => s.Code == "DEVOPS")?.Id ?? Guid.NewGuid();
+        var positionSM = positions.FirstOrDefault(s => s.Code == "SM")?.Id ?? Guid.NewGuid();
+        var positionQA_ENG = positions.FirstOrDefault(s => s.Code == "QA_ENG")?.Id ?? Guid.NewGuid();
         var users = new List<AppUser>
         {
             new AppUser
@@ -40,7 +49,10 @@ public static class ChatSeeder
                 Email = "alice.johnson@demo.com",
                 FirstName = "Alice",
                 LastName = "Johnson",
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                FullName = "Alice Johnson",
+                DayOfBirth = new DateTime(1999, 2, 24),
+                PositionId = positionLead
             },
             new AppUser
             {
@@ -49,7 +61,10 @@ public static class ChatSeeder
                 Email = "bob.smith@demo.com",
                 FirstName = "Bob",
                 LastName = "Smith",
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                FullName = "Bob Smith",
+                DayOfBirth = new DateTime(2000, 2, 24),
+                PositionId = positionUIUX
             },
             new AppUser
             {
@@ -58,7 +73,10 @@ public static class ChatSeeder
                 Email = "charlie.brown@demo.com",
                 FirstName = "Charlie",
                 LastName = "Brown",
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                FullName = "Charlie Brown",
+                DayOfBirth = new DateTime(1998, 2, 24),
+                PositionId = positionJR_DEV
             },
             new AppUser
             {
@@ -67,7 +85,10 @@ public static class ChatSeeder
                 Email = "diana.wilson@demo.com",
                 FirstName = "Diana",
                 LastName = "Wilson",
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                FullName = "Diana Wilson",
+                DayOfBirth = new DateTime(2002, 2, 24),
+                PositionId = positionPO
             },
             new AppUser
             {
@@ -76,7 +97,10 @@ public static class ChatSeeder
                 Email = "eve.davis@demo.com",
                 FirstName = "Eve",
                 LastName = "Davis",
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                FullName = "Eve Davis",
+                DayOfBirth = new DateTime(2003, 2, 24),
+                PositionId = positionBA
             }
         };
 
@@ -221,11 +245,7 @@ public static class ChatSeeder
                     IsRead = i < devMessages.Length - 2 // Mark most as read, leave recent ones unread
                 };
                 message.SetCreatedAudit(user.UserName ?? "System");
-                
-                // Stagger message times
-                var createdTime = DateTime.UtcNow.AddHours(-48).AddMinutes(i * 20);
-                typeof(ChatMessage).GetProperty("CreatedAt")?.SetValue(message, createdTime);
-                
+               
                 messages.Add(message);
             }
         }
@@ -261,10 +281,7 @@ public static class ChatSeeder
                     IsRead = i < projectMessages.Length - 3
                 };
                 message.SetCreatedAudit(user.UserName ?? "System");
-                
-                var createdTime = DateTime.UtcNow.AddHours(-24).AddMinutes(i * 30);
-                typeof(ChatMessage).GetProperty("CreatedAt")?.SetValue(message, createdTime);
-                
+
                 messages.Add(message);
             }
         }
@@ -286,7 +303,7 @@ public static class ChatSeeder
             {
                 var sender = users[i % 2];
                 var receiver = users[(i + 1) % 2];
-                
+
                 var message = new ChatMessage
                 {
                     Id = Guid.NewGuid(),
@@ -297,10 +314,7 @@ public static class ChatSeeder
                     IsRead = i < directMessages.Length - 1
                 };
                 message.SetCreatedAudit(sender.UserName ?? "System");
-                
-                var createdTime = DateTime.UtcNow.AddHours(-12).AddMinutes(i * 15);
-                typeof(ChatMessage).GetProperty("CreatedAt")?.SetValue(message, createdTime);
-                
+
                 messages.Add(message);
             }
         }
@@ -332,10 +346,7 @@ public static class ChatSeeder
                     IsRead = true
                 };
                 message.SetCreatedAudit(user.UserName ?? "System");
-                
-                var createdTime = DateTime.UtcNow.AddHours(-6).AddMinutes(i * 10);
-                typeof(ChatMessage).GetProperty("CreatedAt")?.SetValue(message, createdTime);
-                
+
                 messages.Add(message);
             }
         }

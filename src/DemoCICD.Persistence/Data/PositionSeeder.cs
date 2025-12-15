@@ -8,9 +8,9 @@ public static class PositionSeeder
     public static async Task SeedAdditionalPositionsAsync(ApplicationDbContext context)
     {
         // Check how many positions already exist
-        var existingCount = await context.Positions.CountAsync();
+        var existingCount = await context.Positions.AnyAsync();
         
-        if (existingCount >= 10)
+        if (existingCount)
             return; // Already have enough data
 
         var additionalPositions = new List<Position>

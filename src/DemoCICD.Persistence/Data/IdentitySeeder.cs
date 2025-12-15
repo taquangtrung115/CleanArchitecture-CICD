@@ -58,7 +58,7 @@ public static class IdentitySeeder
             new Function { Id = "CHAT", Name = "Chat Management", Url = "/chat", ParrentId = "", SortOrder = 9, CssClass = "fa-comments", IsActive = true },
             new Function { Id = "PRODUCT", Name = "Product Management", Url = "/products", ParrentId = "", SortOrder = 10, CssClass = "fa-box", IsActive = true }
         };
-
+        
         context.Functions.AddRange(functions);
     }
 
