@@ -4,6 +4,10 @@ using DemoCICD.Domain.Entities.MotoGP.RaceManagement;
 using DemoCICD.Domain.Entities.MotoGP.TeamRiderManagement;
 using DemoCICD.Domain.Entities.MotoGP.MediaNews;
 using DemoCICD.Domain.Entities.Chat;
+using DemoCICD.Domain.Entities.RentalRoom.Rooms;
+using DemoCICD.Domain.Entities.RentalRoom.Profiles;
+using DemoCICD.Domain.Entities.RentalRoom.Locations;
+using DemoCICD.Domain.Entities.RentalRoom.Bills;
 using DemoCICD.Domain.Abstractions.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -82,4 +86,11 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
     public DbSet<ChatRoom> ChatRooms { get; set; }
     public DbSet<ChatMessage> ChatMessages { get; set; }
     public DbSet<ChatRoomMember> ChatRoomMembers { get; set; }
+
+    // RentalRoom Entities
+    public DbSet<Room> Rooms { get; set; }
+    public DbSet<Profile> Profiles { get; set; }
+    public DbSet<Location> Locations { get; set; }
+    public DbSet<Bill> Bills { get; set; }
+    public DbSet<BillDetail> BillDetails { get; set; }
 }

@@ -1,6 +1,4 @@
-﻿
-
-namespace DemoCICD.Persistence.Constants;
+﻿namespace DemoCICD.Persistence.Constants;
 internal static class TableNames
 {
     // *********** Plural Nouns ***********
@@ -32,4 +30,11 @@ internal static class TableNames
     internal const string Bikes = nameof(Bikes);
     internal const string News = nameof(News);
     internal const string Videos = nameof(Videos);
+
+    // *********** RentalRoom Tables ***********
+    internal const string Rooms = nameof(Rooms);
+    internal const string Profiles = nameof(Profiles);
+    internal const string Locations = nameof(Locations);
+    internal const string Bills = nameof(Bills);
+    internal const string BillDetails = nameof(BillDetails);
 }

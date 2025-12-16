@@ -1,11 +1,13 @@
 ﻿using DemoCICD.Domain.Abstractions.Reponsitories;
 using DemoCICD.Domain.Abstractions.Reponsitories.MotoGP;
+using DemoCICD.Domain.Abstractions.Dappers.Repositories.RentalRoom;
 using DemoCICD.Domain.Abstractions;
 using DemoCICD.Domain.Entities.Identity;
 using DemoCICD.Domain.Services.MotoGP;
 using DemoCICD.Persistence.DependencyInjection.Options;
 using DemoCICD.Persistence.Reponsitories;
 using DemoCICD.Persistence.Reponsitories.MotoGP;
+using DemoCICD.Persistence.Reponsitories.RentalRoom;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -103,6 +105,12 @@ public static class ServiceCollectionExtensions
         // Add MotoGP domain services
         services.AddTransient<IPointsCalculationService, PointsCalculationService>();
         services.AddTransient<IStandingsCalculationService, StandingsCalculationService>();
+
+        // Add RentalRoom repositories (EF Core)
+        services.AddTransient<IRoomRepository, RoomRepository>();
+        services.AddTransient<IProfileRepository, ProfileRepository>();
+        services.AddTransient<ILocationRepository, LocationRepository>();
+        services.AddTransient<IBillRepository, BillRepository>();
     }
 
     public static OptionsBuilder<SqlServerRetryOptions> ConfigureSqlServerRetryOptions(this IServiceCollection services, IConfigurationSection section)
