@@ -9,7 +9,6 @@ using DemoCICD.Persistence.Reponsitories;
 using DemoCICD.Persistence.Reponsitories.MotoGP;
 using DemoCICD.Persistence.Reponsitories.RentalRoom;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

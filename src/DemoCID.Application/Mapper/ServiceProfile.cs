@@ -4,10 +4,14 @@ using DemoCICD.Contract.Services.V1.Product;
 using DemoCICD.Domain.Entities;
 using DemoCICD.Domain.Entities.MotoGP.TeamRiderManagement;
 using DemoCICD.Domain.Entities.MotoGP.RaceManagement;
+using DemoCICD.Domain.Entities.RentalRoom.Rooms;
+using DemoCICD.Domain.Entities.RentalRoom.Locations;
+using DemoCICD.Domain.Entities.RentalRoom.Bills;
+using RentalProfile = DemoCICD.Domain.Entities.RentalRoom.Profiles.Profile;
 
 namespace DemoCICD.Application.Mapper;
 
-public class ServiceProfile : Profile
+public class ServiceProfile : AutoMapper.Profile
 {
     public ServiceProfile()
     {
@@ -20,6 +24,9 @@ public class ServiceProfile : Profile
 
         // MotoGP Mappings
         ConfigureMotoGPMappings();
+
+        // RentalRoom Mappings
+        ConfigureRentalRoomMappings();
     }
 
     private void ConfigureMotoGPMappings()
@@ -55,5 +62,45 @@ public class ServiceProfile : Profile
         CreateMap<Season, Contract.Services.V1.MotoGP.Season.Response.SeasonResponse>().ReverseMap();
 
         CreateMap<PagedResult<Season>, PagedResult<Contract.Services.V1.MotoGP.Season.Response.SeasonResponse>>().ReverseMap();
+    }
+
+    private void ConfigureRentalRoomMappings()
+    {
+        // Room mappings
+        CreateMap<Room, Contract.Services.V1.RentalRoom.RoomResponse.Response>()
+            .ForMember(dest => dest.LocationAddress, opt => opt.MapFrom(src => src.Location != null ? src.Location.FullAddress : null))
+            .ReverseMap();
+
+        CreateMap<PagedResult<Room>, PagedResult<Contract.Services.V1.RentalRoom.RoomResponse.Response>>();
+
+        // Profile mappings (using alias to avoid conflict)
+        CreateMap<RentalProfile, Contract.Services.V1.RentalRoom.ProfileResponse.Response>()
+            .ForMember(dest => dest.RoomNumber, opt => opt.MapFrom(src => src.Room != null ? src.Room.RoomNumber : null))
+            .ReverseMap();
+
+        CreateMap<PagedResult<RentalProfile>, PagedResult<Contract.Services.V1.RentalRoom.ProfileResponse.Response>>();
+
+        // Location mappings
+        CreateMap<Location, Contract.Services.V1.RentalRoom.LocationResponse.Response>().ReverseMap();
+
+        CreateMap<PagedResult<Location>, PagedResult<Contract.Services.V1.RentalRoom.LocationResponse.Response>>();
+
+        // Bill mappings
+        CreateMap<Bill, Contract.Services.V1.RentalRoom.BillResponse.Response>()
+            .ForMember(dest => dest.RoomNumber, opt => opt.MapFrom(src => src.Room != null ? src.Room.RoomNumber : "Unknown"))
+            .ForMember(dest => dest.ProfileName, opt => opt.MapFrom(src => src.Profile != null ? src.Profile.FullName : "Unknown"))
+            .ReverseMap();
+
+        CreateMap<PagedResult<Bill>, PagedResult<Contract.Services.V1.RentalRoom.BillResponse.Response>>();
+
+        // BillDetail mappings
+        CreateMap<BillDetail, Contract.Services.V1.RentalRoom.BillResponse.DetailItemResponse>().ReverseMap();
+
+        // Bill detailed response (with BillDetails)
+        CreateMap<Bill, Contract.Services.V1.RentalRoom.BillResponse.DetailedResponse>()
+            .ForMember(dest => dest.RoomNumber, opt => opt.MapFrom(src => src.Room != null ? src.Room.RoomNumber : "Unknown"))
+            .ForMember(dest => dest.ProfileName, opt => opt.MapFrom(src => src.Profile != null ? src.Profile.FullName : "Unknown"))
+            .ForMember(dest => dest.BillDetails, opt => opt.MapFrom(src => src.BillDetails))
+            .ReverseMap();
     }
 }

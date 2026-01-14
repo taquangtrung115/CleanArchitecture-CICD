@@ -141,7 +141,7 @@ public class LocationManagementApi : ApiEndpoint, ICarterModule
 
     #region Helper Records
 
-    private record UpdateCoordinatesRequest(double Latitude, double Longitude);
+    public record UpdateCoordinatesRequest(double Latitude, double Longitude);
 
     #endregion
 }

@@ -1,3 +1,4 @@
+using AutoMapper;
 using DemoCICD.Contract.Abstractions.Message;
 using DemoCICD.Contract.Abstractions.Shared;
 using DemoCICD.Contract.Services.V1.RentalRoom;
@@ -9,10 +10,14 @@ namespace DemoCICD.Application.UserCases.V1.Queries.RentalRoom.Room;
 public sealed class GetRoomsQueryHandler : IQueryHandler<RoomQuery.GetRoomsQuery, PagedResult<RoomResponse.Response>>
 {
     private readonly IRepositoryBase<Domain.Entities.RentalRoom.Rooms.Room, Guid> _roomRepository;
+    private readonly IMapper _mapper;
 
-    public GetRoomsQueryHandler(IRepositoryBase<Domain.Entities.RentalRoom.Rooms.Room, Guid> roomRepository)
+    public GetRoomsQueryHandler(
+        IRepositoryBase<Domain.Entities.RentalRoom.Rooms.Room, Guid> roomRepository,
+        IMapper mapper)
     {
         _roomRepository = roomRepository;
+        _mapper = mapper;
     }
 
     public async Task<Result<PagedResult<RoomResponse.Response>>> Handle(RoomQuery.GetRoomsQuery request, CancellationToken cancellationToken)
@@ -56,21 +61,11 @@ public sealed class GetRoomsQueryHandler : IQueryHandler<RoomQuery.GetRoomsQuery
             .Take(request.PageSize)
             .ToListAsync(cancellationToken);
 
-        var roomResponses = rooms.Select(r => new RoomResponse.Response(
-            r.Id,
-            r.RoomNumber,
-            r.Capacity,
-            r.PricePerNight,
-            r.Description,
-            r.IsAvailable,
-            r.LocationId,
-            null, // LocationAddress - would need join with LocationRepository
-            r.CreatedAt,
-            r.UpdatedAt
-        )).ToList();
+        // Use AutoMapper to map
+        var responses = _mapper.Map<List<RoomResponse.Response>>(rooms);
 
         var pagedResult = PagedResult<RoomResponse.Response>.Create(
-            roomResponses,
+            responses,
             request.PageIndex,
             request.PageSize,
             totalCount);

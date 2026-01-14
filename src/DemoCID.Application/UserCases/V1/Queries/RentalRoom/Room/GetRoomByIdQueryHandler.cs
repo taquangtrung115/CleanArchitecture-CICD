@@ -1,3 +1,4 @@
+using AutoMapper;
 using DemoCICD.Contract.Abstractions.Message;
 using DemoCICD.Contract.Abstractions.Shared;
 using DemoCICD.Contract.Services.V1.RentalRoom;
@@ -8,10 +9,14 @@ namespace DemoCICD.Application.UserCases.V1.Queries.RentalRoom.Room;
 public sealed class GetRoomByIdQueryHandler : IQueryHandler<RoomQuery.GetRoomByIdQuery, RoomResponse.Response>
 {
     private readonly IRepositoryBase<Domain.Entities.RentalRoom.Rooms.Room, Guid> _roomRepository;
+    private readonly IMapper _mapper;
 
-    public GetRoomByIdQueryHandler(IRepositoryBase<Domain.Entities.RentalRoom.Rooms.Room, Guid> roomRepository)
+    public GetRoomByIdQueryHandler(
+        IRepositoryBase<Domain.Entities.RentalRoom.Rooms.Room, Guid> roomRepository,
+        IMapper mapper)
     {
         _roomRepository = roomRepository;
+        _mapper = mapper;
     }
 
     public async Task<Result<RoomResponse.Response>> Handle(RoomQuery.GetRoomByIdQuery request, CancellationToken cancellationToken)
@@ -19,19 +24,11 @@ public sealed class GetRoomByIdQueryHandler : IQueryHandler<RoomQuery.GetRoomByI
         var room = await _roomRepository.FindByIdAsync(request.Id, cancellationToken);
 
         if (room == null)
-            return Result.Failure<RoomResponse.Response>(new Error("Room.NotFound", $"Room with ID {request.Id} not found"));
+            return Result.Failure<RoomResponse.Response>(
+                new Error("Room.NotFound", $"Room with ID {request.Id} not found"));
 
-        var response = new RoomResponse.Response(
-            room.Id,
-            room.RoomNumber,
-            room.Capacity,
-            room.PricePerNight,
-            room.Description,
-            room.IsAvailable,
-            room.LocationId,
-            null, // LocationAddress - would need LocationRepository
-            room.CreatedAt,
-            room.UpdatedAt);
+        // Use AutoMapper to map
+        var response = _mapper.Map<RoomResponse.Response>(room);
 
         return Result.Success(response);
     }
