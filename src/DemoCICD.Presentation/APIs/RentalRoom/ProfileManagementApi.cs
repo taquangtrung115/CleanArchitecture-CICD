@@ -164,8 +164,8 @@ public class ProfileManagementApi : ApiEndpoint, ICarterModule
 
     #region Helper Records
 
-    private record AssignRoomRequest(Guid RoomId, DateTime RentStartDate, decimal DepositAmount);
-    private record EndRentalRequest(DateTime RentEndDate);
+    public record AssignRoomRequest(Guid RoomId, DateTime RentStartDate, decimal DepositAmount);
+    public record EndRentalRequest(DateTime RentEndDate);
 
     #endregion
 }

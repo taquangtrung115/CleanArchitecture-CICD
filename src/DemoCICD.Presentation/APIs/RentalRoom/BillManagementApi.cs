@@ -85,7 +85,7 @@ public class BillManagementApi : ApiEndpoint, ICarterModule
 
     #region Bill Commands
 
-    private static async Task<IResult> CreateBill(
+    public static async Task<IResult> CreateBill(
         ISender sender,
         [FromBody] BillCommand.CreateBillCommand command)
     {
@@ -95,7 +95,7 @@ public class BillManagementApi : ApiEndpoint, ICarterModule
             : HandlerFailure(result);
     }
 
-    private static async Task<IResult> UpdateBill(
+    public static async Task<IResult> UpdateBill(
         ISender sender,
         Guid billId,
         [FromBody] UpdateBillRequest request)
@@ -109,7 +109,7 @@ public class BillManagementApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    private static async Task<IResult> DeleteBill(ISender sender, Guid billId)
+    public static async Task<IResult> DeleteBill(ISender sender, Guid billId)
     {
         var result = await sender.Send(new BillCommand.DeleteBillCommand(billId));
         return Results.Ok(result);
@@ -119,7 +119,7 @@ public class BillManagementApi : ApiEndpoint, ICarterModule
 
     #region Bill Detail Commands
 
-    private static async Task<IResult> AddBillDetail(
+    public static async Task<IResult> AddBillDetail(
         ISender sender,
         Guid billId,
         [FromBody] AddBillDetailRequest request)
@@ -139,7 +139,7 @@ public class BillManagementApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    private static async Task<IResult> UpdateBillDetail(
+    public static async Task<IResult> UpdateBillDetail(
         ISender sender,
         Guid detailId,
         [FromBody] BillCommand.UpdateBillDetailCommand command)
@@ -156,7 +156,7 @@ public class BillManagementApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    private static async Task<IResult> DeleteBillDetail(ISender sender, Guid billId, Guid detailId)
+    public static async Task<IResult> DeleteBillDetail(ISender sender, Guid billId, Guid detailId)
     {
         var result = await sender.Send(new BillCommand.DeleteBillDetailCommand(billId, detailId));
         return Results.Ok(result);
@@ -166,7 +166,7 @@ public class BillManagementApi : ApiEndpoint, ICarterModule
 
     #region Payment Commands
 
-    private static async Task<IResult> MakePayment(
+    public static async Task<IResult> MakePayment(
         ISender sender,
         Guid billId,
         [FromBody] MakePaymentRequest request)
@@ -181,7 +181,7 @@ public class BillManagementApi : ApiEndpoint, ICarterModule
         return Results.Ok(result);
     }
 
-    private static async Task<IResult> MarkAsOverdue(ISender sender, Guid billId)
+    public static async Task<IResult> MarkAsOverdue(ISender sender, Guid billId)
     {
         var result = await sender.Send(new BillCommand.MarkBillAsOverdueCommand(billId));
         return Results.Ok(result);
@@ -248,9 +248,9 @@ public class BillManagementApi : ApiEndpoint, ICarterModule
 
     #region Helper Records
 
-    private record UpdateBillRequest(DateTime DueDate, string? Notes);
+    public record UpdateBillRequest(DateTime DueDate, string? Notes);
     
-    private record AddBillDetailRequest(
+    public record AddBillDetailRequest(
         ServiceType ServiceType,
         string ServiceName,
         string Unit,
@@ -260,7 +260,7 @@ public class BillManagementApi : ApiEndpoint, ICarterModule
         decimal? NewIndex,
         string? Notes);
 
-    private record MakePaymentRequest(
+    public record MakePaymentRequest(
         decimal Amount,
         string PaymentMethod,
         DateTime? PaymentDate);

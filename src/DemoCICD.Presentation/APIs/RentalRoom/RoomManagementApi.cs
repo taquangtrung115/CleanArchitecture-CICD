@@ -149,7 +149,7 @@ public class RoomManagementApi : ApiEndpoint, ICarterModule
 
     #region Helper Records
 
-    private record UpdateAvailabilityRequest(bool IsAvailable);
+    public record UpdateAvailabilityRequest(bool IsAvailable);
 
     #endregion
 }
